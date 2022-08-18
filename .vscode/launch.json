@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Converter",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/converter.py",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "args": [
+                "-i", "Registration",
+                "-m", "registration"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,43 @@
+Registration:
+  output_requirements:
+    output_warped_image: ["fixed_image", "moving_image", "output_transform_prefix"]
+  output_templates:
+    output_warped_image: "{output_transform_prefix}warped"
+  doctest:
+    fixed_image: test.nii.gz
+    moving_image: test.nii.gz
+    cmdline: >- 
+      antsRegistration --output [ output_, output_warped_image.nii.gz ]
+      --metric Mattes[ test.nii, test.nii, 1, 32, Random, 0.05 ]
+  tests_inputs:
+    -
+  tests_outputs:
+    - AttributeError
+    
+
+# CopyGeom:
+#   output_requirements:
+#     out_file: [in_file, dest_file]
+#   output_templates:
+#     dest_file: "original"
+#     out_file: "{dest_file}"
+#   doctest:
+#     in_file: test.nii.gz
+#     dest_file: dest.nii.gz
+#     cmdline: fslcpgeom test.nii.gz dest.nii.gz
+#   tests_inputs:
+#     -
+
+#   tests_outputs:
+#     - AttributeError
+
+
+# Split:
+#   output_requirements:
+#     out_file: [in_file, dimension]
+#   output_templates:
+#   doctest:
+#   tests_inputs:
+#     -
+#   tests_outputs:
+#     - AttributeError
