@@ -1,0 +1,4 @@
+pydra>=0.19
+nipype>=1.8.3
+click>=8.1.3
+black>=22.6.0
