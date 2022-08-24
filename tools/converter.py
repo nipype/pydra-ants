@@ -13,7 +13,7 @@ import click
 import warnings
 import functools
 
-sys.path.append(str(Path(__file__).resolve().parent.parent / 'specs'))
+sys.path.append(str(Path(__file__).resolve().parent.parent / "specs"))
 import callables
 
 
@@ -36,28 +36,28 @@ class ANTsConverter:
     NAME_MAPPING = {"desc": "help_string"}
 
     TRAITS_IRREL = [
-        'output_type',
-        'args',
-        'environ',
-        'environ_items',
-        '__all__',
-        'trait_added',
-        'trait_modified',
+        "output_type",
+        "args",
+        "environ",
+        "environ_items",
+        "__all__",
+        "trait_added",
+        "trait_modified",
     ]
 
     TYPE_REPLACE = [
-        ("\'File\'", "specs.File"),
-        ("\'bool\'", "bool"),
-        ("\'str\'", "str"),
-        ("\'Any\'", "ty.Any"),
-        ("\'int\'", "int"),
-        ("\'float\'", "float"),
-        ("\'list\'", "list"),
-        ("\'dict\'", "dict"),
-        ("\'MultiInputObj\'", "specs.MultiInputObj"),
-        ("\'MultiOutputObj\'", "specs.MultiOutputObj"),
-        ("\'MultiInputFile\'", "specs.MultiInputFile"),
-        ("\'MultiOutputFile\'", "specs.MultiOutputFile"),
+        ("'File'", "specs.File"),
+        ("'bool'", "bool"),
+        ("'str'", "str"),
+        ("'Any'", "ty.Any"),
+        ("'int'", "int"),
+        ("'float'", "float"),
+        ("'list'", "list"),
+        ("'dict'", "dict"),
+        ("'MultiInputObj'", "specs.MultiInputObj"),
+        ("'MultiOutputObj'", "specs.MultiOutputObj"),
+        ("'MultiInputFile'", "specs.MultiInputFile"),
+        ("'MultiOutputFile'", "specs.MultiOutputFile"),
     ]
 
     def __init__(self, interface_name, interface_spec_file):
@@ -146,7 +146,9 @@ class ANTsConverter:
         input_fields_str = types_to_names(spec_fields=input_fields)
         output_fields_str = types_to_names(spec_fields=output_fields)
         functions_str = self.function_callables()
-        spec_str = "from pydra.engine import specs \nfrom pydra import ShellCommandTask \n"
+        spec_str = (
+            "from pydra.engine import specs \nfrom pydra import ShellCommandTask \n"
+        )
         spec_str += f"import typing as ty\n"
         spec_str += functions_str
         spec_str += f"input_fields = {input_fields_str}\n"
@@ -164,7 +166,9 @@ class ANTsConverter:
         for tp_repl in self.TYPE_REPLACE:
             spec_str = spec_str.replace(*tp_repl)
 
-        spec_str_black = black.format_file_contents(spec_str, fast=False, mode=black.FileMode())
+        spec_str_black = black.format_file_contents(
+            spec_str, fast=False, mode=black.FileMode()
+        )
 
         with open(filename, "w") as f:
             f.write(spec_str_black)
@@ -193,7 +197,9 @@ class ANTsConverter:
                 tests_inp_error.append((tests_inputs[i], out))
 
         spec_str = f"import os, pytest \nfrom pathlib import Path\n"
-        spec_str += f"from ..{self.interface_name.lower()} import {self.interface_name} \n\n"
+        spec_str += (
+            f"from ..{self.interface_name.lower()} import {self.interface_name} \n\n"
+        )
         if run:
             spec_str += (
                 "@pytest.mark.xfail('ANTSPATH' not in os.environ, reason='no ANTs found', "
@@ -221,7 +227,9 @@ class ANTsConverter:
         if tests_inp_error:
             spec_str += self.write_test_error(input_error=tests_inp_error)
 
-        spec_str_black = black.format_file_contents(spec_str, fast=False, mode=black.FileMode())
+        spec_str_black = black.format_file_contents(
+            spec_str, fast=False, mode=black.FileMode()
+        )
 
         with open(filename_test, "w") as f:
             f.write(spec_str_black)
@@ -232,7 +240,9 @@ class ANTsConverter:
         """
         spec_str = "\n\n"
         spec_str += f"@pytest.mark.parametrize('inputs, error', {input_error})\n"
-        spec_str += f"def test_{self.interface_name}_exception(test_data, inputs, error):\n"
+        spec_str += (
+            f"def test_{self.interface_name}_exception(test_data, inputs, error):\n"
+        )
         spec_str += f"    in_file = Path(test_data) / 'test.nii.gz'\n"
         spec_str += f"    if inputs is None: inputs = {{}}\n"
         spec_str += f"    for key, val in inputs.items():\n"
@@ -248,13 +258,13 @@ class ANTsConverter:
         """adding doctests to the interfaces"""
         cmdline = self.interface_spec["doctest"].pop("cmdline")
         doctest = '    """\n    Example\n    -------\n'
-        doctest += f'    >>> task = {self.interface_name}()\n'
+        doctest += f"    >>> task = {self.interface_name}()\n"
         for key, val in self.interface_spec["doctest"].items():
             if type(val) is str:
                 doctest += f'    >>> task.inputs.{key} = "{val}"\n'
             else:
-                doctest += f'    >>> task.inputs.{key} = {val}\n'
-        doctest += '    >>> task.cmdline\n'
+                doctest += f"    >>> task.inputs.{key} = {val}\n"
+        doctest += "    >>> task.cmdline\n"
         doctest += f"    '{cmdline}'"
         doctest += '\n    """\n'
         return doctest
@@ -290,7 +300,10 @@ class ANTsConverter:
 
         if "default" in metadata_extra_spec:
             default_pdr = metadata_extra_spec.pop("default")
-        elif getattr(field, "usedefault") and field.default is not traits.ctrait.Undefined:
+        elif (
+            getattr(field, "usedefault")
+            and field.default is not traits.ctrait.Undefined
+        ):
             default_pdr = field.default
         else:
             default_pdr = None
@@ -315,7 +328,9 @@ class ANTsConverter:
                 tp_pdr = str
         elif getattr(field, "genfile"):
             if nm in self.interface_spec["output_templates"]:
-                metadata_pdr["output_file_template"] = self.interface_spec["output_templates"][nm]
+                metadata_pdr["output_file_template"] = self.interface_spec[
+                    "output_templates"
+                ][nm]
                 if tp_pdr in [
                     specs.File,
                     specs.Directory,
@@ -360,7 +375,10 @@ class ANTsConverter:
 
         if self.interface_spec["output_requirements"][name]:
             if all(
-                [isinstance(el, list) for el in self.interface_spec["output_requirements"][name]]
+                [
+                    isinstance(el, list)
+                    for el in self.interface_spec["output_requirements"][name]
+                ]
             ):
                 requires_l = self.interface_spec["output_requirements"][name]
                 nested_flag = True
@@ -388,7 +406,9 @@ class ANTsConverter:
                 metadata_pdr["requires"] = metadata_pdr["requires"][0]
 
         if name in self.interface_spec["output_templates"]:
-            metadata_pdr["output_file_template"] = self.interface_spec["output_templates"][name]
+            metadata_pdr["output_file_template"] = self.interface_spec[
+                "output_templates"
+            ][name]
         elif name in self.interface_spec["output_callables"]:
             metadata_pdr["callable"] = self.interface_spec["output_callables"][name]
         return (tp_pdr, metadata_pdr)
@@ -396,7 +416,9 @@ class ANTsConverter:
     def function_callables(self):
         if not self.interface_spec["output_callables"]:
             return ""
-        python_functions_spec = Path(os.path.dirname(__file__)) / "../specs/callables.py"
+        python_functions_spec = (
+            Path(os.path.dirname(__file__)) / "../specs/callables.py"
+        )
         if not python_functions_spec.exists():
             raise Exception(
                 "specs/callables.py file is needed if output_callables in the spec files"
@@ -412,7 +434,9 @@ class ANTsConverter:
     def pydra_type_converter(self, field, spec_type, name):
         """converting types to types used in pydra"""
         if spec_type not in ["input", "output"]:
-            raise Exception(f"spec_type has to be input or output, but {spec_type} provided")
+            raise Exception(
+                f"spec_type has to be input or output, but {spec_type} provided"
+            )
         tp = field.trait_type
         if isinstance(tp, traits.trait_types.Int):
             tp_pdr = int
@@ -472,7 +496,7 @@ class ANTsConverter:
         return argstr_new
 
 
-ANTS_MODULES = ['registration', 'resampling', 'segmentation', 'visualization', 'utils']
+ANTS_MODULES = ["registration", "resampling", "segmentation", "visualization", "utils"]
 
 
 @click.command()
@@ -485,15 +509,21 @@ ANTS_MODULES = ['registration', 'resampling', 'segmentation', 'visualization', '
     "if all is used all interfaces from the spec file will be created",
 )
 @click.option(
-    "-m", "--module_name", required=True, help=f"name of the module from the list {ANTS_MODULES}"
+    "-m",
+    "--module_name",
+    required=True,
+    help=f"name of the module from the list {ANTS_MODULES}",
 )
 def create_pydra_spec(interface_name, module_name):
     if module_name not in ANTS_MODULES:
         raise Exception(
-            f"module name {module_name} not available;" f"should be from the list {ANTS_MODULES}"
+            f"module name {module_name} not available;"
+            f"should be from the list {ANTS_MODULES}"
         )
 
-    spec_file = Path(os.path.dirname(__file__)) / f"../specs/ants_{module_name}_param.yml"
+    spec_file = (
+        Path(os.path.dirname(__file__)) / f"../specs/ants_{module_name}_param.yml"
+    )
     if not spec_file.exists():
         raise Exception(
             f"the specification file doesn't exist for the module {module_name},"
@@ -540,5 +570,5 @@ def create_pydra_spec(interface_name, module_name):
         converter.pydra_specs(write=True, dirname=dirname_interf)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_pydra_spec()
