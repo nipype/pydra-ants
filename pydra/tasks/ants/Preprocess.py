@@ -3,7 +3,7 @@ import typing as ty
 from pathlib import Path
 from pydra import ShellCommandTask
 from pydra.engine import specs
-from pydra.engine.specs import ShellSpec, ShellOutSpec, File, Path, Directory, SpecInfo, MultiInputFile
+from pydra.engine.specs import ShellSpec, ShellOutSpec, File, Path, Directory, SpecInfo, MultiInputFile, MultiInputObj
 
 # antsRegistration
 """The user can specify any number of "stages" where a stage 
@@ -25,13 +25,70 @@ input_fields = [
         },
     ),
     (
-        "outputTransformPrefix",
-        str,
+        "fixed_image",
+        MultiInputFile,
         {
-            "argstr": "--output '{outputTransformPrefix}'", #2? another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
+            "help_string": "Image to which the moving_image should be transformed(usually a structural image)",
+            "mandatory": True,
+        },
+    ),
+    (
+        "fixed_image_mask",
+        File,
+        {
+            "help_string": "Mask used to limit metric sampling region of the fixed imagein all stages",
+            "argstr": "{fixed_image_mask}",
+            "xor": ["fixed_image_masks"],
+        },
+    ),
+    (
+        "fixed_image_masks",
+        MultiInputObj,
+        {
+            "help_string": 'Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)',
+            "xor": ["fixed_image_mask"],
+        },
+    ),
+    (
+        "moving_image",
+        MultiInputFile,
+        {
+            "help_string": "Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to",
+            "mandatory": True,
+        },
+    ),
+    (
+        "moving_image_mask",
+        File,
+        {
+            "help_string": "mask used to limit metric sampling region of the moving imagein all stages",
+            "requires": ["fixed_image_mask"],
+            "xor": ["moving_image_masks"],
+        },
+    ),
+    (
+        "moving_image_masks",
+        MultiInputObj,
+        {
+            "help_string": 'Masks used to limit metric sampling region of the moving image, defined per registration stage(Use "NULL" to omit a mask at a given stage)',
+            "xor": ["moving_image_mask"],
+        },
+    ),
+    (
+        "output_transform_prefix",
+        ty.Any, #?
+        "transform",
+        {
+            "argstr": "--output '{output_transform_prefix}'", #2? how to specify which one? ->another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
             "help_string": "Specify the output transform prefix (output format is .nii.gz )",
             "mandatory": True,
         },
+    ),
+    ("output_warped_image", ty.Any, {"help_string": ""},),
+    (
+        "output_inverse_warped_image",
+        ty.Any,
+        {"help_string": "", "requires": ["output_warped_image"],},
     ),
     (
         "saveStateAsTransform",
@@ -50,23 +107,24 @@ input_fields = [
         },
     ),
     (
-        "val1", #5? cannot be repetative?
+        "write_composite_transform", 
         bool,
+        False,
         {
-            "argstr": "--write-composite-transform '{val1}'", #6?
+            "argstr": "--write-composite-transform '{write_composite_transform}'", 
             "help_string": (
                 "Boolean specifying whether or not the composite transform (and its inverse, if it exists)"
                 "should be written to an hdf5 composite file. This is false by default" 
                 "so that only the transform for each stage is written to file."
             ),
-            "allowed_values": [0,1],#7?
         },
     ),
     (
-        "unintVal1", #6?what is the type in py? cannot be repeatative?
-        int, #8?
+        "print_similarity_measure_interval", 
+        list,#?
+        [0],
         {
-            "argstr": "--print-similarity-measure-interval '{unintVal1}'", 
+            "argstr": "--print-similarity-measure-interval '{print_similarity_measure_interval}'", 
             "help_string": (
                 "Prints out the CC similarity metric measure between the full-size input fixed" 
                 "and the transformed moving images at each iteration a value of 0 (the default)" 
@@ -76,10 +134,11 @@ input_fields = [
         },
     ),
     (
-        "unintVal2", #6?what is the type in py?
-        int, 
+        "write_interval_volumes", 
+        list, 
+        [0],
         {
-            "argstr": "--write-interval-volumes '{unintVal2}'", 
+            "argstr": "--write-interval-volumes '{write_interval_volumes}'", 
             "help_string": (
                 "Writes out the output volume at each iteration." 
                 "a value of 0 (the default) indicates thatthis option should not take place"
@@ -88,35 +147,38 @@ input_fields = [
         },
     ),
     (
-        "val2", 
+        "collapse_output_transforms", 
         bool,
+        True,
         {
-            "argstr": "--collapse-output-transforms '{val2}'", 
+            "argstr": "--collapse-output-transforms '{collapse_output_transforms}'", 
             "help_string": "Collapse output transforms.",
         },
     ),
     (
-        "val3", 
+        "initialize_transforms_per_stage", 
         bool,
+        False,
         {
-            "argstr": "--initialize-transforms-per-stage '{val3}'", 
+            "argstr": "--initialize-transforms-per-stage '{initialize_transforms_per_stage}'", 
             "help_string": "Initialize linear transforms from the previous stage.",          
         },
     ),
     (
-        "interpolation", 
-        str, #7??? different types and options: MultiLabel[<sigma=imageSpacing>,<alpha=4.0>] and Gaussian[<sigma=imageSpacing>,<alpha=1.0>] and GenericLabel[<interpolator=Linear>]
+        "interpolation", #("Linear", "NearestNeighbor","MultiLabel","Gaussian","BSpline","CosineWindowedSinc","WelchWindowedSinc","HammingWindowedSinc","LanczosWindowedSinc","GenericLabel")
+        ty.Any, #7??? different types and options: MultiLabel[<sigma=imageSpacing>,<alpha=4.0>] and Gaussian[<sigma=imageSpacing>,<alpha=1.0>] and GenericLabel[<interpolator=Linear>]
+        "Linear", #?default value
         {
             "argstr": "--interpolation '{interpolation}'", 
             "help_string": "interpolation used to warp (and possibly inverse warp) the final output image(s)",
-            "allowed_values": ("NearestNeighbor","CosineWindowedSinc","WelchWindowedSinc","HammingWindowedSinc","LanczosWindowedSinc"), #?
         },
     ),
+    ("interpolation_parameters", ty.Any, {"help_string": ""}),
     (
-        "dim", 
-        str, #8???? PxQxR
+        "restrict_deformation", 
+        list, #8???? PxQxR
         {
-            "argstr": "--restrict-deformation '{dim}'", 
+            "argstr": "--restrict-deformation '{restrict_deformation}'", 
             "help_string": (
                 "restrict the optimization of the displacement field, translation, rigid or affine transform"
                 "on a per-component basis. i.e, to limit the deformation or rotation of 3-D volume to the" 
@@ -129,7 +191,7 @@ input_fields = [
     ),
     (
         "initial_fixed_transform", 
-        MultiInputFile, #9 ty.list[str]???? initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
+        MultiInputFile, #9 ty.Any?? ty.list[str]???? initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
         {
             "argstr": "--initial-fixed-transform '{initial_fixed_transform}'", 
             "help_string": (
@@ -144,7 +206,7 @@ input_fields = [
     ),
     (
         "initial_moving_transform", 
-        MultiInputFile, #initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
+        MultiInputFile, #ty.Any? #initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
         {
             "argstr": "--initial-moving-transform '{initial_moving_transform}'", 
             "help_string": (
@@ -214,7 +276,7 @@ input_fields = [
     (
         "transforms",
         list,
-        {"argstr": "{transforms}", "mandatory": True, "help_string": "transform type",},
+        {"argstr": "--transform {transforms}", "mandatory": True, "help_string": "transform type",},
     ),
     ("transform_parameters", list, {"help_string": "parameters are transform-specific and can be determined from the usage", "requires": ["transforms"],}),#??
     ("number_of_iterations", list, {"help_string": ""}),#?list
@@ -277,25 +339,61 @@ input_fields = [
         },
     ),
     ("verbose", bool, False, {"argstr": "--verbose '{verbose}'", "help_string": "Verbose output",}),
-
-
-
-
-
-
-
-
-
-
-
 ]
 
 
-#10 --initial-fixed-transform vs --initial-moving-transform?
-#11 --metric?? --transform??
+output_fields = [
+    (
+        "output_transform_prefix",
+        File,#??
+        {
+            "argstr": "--output '{output_transform_prefix}'", #2? how to specify which one? ->another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
+            "mandatory": True,
+            "help_string": "output transform file(s)",
+            "requires": ["output_transform_prefix"],#list of field names that are required to create a specific output
+        },
+    ),
+    ("output_warped_image", ty.Any, {"help_string": "","requires":["output_warped_image"],},),
+    (
+        "output_inverse_warped_image",
+        ty.Any,
+        {"help_string": "", "requires": ["output_inverse_warped_image"],},),
+]
 
 
 
+Registration_input_spec = SpecInfo(
+    name="Input", fields=input_fields, bases=(ShellSpec,)
+)
+Registration_output_spec = SpecInfo(
+    name="Output", fields=output_fields, bases=(ShellOutSpec,)
+)
+
+
+#---------------
+class Registration(ShellCommandTask):
+    """
+    Example
+    -------
+    >>> task = Registration()
+    >>> task.inputs.fixed_image = "test.nii.gz"
+    >>> task.inputs.moving_image = "test.nii.gz"
+    >>> task.cmdline
+    'antsRegistration --output [ output_, output_warped_image.nii.gz ] --metric Mattes[ test.nii, test.nii, 1, 32, Random, 0.05 ]'
+    """
+
+    input_spec = Registration_input_spec
+    output_spec = Registration_output_spec
+    executable = "antsRegistration"
+
+
+
+
+
+
+
+
+"""
 output_fields = [
     (
         "composit_transform",
@@ -306,3 +404,6 @@ output_fields = [
         },
     ),
 ]
+"""
+#10 --initial-fixed-transform vs --initial-moving-transform?
+#11 --metric?? --transform??
