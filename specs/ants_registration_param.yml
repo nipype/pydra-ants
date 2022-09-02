@@ -6,14 +6,14 @@ Registration:
   doctest:
     fixed_image: test.nii.gz
     moving_image: test.nii.gz
-    cmdline: >- 
+    cmdline: >-
       antsRegistration --output [ output_, output_warped_image.nii.gz ]
       --metric Mattes[ test.nii, test.nii, 1, 32, Random, 0.05 ]
   tests_inputs:
     -
   tests_outputs:
     - AttributeError
-    
+
 
 # CopyGeom:
 #   output_requirements:

@@ -19,17 +19,26 @@ def test_spec(tmpdir):
     cmd = "bet"
 
     shelly = pydra.ShellCommandTask(
-        name="bet_task", executable=cmd, input_spec=input_spec_pydra, output_spec=output_spec_pydra
+        name="bet_task",
+        executable=cmd,
+        input_spec=input_spec_pydra,
+        output_spec=output_spec_pydra,
     )
     shelly.inputs.in_file = in_file
     assert shelly.inputs.executable == "bet"
-    assert shelly.cmdline == f"bet {in_file} {str(shelly.output_dir / 'test_brain.nii.gz')}"
+    assert (
+        shelly.cmdline
+        == f"bet {in_file} {str(shelly.output_dir / 'test_brain.nii.gz')}"
+    )
     res = shelly()
     assert res.output.out_file.exists()
     print("\n Result: ", res)
 
     shelly_mask = pydra.ShellCommandTask(
-        name="bet_task", executable=cmd, input_spec=input_spec_pydra, output_spec=output_spec_pydra
+        name="bet_task",
+        executable=cmd,
+        input_spec=input_spec_pydra,
+        output_spec=output_spec_pydra,
     )
     shelly_mask.inputs.in_file = in_file
     shelly_mask.inputs.mask = True
@@ -61,7 +70,10 @@ def test_spec_from_file(tmpdir):
     shelly = bm.BET(name="my_bet")
     shelly.inputs.in_file = in_file
     assert shelly.inputs.executable == "bet"
-    assert shelly.cmdline == f"bet {in_file} {str(shelly.output_dir / 'test_brain.nii.gz')}"
+    assert (
+        shelly.cmdline
+        == f"bet {in_file} {str(shelly.output_dir / 'test_brain.nii.gz')}"
+    )
     res = shelly()
     assert res.output.out_file.exists()
     print("\n Result: ", res)

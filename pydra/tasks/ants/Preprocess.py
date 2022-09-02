@@ -52,7 +52,7 @@ input_fields = [
     ),
     (
         "fixed_image_masks",
-        MultiInputObj,#2. MultiInputFile?
+        MultiInputObj,  # 2. MultiInputFile?
         {
             "help_string": 'Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)',
             "xor": ["fixed_image_mask"],
@@ -85,15 +85,19 @@ input_fields = [
     ),
     (
         "output_transform_prefix",
-        ty.Any, #3? how to specify which one? -> outputTransformPrefix or [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
-        "transform", #4? default value?
+        ty.Any,  # 3? how to specify which one? -> outputTransformPrefix or [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
+        "transform",  # 4? default value?
         {
-            "argstr": "--output '{output_transform_prefix}'", 
+            "argstr": "--output '{output_transform_prefix}'",
             "help_string": "Specify the output transform prefix (output format is .nii.gz )",
             "mandatory": True,
         },
     ),
-    ("output_warped_image", ty.Any, {"help_string": ""},),#5? how to specify this parameter relates to the other choice for output_transform_prefix
+    (
+        "output_warped_image",
+        ty.Any,
+        {"help_string": ""},
+    ),  # 5? how to specify this parameter relates to the other choice for output_transform_prefix
     (
         "output_inverse_warped_image",
         ty.Any,
@@ -104,7 +108,7 @@ input_fields = [
     ),
     (
         "saveStateAsTransform",
-        str, #6? str or Path? (file name)
+        str,  # 6? str or Path? (file name)
         {
             "argstr": "--save-state '{saveStateAsTransform}'",
             "help_string": "Specify the output file for the current state of the registration",
@@ -132,9 +136,9 @@ input_fields = [
         },
     ),
     (
-        "print_similarity_measure_interval", 
-        list,#7?
-        [0],#8? defult value?
+        "print_similarity_measure_interval",
+        list,  # 7?
+        [0],  # 8? defult value?
         {
             "argstr": "--print-similarity-measure-interval '{print_similarity_measure_interval}'",
             "help_string": (
@@ -177,18 +181,22 @@ input_fields = [
         },
     ),
     (
-        "interpolation", #("Linear", "NearestNeighbor","MultiLabel","Gaussian","BSpline","CosineWindowedSinc","WelchWindowedSinc","HammingWindowedSinc","LanczosWindowedSinc","GenericLabel")
-        ty.Any, ####9??? different types and options: MultiLabel[<sigma=imageSpacing>,<alpha=4.0>] and Gaussian[<sigma=imageSpacing>,<alpha=1.0>] and GenericLabel[<interpolator=Linear>]
-        "Linear", #10?default value
+        "interpolation",  # ("Linear", "NearestNeighbor","MultiLabel","Gaussian","BSpline","CosineWindowedSinc","WelchWindowedSinc","HammingWindowedSinc","LanczosWindowedSinc","GenericLabel")
+        ty.Any,  ####9??? different types and options: MultiLabel[<sigma=imageSpacing>,<alpha=4.0>] and Gaussian[<sigma=imageSpacing>,<alpha=1.0>] and GenericLabel[<interpolator=Linear>]
+        "Linear",  # 10?default value
         {
             "argstr": "--interpolation '{interpolation}'",
             "help_string": "interpolation used to warp (and possibly inverse warp) the final output image(s)",
         },
     ),
-    ("interpolation_parameters", ty.Any, {"help_string": ""}), #10? add teh parameter for the selected interpolation later
     (
-        "restrict_deformation", 
-        list, #11???? PxQxR
+        "interpolation_parameters",
+        ty.Any,
+        {"help_string": ""},
+    ),  # 10? add teh parameter for the selected interpolation later
+    (
+        "restrict_deformation",
+        list,  # 11???? PxQxR
         {
             "argstr": "--restrict-deformation '{restrict_deformation}'",
             "help_string": (
@@ -202,8 +210,8 @@ input_fields = [
         },
     ),
     (
-        "initial_fixed_transform", 
-        ty.Any, #12 ?? ty.list[str]???? initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
+        "initial_fixed_transform",
+        ty.Any,  # 12 ?? ty.list[str]???? initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature]
         {
             "argstr": "--initial-fixed-transform '{initial_fixed_transform}'",
             "help_string": (
@@ -212,13 +220,13 @@ input_fields = [
                 "the user can also perform an initial translation alignment by specifying the fixed and moving images"
                 "and selecting an initialization feature. These features include using the geometric center of the"
                 "images (=0), the image intensities (=1), or the origin of the images (=2). "
-            ),  
+            ),
             "xor": [" "],
         },
     ),
     (
-        "initial_moving_transform", 
-        ty.Any, #ty.Any? #initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature] 
+        "initial_moving_transform",
+        ty.Any,  # ty.Any? #initialTransform,[initialTransform,<useInverse>],[fixedImage,movingImage,initializationFeature]
         {
             "argstr": "--initial-moving-transform '{initial_moving_transform}'",
             "help_string": (
@@ -232,8 +240,8 @@ input_fields = [
         },
     ),
     (
-        "metric", #13 ???C[fixedImage,movingImage,metricWeight,radius,...]  how to show a metric and related parameters?
-        list, #14? ty.Any
+        "metric",  # 13 ???C[fixedImage,movingImage,metricWeight,radius,...]  how to show a metric and related parameters?
+        list,  # 14? ty.Any
         {
             "argstr": "{metric}",
             "help_string": "the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.",
@@ -242,12 +250,12 @@ input_fields = [
         },
     ),
     (
-        "metric_weight", #14? how to show it is related to metric?
+        "metric_weight",  # 14? how to show it is related to metric?
         list,
         {
             "help_string": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
             "mandatory": True,
-            "requires": ["metric"], #15?
+            "requires": ["metric"],  # 15?
         },
     ),
     (
@@ -259,8 +267,8 @@ input_fields = [
         },
     ),
     (
-        "sampling_strategy", #<samplingStrategy={None,Regular,Random}>
-        list, #16?
+        "sampling_strategy",  # <samplingStrategy={None,Regular,Random}>
+        list,  # 16?
         {
             "help_string": "the metric sampling strategy (strategies) defined by a sampling percentage for each stage."
             "The sampling strategy defaults to 'None' (aka a dense sampling of one sample per voxel), otherwise it defines a point set over"
@@ -270,8 +278,8 @@ input_fields = [
         },
     ),
     (
-        "sampling_percentage", #<samplingPercentage=[0,1]>
-        list, #17? 
+        "sampling_percentage",  # <samplingPercentage=[0,1]>
+        list,  # 17?
         {
             "help_string": "the metric sampling percentage(s) to use for each stage, it defines the fraction of points to select from the domain.",
             "requires": ["metric"],
@@ -279,14 +287,14 @@ input_fields = [
     ),
     (
         "use_gradient_filter",
-        ty.Any,#18?
-        False,#?default
-    {
-        "help_string": "specifies whether a smoothingfilter is applied when estimating the metric gradient.",
-    },
+        ty.Any,  # 18?
+        False,  # ?default
+        {
+            "help_string": "specifies whether a smoothingfilter is applied when estimating the metric gradient.",
+        },
     ),
     (
-        "transforms",#19?
+        "transforms",  # 19?
         list,
         {
             "argstr": "--transform {transforms}",
@@ -319,7 +327,7 @@ input_fields = [
         {"help_string": "", "requires": ["number_of_iterations"]},
     ),
     (
-        "convergence_window_size",#20?
+        "convergence_window_size",  # 20?
         list,
         [10],
         {"help_string": "", "requires": ["convergence_threshold"]},
@@ -348,7 +356,7 @@ input_fields = [
     ),
     (
         "use_histogram_matching",
-        ty.Any,#21? bool?
+        ty.Any,  # 21? bool?
         True,
         {
             "argstr": "--use-histogram-matching '{use_histogram_matching}'",
@@ -397,7 +405,7 @@ output_fields = [
         "output_transform_prefix",
         File,  # ??
         {
-            "argstr": "--output '{output_transform_prefix}'", #22? how to specify which one? ->another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
+            "argstr": "--output '{output_transform_prefix}'",  # 22? how to specify which one? ->another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
             "mandatory": True,
             "help_string": "output transform file(s)",
             "requires": [
@@ -413,7 +421,14 @@ output_fields = [
             "requires": ["output_warped_image"],
         },
     ),
-    ("output_warped_image", ty.Any, {"help_string": "","requires":["output_warped_image"],},), #23? type?
+    (
+        "output_warped_image",
+        ty.Any,
+        {
+            "help_string": "",
+            "requires": ["output_warped_image"],
+        },
+    ),  # 23? type?
     (
         "output_inverse_warped_image",
         ty.Any,
@@ -466,4 +481,4 @@ output_fields = [
 # 11 --metric?? --transform??
 
 
-#ty.Union[str, ty.List[str, File, File]],
+# ty.Union[str, ty.List[str, File, File]],
