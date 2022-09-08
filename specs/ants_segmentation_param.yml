@@ -1,6 +1,6 @@
 Atropos:
   output_requirements:
-    
+
   output_templates:
     out_classified_image_name: ...
   doctest:
@@ -8,7 +8,7 @@ Atropos:
     # moving_image: test.nii.gz
     # --output [ output_, output_warped_image.nii.gz ] --metric Mattes[ test.nii, test.nii, 1, 32, Random, 0.05 ]
     cmdline: >-
-      atropos 
+      atropos
   tests_inputs:
     -
   tests_outputs:
