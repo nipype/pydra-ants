@@ -30,7 +30,7 @@ input_fields = [
             "argstr": "--dimensionality '{dimension}'",
             "help_string": ("Image dimension"),
             "allowed_values": [2, 3, 4],  # 1?list?
-            #"mandatory": True,
+            # "mandatory": True,
         },
     ),
     (
@@ -86,7 +86,7 @@ input_fields = [
     (
         "output_transform_prefix",
         ty.Any,  # 3? how to specify which one? -> outputTransformPrefix or [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
-        #"transform",  # 4? default value?
+        # "transform",  # 4? default value?
         {
             "argstr": "--output '{output_transform_prefix}'",
             "help_string": "Specify the output transform prefix (output format is .nii.gz )",
@@ -138,7 +138,7 @@ input_fields = [
     (
         "print_similarity_measure_interval",
         list,  # 7?
-        #[0],  # 8? defult value?
+        # [0],  # 8? defult value?
         {
             "argstr": "--print-similarity-measure-interval '{print_similarity_measure_interval}'",
             "help_string": (
@@ -152,7 +152,7 @@ input_fields = [
     (
         "write_interval_volumes",
         list,
-        #[0],
+        # [0],
         {
             "argstr": "--write-interval-volumes '{write_interval_volumes}'",
             "help_string": (
@@ -167,7 +167,7 @@ input_fields = [
         int,
         {
             "argstr": "--collapse-output-transforms {collapse_output_transforms}",
-            "help_string": "Collapse output transforms."
+            "help_string": "Collapse output transforms.",
         },
     ),
     (
@@ -182,7 +182,7 @@ input_fields = [
     (
         "interpolation",  # ("Linear", "NearestNeighbor","MultiLabel","Gaussian","BSpline","CosineWindowedSinc","WelchWindowedSinc","HammingWindowedSinc","LanczosWindowedSinc","GenericLabel")
         ty.Any,  ####9??? different types and options: MultiLabel[<sigma=imageSpacing>,<alpha=4.0>] and Gaussian[<sigma=imageSpacing>,<alpha=1.0>] and GenericLabel[<interpolator=Linear>]
-        #"Linear",  # 10?default value
+        # "Linear",  # 10?default value
         {
             "argstr": "--interpolation '{interpolation}'",
             "help_string": "interpolation used to warp (and possibly inverse warp) the final output image(s)",
@@ -253,7 +253,7 @@ input_fields = [
         list,
         {
             "help_string": "the metric weight(s) for each stage. The weights must sum to 1 per stage.",
-            #"mandatory": True,
+            # "mandatory": True,
             "requires": ["metric"],  # 15?
         },
     ),
@@ -297,7 +297,7 @@ input_fields = [
         list,
         {
             "argstr": "--transform {transforms}",
-            #"mandatory": True,
+            # "mandatory": True,
             "help_string": "transform type",
         },
     ),
@@ -316,23 +316,25 @@ input_fields = [
         {
             "argstr": "--convergence '{convergence}'",
             "help_string": "",
-            #"requires": ["number_of_iterations"],
+            # "requires": ["number_of_iterations"],
         },
     ),
     (
         "convergence_threshold",
         list,
         [1e-06],
-        {"help_string": "",
-        #"requires": ["number_of_iterations"],
+        {
+            "help_string": "",
+            # "requires": ["number_of_iterations"],
         },
     ),
     (
         "convergence_window_size",  # 20?
         list,
         [10],
-        {"help_string": "",
-        #"requires": ["convergence_threshold"],
+        {
+            "help_string": "",
+            # "requires": ["convergence_threshold"],
         },
     ),
     (
@@ -341,7 +343,7 @@ input_fields = [
         {
             "argstr": "--smoothing-sigmas '{smoothing_sigmas}'",
             "help_string": "",
-            #"mandatory": True,
+            # "mandatory": True,
         },
     ),
     (
@@ -355,13 +357,13 @@ input_fields = [
         {
             "argstr": "--shrink-factors '{shrink_factors}'",
             "help_string": "",
-            #"mandatory": True,
+            # "mandatory": True,
         },
     ),
     (
         "use_histogram_matching",
         ty.Any,  # 21? bool?
-        #True,
+        # True,
         {
             "argstr": "--use-histogram-matching '{use_histogram_matching}'",
             "help_string": "Histogram match the images before registration.",
@@ -370,7 +372,7 @@ input_fields = [
     (
         "winsorize_image_intensities",
         ty.Any,
-        #1.0,
+        # 1.0,
         {
             "argstr": "--winsorize-image-intensities '{winsorize_image_intensities}'",
             "help_string": "The Upper quantile to clip image ranges",
@@ -412,7 +414,9 @@ output_fields = [
             "argstr": "--output '{output_transform_prefix}'",  # 22? how to specify which one? ->another option [outputTransformPrefix,<outputWarpedImage>,<outputInverseWarpedImage>]
             "mandatory": True,
             "help_string": "output transform file(s)",
-            "requires": ["output_transform_prefix"],  # list of field names that are required to create a specific output
+            "requires": [
+                "output_transform_prefix"
+            ],  # list of field names that are required to create a specific output
         },
     ),
     (
@@ -456,7 +460,7 @@ class Registration(ShellCommandTask):
     Example
     -------
     >>> task = Registration()
-    >>> task.inputs.fixed_image = "test.nii.gz" 
+    >>> task.inputs.fixed_image = "test.nii.gz"
     >>> task.inputs.moving_image = "test.nii.gz"
     >>> task.inputs.metric = "Mattes[test.nii, test.nii, 1, 32, Random, 0.05]"
     >>> task.inputs.output_transform_prefix = "[output_,output_warped_image.nii.gz]"
