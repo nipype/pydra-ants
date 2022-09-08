@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Current File",
             "type": "python",
@@ -17,8 +18,8 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-i", "Registration",
-                "-m", "registration"
+                "-i", "Atropos",
+                "-m", "segmentation"
             ]
         }
     ]
