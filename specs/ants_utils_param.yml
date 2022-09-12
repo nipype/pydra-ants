@@ -4,7 +4,7 @@ AI:
 
   output_templates:
     output_transform: "{initialization}.mat"
-  
+
   doctest:
     fixed_image: 'structural.nii'
     moving_image: 'epi.nii'
@@ -15,5 +15,3 @@ AI:
 
   tests_outputs:
     - AttributeError
-
-
