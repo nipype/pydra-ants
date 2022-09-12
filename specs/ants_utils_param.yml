@@ -1,0 +1,19 @@
+AI:
+  output_requirements:
+    output_transform: [fixed_image, moving_image]
+
+  output_templates:
+    output_transform: "{initialization}.mat"
+  
+  doctest:
+    fixed_image: 'structural.nii'
+    moving_image: 'epi.nii'
+    cmdline: 'antsAI --output initialization.mat -m Mattes[structural.nii,epi.nii,32,Regular,1]'
+
+  tests_inputs:
+    -
+
+  tests_outputs:
+    - AttributeError
+
+

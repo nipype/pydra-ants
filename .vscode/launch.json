@@ -18,8 +18,8 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-i", "N4BiasFieldCorrection",
-                "-m", "segmentation"
+                "-i", "AI",
+                "-m", "utils"
             ]
         }
     ]
