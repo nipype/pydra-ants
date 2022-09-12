@@ -18,7 +18,7 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-i", "Atropos",
+                "-i", "N4BiasFieldCorrection",
                 "-m", "segmentation"
             ]
         }

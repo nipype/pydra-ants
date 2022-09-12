@@ -15,6 +15,25 @@ Atropos:
     # - AttributeError
 
 
+N4BiasFieldCorrection:
+  output_requirements:
+    output_image: [input_image]
+
+  output_templates:
+    output_image: "{input_image}_corrected"
+  
+  doctest:
+    input_image: "test.nii.gz"
+    output_image: test_corrected.nii.gz
+    cmdline: 'N4BiasFieldCorrection --input-image test.nii.gz --output test_corrected.nii.gz'
+
+  tests_inputs:
+    -
+
+  tests_outputs:
+    - AttributeError
+
+
 # CopyGeom:
 #   output_requirements:
 #     out_file: [in_file, dest_file]
