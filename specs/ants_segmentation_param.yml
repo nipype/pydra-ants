@@ -21,7 +21,7 @@ N4BiasFieldCorrection:
 
   output_templates:
     output_image: "{input_image}_corrected"
-  
+
   doctest:
     input_image: "test.nii.gz"
     output_image: test_corrected.nii.gz
