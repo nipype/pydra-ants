@@ -18,7 +18,7 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-i", "AI",
+                "-i", "ImageMath",
                 "-m", "utils"
             ]
         }
