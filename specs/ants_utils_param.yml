@@ -15,3 +15,24 @@ AI:
 
   tests_outputs:
     - AttributeError
+
+
+ImageMath:
+  output_requirements:
+    output_image: [op1, operation, op2]
+
+  output_templates:
+    output_image: "{op1}_maths"
+
+  doctest:
+    op1: 'structural.nii'
+    operation: '+'
+    op2: '2'
+    cmdline: 'ImageMath 3 structural_maths.nii + structural.nii 2'
+
+  tests_inputs:
+    -
+
+  tests_outputs:
+    - AttributeError
+
