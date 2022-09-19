@@ -61,7 +61,7 @@ ThresholdImage:
     output_image: [input_image]
 
   output_templates:
-    output_image: 
+    output_image:
 
   doctest:
     input_image: 'structural.nii'
