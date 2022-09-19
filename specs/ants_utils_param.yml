@@ -54,6 +54,7 @@ MultiplyImages:
 
   tests_outputs:
     - AttributeError
+<<<<<<< HEAD
 
 
 ThresholdImage:
@@ -80,3 +81,5 @@ ThresholdImage:
 
 
 
+=======
+>>>>>>> 3afa073284746c02f4faf1d90557e80be63835a7
