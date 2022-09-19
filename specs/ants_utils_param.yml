@@ -35,4 +35,3 @@ ImageMath:
 
   tests_outputs:
     - AttributeError
-
