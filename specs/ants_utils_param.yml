@@ -35,6 +35,7 @@ ImageMath:
 
   tests_outputs:
     - AttributeError
+<<<<<<< HEAD
 
 
 MultiplyImages:
@@ -56,3 +57,5 @@ MultiplyImages:
     - AttributeError
 
 
+=======
+>>>>>>> 339c427f679cf0d7c0bdbe52c96a570767b0f22c
