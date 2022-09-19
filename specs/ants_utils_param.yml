@@ -56,3 +56,27 @@ MultiplyImages:
     - AttributeError
 
 
+ThresholdImage:
+  output_requirements:
+    output_image: [input_image]
+
+  output_templates:
+    output_image: 
+
+  doctest:
+    input_image: 'structural.nii'
+    output_image: 'output.nii.gz'
+    th_low: '0.5'
+    th_high: '1.0'
+    inside_value: '1.0'
+    outside_value: '0.0'
+    cmdline: 'ThresholdImage 3 structural.nii output.nii.gz 0.500000 1.000000 1.000000 0.000000'
+
+  tests_inputs:
+    -
+
+  tests_outputs:
+    - AttributeError
+
+
+

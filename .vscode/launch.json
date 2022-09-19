@@ -18,7 +18,7 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                "-i", "MultiplyImages",
+                "-i", "ThresholdImage",
                 "-m", "utils"
             ]
         }
