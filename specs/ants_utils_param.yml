@@ -36,3 +36,23 @@ ImageMath:
   tests_outputs:
     - AttributeError
 
+
+MultiplyImages:
+  output_requirements:
+    output_product_image: [dimension, first_input, second_input]
+
+  output_templates:
+
+  doctest:
+    dimension: '3'
+    first_input: 'moving2.nii'
+    second_input: '0.25'
+    cmdline: 'MultiplyImages 3 moving2.nii 0.25 out.nii'
+
+  tests_inputs:
+    -
+
+  tests_outputs:
+    - AttributeError
+
+
