@@ -127,8 +127,8 @@ class ThresholdImage(ShellCommandTask):
     Example
     -------
     >>> task = ThresholdImage()
-    >>> task.inputs.input_image = "structural.nii"
-    >>> task.inputs.output_image = "output.nii.gz"
+    >>> task.inputs.input_image = "tests/data/structural.nii"
+    >>> task.inputs.output_image = "tests/data/output.nii.gz"
     >>> task.inputs.th_low = "0.5"
     >>> task.inputs.th_high = "1.0"
     >>> task.inputs.inside_value = "1.0"

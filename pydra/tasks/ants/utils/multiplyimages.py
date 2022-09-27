@@ -70,7 +70,7 @@ class MultiplyImages(ShellCommandTask):
     -------
     >>> task = MultiplyImages()
     >>> task.inputs.dimension = "3"
-    >>> task.inputs.first_input = "moving2.nii"
+    >>> task.inputs.first_input = "tests/data/moving2.nii"
     >>> task.inputs.second_input = "0.25"
     >>> task.cmdline
     'MultiplyImages 3 moving2.nii 0.25 out.nii'

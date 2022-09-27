@@ -73,7 +73,7 @@ class ImageMath(ShellCommandTask):
     Example
     -------
     >>> task = ImageMath()
-    >>> task.inputs.op1 = "structural.nii"
+    >>> task.inputs.op1 = "tests/data/structural.nii"
     >>> task.inputs.operation = "+"
     >>> task.inputs.op2 = "2"
     >>> task.cmdline
