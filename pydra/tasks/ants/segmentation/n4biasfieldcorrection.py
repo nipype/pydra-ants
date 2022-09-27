@@ -6,7 +6,7 @@ input_fields = [
     (
         "dimension",
         ty.Any,
-        3,
+        #3,
         {"help_string": "image dimension (2, 3 or 4)", "argstr": "-d {dimension}"},
     ),
     (
@@ -118,6 +118,8 @@ class N4BiasFieldCorrection(ShellCommandTask):
     >>> task = N4BiasFieldCorrection()
     >>> task.inputs.input_image = "test.nii.gz"
     >>> task.inputs.output_image = "test_corrected.nii.gz"
+    >>> task.inputs.save_bias = "1"
+    >>> task.inputs.copy_header = "1"
     >>> task.cmdline
     'N4BiasFieldCorrection --input-image test.nii.gz --output test_corrected.nii.gz'
     """

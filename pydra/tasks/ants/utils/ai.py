@@ -122,8 +122,8 @@ class AI(ShellCommandTask):
     Example
     -------
     >>> task = AI()
-    >>> task.inputs.fixed_image = "structural.nii"
-    >>> task.inputs.moving_image = "epi.nii"
+    >>> task.inputs.fixed_image = "tests/data/structural.nii"
+    >>> task.inputs.moving_image = "tests/data/epi.nii"
     >>> task.cmdline
     'antsAI --output initialization.mat -m Mattes[structural.nii,epi.nii,32,Regular,1]'
     """
