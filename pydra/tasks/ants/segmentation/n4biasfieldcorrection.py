@@ -6,7 +6,7 @@ input_fields = [
     (
         "dimension",
         ty.Any,
-        #3,
+        # 3,
         {"help_string": "image dimension (2, 3 or 4)", "argstr": "-d {dimension}"},
     ),
     (
