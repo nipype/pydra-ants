@@ -98,8 +98,8 @@ input_fields = [
         str,
         {
             "help_string": "",
-            "argstr": "{out_classified_image_name}",
-            "output_file_template": "...",
+            "argstr": "--output {out_classified_image_name}",
+            #"output_file_template": "...",
         },
     ),
     ("save_posteriors", bool, {"help_string": ""}),
