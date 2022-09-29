@@ -82,7 +82,7 @@ input_fields = [
     (
         "use_random_seed",
         bool,
-        True,
+        #True,
         {
             "help_string": "use random seed value over constant",
             "argstr": "--use-random-seed {use_random_seed}",
@@ -126,8 +126,12 @@ class Atropos(ShellCommandTask):
     Example
     -------
     >>> task = Atropos()
+    >>> task.inputs.intensity_images= "structural.nii"
+    >>> task.inputs.mask_image = "tests/data/mask.nii"
+    >>> task.inputs.initialization = "Random[2]"
+    >>> task.inputs.number_of_tissue_classes = "2"
     >>> task.cmdline
-    'atropos'
+    'Atropos --image-dimensionality 3 --intensity-image structural.nii --mask-image tests/data/mask.nii Random[2]'
     """
 
     input_spec = Atropos_input_spec

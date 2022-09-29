@@ -124,8 +124,9 @@ class AI(ShellCommandTask):
     >>> task = AI()
     >>> task.inputs.fixed_image = "tests/data/structural.nii"
     >>> task.inputs.moving_image = "tests/data/epi.nii"
+    >>> task.inputs.metric = "('Mattes', 32, 'Regular', 1)"
     >>> task.cmdline
-    'antsAI --output initialization.mat -m Mattes[structural.nii,epi.nii,32,Regular,1]'
+    'antsAI -d 3 -m (Mattes, 32, Regular, 1) -t (Affine, 0.1)[%g] -s [(20, 0.12),(20, 0.12)] -c [(10, 1e-06, 10),%g,(10, 1e-06, 10)] -o initialization.mat'
     """
 
     input_spec = AI_input_spec

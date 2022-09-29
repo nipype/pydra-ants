@@ -107,7 +107,7 @@ input_fields = [
         bool,
         {
             "help_string": "copy headers of the original image into the output (corrected) file",
-            "mandatory": True,
+            #"mandatory": True,
         },
     ),
     ("num_threads", int, 1, {"help_string": "Number of ITK threads to use"}),
@@ -134,7 +134,7 @@ class ThresholdImage(ShellCommandTask):
     >>> task.inputs.inside_value = "1.0"
     >>> task.inputs.outside_value = "0.0"
     >>> task.cmdline
-    'ThresholdImage 3 structural.nii output.nii.gz 0.500000 1.000000 1.000000 0.000000'
+    'ThresholdImage 3 tests/data/structural.nii tests/data/output.nii.gz 0.5 1.0 1.0 0.0'
     """
 
     input_spec = ThresholdImage_input_spec
