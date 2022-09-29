@@ -99,7 +99,7 @@ input_fields = [
         {
             "help_string": "",
             "argstr": "--output {out_classified_image_name}",
-            #"output_file_template": "...",
+            # "output_file_template": "...",
         },
     ),
     ("save_posteriors", bool, {"help_string": ""}),
