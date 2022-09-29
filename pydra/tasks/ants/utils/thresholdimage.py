@@ -107,7 +107,7 @@ input_fields = [
         bool,
         {
             "help_string": "copy headers of the original image into the output (corrected) file",
-            #"mandatory": True,
+            # "mandatory": True,
         },
     ),
     ("num_threads", int, 1, {"help_string": "Number of ITK threads to use"}),
