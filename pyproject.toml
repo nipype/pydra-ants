@@ -1,0 +1,34 @@
+[build-system]
+requires = ["flit_scm"]
+build-backend = "flit_scm:buildapi"
+
+[project]
+name = "pydra-ants"
+description = "Pydra task package for ANTs tools"
+requires-python = ">=3.7"
+dependencies = ["pydra >=0.6.1"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+doc = [
+  "packaging",
+  "sphinx >= 2.1.2",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-apidoc ~= 0.3.0",
+  "sphinxcontrib-napoleon",
+  "sphinxcontrib-versioning",
+]
+test = [
+  "pytest >= 4.4.0",
+  "pytest-cov",
+  "pytest-env",
+  "pytest-xdist",
+  "pytest-rerunfailures",
+  "codecov",
+]
+
+[tool.flit.module]
+name = "pydra.tasks.ants"
+
+[tool.setuptools_scm]
+write_to = "pydra/tasks/ants/_version.py"
