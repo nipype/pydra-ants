@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pydra-ants"
+version = "0.0.0"
+description = "Pydra tasks for ANTs"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+keywords = [
+  "ants",
+  "neuroimaging",
+  "pydra",
+  "registration",
+]
+authors = [
+  { name = "Ghislain Vaillant", email = "ghislain.vaillant@icm-institute.org" },
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+  "attrs >=22.1.0",
+  "pydra >=0.22",
+]
+
+[project.urls]
+Documentation = "https://github.com/ghisvail/pydra-ants#readme"
+Issues = "https://github.com/ghisvail/pydra-ants/issues"
+Source = "https://github.com/ghisvail/pydra-ants"
+
+[tool.black]
+target-version = ["py37"]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+  "--doctest-modules",
+  "--doctest-continue-on-failure",
+]
+pythonpath = ["src"]
+testpaths = ["src"]
