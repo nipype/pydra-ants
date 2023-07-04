@@ -13,9 +13,16 @@ segmentation and statistical analysis.
 
 **Table of Contents**
 
+- [Available Tasks](#available-tasks)
 - [Installation](#installation)
 - [Development](#development)
 - [License](#license)
+
+## Available Tasks
+
+- ApplyTransforms
+- N4BiasFieldCorrection
+- RegistrationSyNQuick
 
 ## Installation
 
