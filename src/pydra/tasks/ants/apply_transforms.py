@@ -25,11 +25,12 @@ Examples
 ...     interpolation_method="Gaussian",
 ...     sigma=4.0,
 ...     alpha=1.0,
-...     transform_files=["affine1.mat", "affine2.mat"],
-...     invert_transforms=[False, True],
+...     transform_files=["affine.mat", "warp_field.nii.gz"],
+...     which_to_invert=[True, False],
 ... )
 >>> task.cmdline
-'antsApplyTransforms ... --interpolation Gaussian[4.0, 1.0] --transform [affine1.mat, 0] --transform [affine2.mat, 1]'
+'antsApplyTransforms ... --interpolation Gaussian[4.0, 1.0] --transform [affine.mat, 1] \
+--transform [warp_field.nii.gz, 0]'
 """
 
 __all__ = ["ApplyTransforms"]
@@ -142,19 +143,19 @@ class ApplyTransforms(ShellCommandTask):
         _transforms = field(
             metadata={
                 "help_string": "apply transform stack",
-                "formatter": lambda transform_files, invert_transforms: (
+                "formatter": lambda transform_files, which_to_invert: (
                     ""
                     if not transform_files
                     else " ".join(f"--transform {f}" for f in transform_files)
-                    if not invert_transforms
-                    else " ".join(f"--transform [{f}, {int(i)}]" for f, i in zip(transform_files, invert_transforms))
+                    if not which_to_invert
+                    else " ".join(f"--transform [{f}, {int(i)}]" for f, i in zip(transform_files, which_to_invert))
                 ),
             }
         )
 
         transform_files: Sequence[PathLike] = field(metadata={"help_string": "stack of transform files to apply"})
 
-        invert_transforms: Sequence[bool] = field(metadata={"help_string": "specify which transforms to invert"})
+        which_to_invert: Sequence[bool] = field(metadata={"help_string": "specify which transforms to invert"})
 
         default_value: float = field(
             metadata={"help_string": "default voxel value for input image", "argstr": "--default-value"}
