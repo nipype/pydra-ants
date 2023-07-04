@@ -14,6 +14,7 @@ segmentation and statistical analysis.
 **Table of Contents**
 
 - [Installation](#installation)
+- [Development](#development)
 - [License](#license)
 
 ## Installation
