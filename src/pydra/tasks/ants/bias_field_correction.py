@@ -53,7 +53,7 @@ class N4BiasFieldCorrection(ShellCommandTask):
 
         shrink_factor: int = field(default=4, metadata={"help_string": "shrink factor", "argstr": "--shrink-factor"})
 
-        bspline_fitting = field(
+        _bspline_fitting = field(
             metadata={
                 "help_string": "b-spline fitting parameters",
                 "argstr": "--bspline-fitting [{spline_distance}, {spline_order}]",
@@ -65,9 +65,9 @@ class N4BiasFieldCorrection(ShellCommandTask):
 
         spline_order: int = field(default=3, metadata={"help_string": "spline order"})
 
-        convergence = field(
+        _convergence = field(
             metadata={
-                "help_string": "convergence parameters",
+                "help_string": "convergence",
                 "readonly": True,
                 "formatter": lambda num_iterations, convergence_threshold: (
                     "--convergence [{}, {}]".format("x".join(str(i) for i in num_iterations), convergence_threshold)
@@ -81,9 +81,9 @@ class N4BiasFieldCorrection(ShellCommandTask):
 
         convergence_threshold: float = field(default=0.0, metadata={"help_string": "convergence threshold"})
 
-        histogram_sharpening = field(
+        _histogram_sharpening = field(
             metadata={
-                "help_string": "histogram sharpening parameters",
+                "help_string": "histogram sharpening",
                 "argstr": "--histogram-sharpening [{bias_field_fwhm}, {wiener_filter_noise}, {num_histogram_bins}]",
                 "readonly": True,
             }
@@ -95,7 +95,7 @@ class N4BiasFieldCorrection(ShellCommandTask):
 
         num_histogram_bins: int = field(default=200, metadata={"help_string": "number of histogram bins"})
 
-        output_images = field(
+        _output_images = field(
             metadata={
                 "help_string": "output images",
                 "argstr": "--output [{output_corrected_image}, {output_bias_field_image}]",
