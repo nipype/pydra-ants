@@ -9,7 +9,7 @@ Examples
 >>> task.cmdline    # doctest: +ELLIPSIS
 'N4BiasFieldCorrection --input-image input.nii --rescale-intensities 1 --shrink-factor 4 \
 --bspline-fitting [200, 3] --convergence [50x50x50x50, 0.0] --histogram-sharpening [0.15, 0.01, 200] \
---output [.../input_corrected.nii, .../input_bias_field.nii]'
+--output [.../input_corrected.nii, .../input_biasfield.nii]'
 """
 
 __all__ = ["N4BiasFieldCorrection"]
@@ -98,7 +98,7 @@ class N4BiasFieldCorrection(ShellCommandTask):
         _output_images = field(
             metadata={
                 "help_string": "output images",
-                "argstr": "--output [{output_corrected_image}, {output_bias_field_image}]",
+                "argstr": "--output [{output_corrected_image}, {output_bias_field}]",
                 "readonly": True,
             }
         )
@@ -107,8 +107,8 @@ class N4BiasFieldCorrection(ShellCommandTask):
             metadata={"help_string": "output corrected image", "output_file_template": "{input_image}_corrected"}
         )
 
-        output_bias_field_image: str = field(
-            metadata={"help_string": "output biasfield image", "output_file_template": "{input_image}_bias_field"}
+        output_bias_field: str = field(
+            metadata={"help_string": "output bias field image", "output_file_template": "{input_image}_biasfield"}
         )
 
     input_spec = SpecInfo(name="Input", bases=(InputSpec,))

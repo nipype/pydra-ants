@@ -179,18 +179,18 @@ class RegistrationSyNQuick(ShellCommandTask):
             }
         )
 
-        forward_warp_field_image: File = field(
+        forward_warp_field: File = field(
             metadata={
-                "help_string": "forward warp field image",
+                "help_string": "forward warp field",
                 "callable": lambda transform_type, output_prefix: (
                     f"{output_prefix}1Warp.nii.gz" if transform_type not in ("t", "r", "a") else NOTHING
                 ),
             }
         )
 
-        inverse_warp_field_image: File = field(
+        inverse_warp_field: File = field(
             metadata={
-                "help_string": "inverse warp field image",
+                "help_string": "inverse warp field",
                 "callable": lambda transform_type, output_prefix: (
                     f"{output_prefix}1InverseWarp.nii.gz" if transform_type not in ("t", "r", "a") else NOTHING
                 ),
