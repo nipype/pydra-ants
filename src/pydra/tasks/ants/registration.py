@@ -158,33 +158,39 @@ class RegistrationSyNQuick(ShellCommandTask):
 
     @define(kw_only=True)
     class OutputSpec(ShellOutSpec):
-        warped_image: File = field(
-            metadata={"help_string": "warped image", "output_file_template": "{output_prefix}Warped.nii.gz"}
+        warped_moving_image: File = field(
+            metadata={
+                "help_string": "moving image warped to fixed image space",
+                "output_file_template": "{output_prefix}Warped.nii.gz",
+            }
         )
 
-        inverse_warped_image: File = field(
+        warped_fixed_image: File = field(
             metadata={
-                "help_string": "inverse warped image",
+                "help_string": "fixed image warped to moving image space",
                 "output_file_template": "{output_prefix}InverseWarped.nii.gz",
             }
         )
 
-        matrix_file: File = field(
-            metadata={"help_string": "warped image", "output_file_template": "{output_prefix}0GenericAffine.mat"}
+        affine_transform: File = field(
+            metadata={
+                "help_string": "affine transform",
+                "output_file_template": "{output_prefix}0GenericAffine.mat",
+            }
         )
 
-        warp_field: File = field(
+        forward_warp_field_image: File = field(
             metadata={
-                "help_string": "warp field",
+                "help_string": "forward warp field image",
                 "callable": lambda transform_type, output_prefix: (
                     f"{output_prefix}1Warp.nii.gz" if transform_type not in ("t", "r", "a") else NOTHING
                 ),
             }
         )
 
-        inverse_warp_field: File = field(
+        inverse_warp_field_image: File = field(
             metadata={
-                "help_string": "inverse warp field",
+                "help_string": "inverse warp field image",
                 "callable": lambda transform_type, output_prefix: (
                     f"{output_prefix}1InverseWarp.nii.gz" if transform_type not in ("t", "r", "a") else NOTHING
                 ),
