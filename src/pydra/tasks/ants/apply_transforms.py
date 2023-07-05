@@ -12,8 +12,8 @@ Examples
 >>> task = ApplyTransforms(
 ...     moving_image="moving.nii",
 ...     fixed_image="fixed.nii",
-...     interpolation_method="BSpline",
-...     transform_files=["affine.mat"],
+...     interpolation="BSpline",
+...     transform_list=["affine.mat"],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
 'antsApplyTransforms ... -n BSpline[3] -t affine.mat ...'
@@ -21,10 +21,10 @@ Examples
 >>> task = ApplyTransforms(
 ...     moving_image="moving.nii",
 ...     fixed_image="fixed.nii",
-...     interpolation_method="Gaussian",
+...     interpolation="Gaussian",
 ...     sigma=4.0,
 ...     alpha=1.0,
-...     transform_files=["affine.mat", "warp_field.nii.gz"],
+...     transform_list=["affine.mat", "warp_field.nii.gz"],
 ...     which_to_invert=[True, False],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
@@ -74,30 +74,13 @@ class ApplyTransforms(ShellCommandTask):
             metadata={"help_string": "output image", "argstr": "-o", "output_file_template": "{moving_image}_warped"}
         )
 
-        _interpolation = field(
-            metadata={
-                "help_string": "interpolation",
-                "formatter": lambda interpolation_method, sigma, alpha, spline_order: (
-                    f"-n {interpolation_method}"
-                    + (
-                        f"[{spline_order}]"
-                        if interpolation_method == "BSpline"
-                        else f"[{sigma}, {alpha}]"
-                        if interpolation_method in ("MultiLabel", "Gaussian")
-                        else ""
-                    )
-                ),
-            }
-        )
-
-        interpolation_method: str = field(
+        interpolation: str = field(
             default="Linear",
             metadata={
                 "help_string": "interpolation method",
                 "allowed_values": {
                     "Linear",
                     "NearestNeighbor",
-                    "MultiLabel",
                     "Gaussian",
                     "BSpline",
                     "CosineWindowedSinc",
@@ -105,6 +88,16 @@ class ApplyTransforms(ShellCommandTask):
                     "HammingWindowedSinc",
                     "LanczosWindowedSinc",
                 },
+                "formatter": lambda interpolation, sigma, alpha, spline_order: (
+                    f"-n {interpolation}"
+                    + (
+                        f"[{spline_order}]"
+                        if interpolation == "BSpline"
+                        else f"[{sigma}, {alpha}]"
+                        if interpolation in ("MultiLabel", "Gaussian")
+                        else ""
+                    )
+                ),
             },
         )
 
@@ -122,22 +115,22 @@ class ApplyTransforms(ShellCommandTask):
             }
         )
 
-        _transforms = field(
+        transform_list: Sequence[PathLike] = field(
             metadata={
-                "help_string": "apply transform stack",
-                "formatter": lambda transform_files, which_to_invert: (
+                "help_string": "list of transforms to apply",
+                "formatter": lambda transform_list, which_to_invert: (
                     ""
-                    if not transform_files
-                    else " ".join(f"-t {f}" for f in transform_files)
+                    if not transform_list
+                    else " ".join(f"-t {f}" for f in transform_list)
                     if not which_to_invert
-                    else " ".join(f"-t [{f}, {int(i)}]" for f, i in zip(transform_files, which_to_invert))
+                    else " ".join(f"-t [{f}, {int(i)}]" for f, i in zip(transform_list, which_to_invert))
                 ),
             }
         )
 
-        transform_files: Sequence[PathLike] = field(metadata={"help_string": "stack of transform files to apply"})
-
-        which_to_invert: Sequence[bool] = field(metadata={"help_string": "specify which transforms to invert"})
+        which_to_invert: Sequence[bool] = field(
+            metadata={"help_string": "specify which transforms to invert", "requires": {"transform_list"}}
+        )
 
         default_value: float = field(metadata={"help_string": "default voxel value", "argstr": "-f"})
 
