@@ -141,11 +141,12 @@ class ApplyTransforms(ShellCommandTask):
 
         default_value: float = field(metadata={"help_string": "default voxel value", "argstr": "-f"})
 
-        use_float_precision: bool = field(
-            default=False,
+        precision: str = field(
+            default="double",
             metadata={
-                "help_string": "use float precision instead of double",
-                "formatter": lambda use_float_precision: f"--float {int(use_float_precision)}",
+                "help_string": "use float or double precision",
+                "allowed_values": {"float", "double"},
+                "formatter": lambda precision: "--float {}".format({"double": 0, "float": 1}.get(precision)),
             },
         )
 
