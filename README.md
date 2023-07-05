@@ -30,6 +30,14 @@ segmentation and statistical analysis.
 pip install pydra-ants
 ```
 
+A separate installation of ANTs is required to use this package.
+
+An official conda package is available through conda-forge:
+
+```console
+conda install -c conda-forge ants
+```
+
 ## Development
 
 This project is managed with [Hatch][hatch]:
