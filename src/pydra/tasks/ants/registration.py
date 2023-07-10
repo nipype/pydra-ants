@@ -17,7 +17,6 @@ Examples
 ...     dimensionality=3,
 ...     fixed_image="reference.nii",
 ...     moving_image="structural.nii", 
-...     output_prefix="output",
 ...     transform_type="b",
 ...     spline_distance=32,
 ...     gradient_step_size=0.2,
@@ -25,6 +24,15 @@ Examples
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
 'antsRegistrationSyNQuick.sh ... -t b -s 32 -g 0.2 ... -e 42'
+
+>>> task = RegistrationSyNQuick(
+...     dimensionality=3,
+...     fixed_image="reference.nii",
+...     moving_image="structural.nii",
+...     fixed_mask="mask.nii",
+... )
+>>> task.cmdline    # doctest: +ELLIPSIS
+'antsRegistrationSyNQuick.sh ... -x mask.nii ...'
 """
 
 __all__ = ["RegistrationSyNQuick"]
@@ -112,16 +120,14 @@ class RegistrationSyNQuick(ShellCommandTask):
             },
         )
 
-        _masks = field(
+        fixed_mask: PathLike = field(
             metadata={
-                "help_string": "masks parameter",
+                "help_string": "mask applied to the fixed image",
                 "formatter": lambda fixed_mask, moving_mask: (
                     "" if not fixed_mask else f"-x {fixed_mask},{moving_mask}" if moving_mask else f"-x {fixed_mask}"
                 ),
             }
         )
-
-        fixed_mask: PathLike = field(metadata={"help_string": "mask applied to the fixed image"})
 
         moving_mask: PathLike = field(
             metadata={"help_string": "mask applied to the moving image", "requires": {"fixed_mask"}}
