@@ -1,5 +1,10 @@
 # pydra-ants
 
+[![PyPI - Version][pypi-version]][pypi-project]
+[![PyPI - Python Version][pypi-pyversions]][pypi-project]
+[![PyPI - Downloads][pypi-downloads]][pypi-project]
+![][status-test]
+
 -----
 
 Pydra tasks for ANTs
@@ -62,10 +67,20 @@ hatch run lint:fix
 
 This project is distributed under the terms of the [Apache License, Version 2.0][license].
 
-[pydra]: https://pydra.readthedocs.io/
-
 [ants]: https://github.com/ANTsX/ANTs
 
 [hatch]: https://hatch.pypa.io/
 
 [license]: https://spdx.org/licenses/Apache-2.0.html
+
+[pydra]: https://pydra.readthedocs.io/
+
+[pypi-downloads]: https://static.pepy.tech/badge/pydra-ants
+
+[pypi-project]: https://pypi.org/project/pydra-ants
+
+[pypi-pyversions]: https://img.shields.io/pypi/pyversions/pydra-ants.svg
+
+[pypi-version]: https://img.shields.io/pypi/v/pydra-ants.svg
+
+[status-test]: https://github.com/aramis-lab/pydra-ants/actions/workflows/test.yaml/badge.svg
