@@ -9,7 +9,7 @@ Examples
 >>> task.cmdline    # doctest: +ELLIPSIS
 'N4BiasFieldCorrection --input-image input.nii --rescale-intensities 1 --shrink-factor 4 \
 --bspline-fitting [200, 3] --convergence [50x50x50x50, 0.0] --histogram-sharpening [0.15, 0.01, 200] \
---output [.../input_corrected.nii, .../input_biasfield.nii]'
+--output .../input_corrected.nii'
 """
 
 __all__ = ["N4BiasFieldCorrection"]
@@ -98,14 +98,18 @@ class N4BiasFieldCorrection(ShellCommandTask):
         output_parameters = field(
             metadata={
                 "help_string": "output parameters",
-                "argstr": "--output [{output_image}, {output_bias_field}]",
                 "readonly": True,
+                "formatter": lambda output_image, save_bias_field, output_bias_field: (
+                    f"--output [{output_image}, {output_bias_field}]" if save_bias_field else f"--output {output_image}"
+                ),
             }
         )
 
         output_image: str = field(
             metadata={"help_string": "output image", "output_file_template": "{input_image}_corrected"}
         )
+
+        save_bias_field: bool = field(default=False, metadata={"help_string": "save bias field"})
 
         output_bias_field: str = field(
             metadata={"help_string": "output bias field", "output_file_template": "{input_image}_biasfield"}
