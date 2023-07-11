@@ -41,6 +41,23 @@ from pydra.engine.specs import ShellSpec, SpecInfo
 from pydra.engine.task import ShellCommandTask
 
 
+def _format_output_parameters(
+    output_image: PathLike,
+    save_warp_field: bool,
+    output_warp_field: PathLike,
+    save_transform: bool,
+    output_transform: PathLike,
+    invert_transform: bool,
+) -> str:
+    return "-o {}".format(
+        "Linear[{}, {:%d}]".format(output_transform, invert_transform)
+        if save_transform
+        else "[{}, {:%d}]".format(output_warp_field, save_warp_field)
+        if save_warp_field
+        else f"{output_image}"
+    )
+
+
 class ApplyTransforms(ShellCommandTask):
     """Task definition for antsApplyTransforms."""
 
@@ -70,9 +87,35 @@ class ApplyTransforms(ShellCommandTask):
 
         fixed_image: PathLike = field(metadata={"help_string": "fixed image", "mandatory": True, "argstr": "-r"})
 
-        output_image: str = field(
-            metadata={"help_string": "output image", "argstr": "-o", "output_file_template": "{moving_image}_warped"}
+        output_parameters: str = field(
+            metadata={
+                "help_string": "output parameters",
+                "readonly": True,
+                "formatter": _format_output_parameters,
+            }
         )
+
+        output_image: str = field(
+            metadata={"help_string": "output image", "output_file_template": "{moving_image}_warped"}
+        )
+
+        save_warp_field: bool = field(metadata={"help_string": "save composite warp field"})
+
+        output_warp_field: str = field(
+            metadata={"help_string": "output warp field", "output_file_template": "{moving_image}_warpfield"}
+        )
+
+        save_transform: bool = field(metadata={"help_string": "save composite transform"})
+
+        output_transform: str = field(
+            metadata={
+                "help_string": "output transform",
+                "output_file_template": "{moving_image}_affine.mat",
+                "keep_extension": False,
+            }
+        )
+
+        invert_transform: bool = field(default=False, metadata={"help_string": "invert composite transform"})
 
         interpolation: str = field(
             default="Linear",
