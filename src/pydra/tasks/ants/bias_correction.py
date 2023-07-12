@@ -109,10 +109,14 @@ class N4BiasFieldCorrection(ShellCommandTask):
             metadata={"help_string": "output image", "output_file_template": "{input_image}_corrected"}
         )
 
-        save_bias_field: bool = field(default=False, metadata={"help_string": "save bias field"})
+        save_bias_field: bool = field(metadata={"help_string": "save bias field"})
 
         output_bias_field: str = field(
-            metadata={"help_string": "output bias field", "output_file_template": "{input_image}_biasfield"}
+            metadata={
+                "help_string": "output bias field",
+                "output_file_template": "{input_image}_biasfield",
+                "requires": {"save_bias_field"},
+            }
         )
 
     input_spec = SpecInfo(name="Input", bases=(InputSpec,))

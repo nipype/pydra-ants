@@ -102,7 +102,11 @@ class ApplyTransforms(ShellCommandTask):
         save_warp_field: bool = field(metadata={"help_string": "save composite warp field"})
 
         output_warp_field: str = field(
-            metadata={"help_string": "output warp field", "output_file_template": "{moving_image}_warpfield"}
+            metadata={
+                "help_string": "output warp field",
+                "output_file_template": "{moving_image}_warpfield",
+                "requires": {"save_warp_field"},
+            }
         )
 
         save_transform: bool = field(metadata={"help_string": "save composite transform"})
@@ -112,6 +116,7 @@ class ApplyTransforms(ShellCommandTask):
                 "help_string": "output transform",
                 "output_file_template": "{moving_image}_affine.mat",
                 "keep_extension": False,
+                "requires": {"save_transform"},
             }
         )
 
