@@ -26,6 +26,7 @@ segmentation and statistical analysis.
 ## Available Tasks
 
 - ApplyTransforms
+- CreateJacobianDeterminantImage
 - N4BiasFieldCorrection
 - RegistrationSyNQuick
 
