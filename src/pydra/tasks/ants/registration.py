@@ -149,7 +149,7 @@ class RegistrationSyNQuick(ShellCommandTask):
             default=False,
             metadata={
                 "help_string": "use histogram matching",
-                "formatter": lambda use_histogram_matching: f"-j {int(use_histogram_matching)}",
+                "formatter": lambda use_histogram_matching: f"-j {use_histogram_matching:d}",
             },
         )
 
@@ -157,7 +157,7 @@ class RegistrationSyNQuick(ShellCommandTask):
             default=False,
             metadata={
                 "help_string": "use reproducible mode",
-                "formatter": lambda use_reproducible_mode: f"-y {int(use_reproducible_mode)}",
+                "formatter": lambda use_reproducible_mode: f"-y {use_reproducible_mode:d}",
             },
         )
 

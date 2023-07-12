@@ -195,7 +195,7 @@ class ApplyTransforms(ShellCommandTask):
             default=False,
             metadata={
                 "help_string": "enable verbose output",
-                "formatter": lambda verbose: f"--verbose {int(verbose)}",
+                "formatter": lambda verbose: f"--verbose {verbose:d}",
             },
         )
 
