@@ -12,7 +12,7 @@ Examples
 >>> task = ApplyTransforms(
 ...     moving_image="moving.nii",
 ...     fixed_image="fixed.nii",
-...     interpolation="BSpline",
+...     interpolator="BSpline",
 ...     input_transforms=["affine.mat"],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
@@ -21,14 +21,14 @@ Examples
 >>> task = ApplyTransforms(
 ...     moving_image="moving.nii",
 ...     fixed_image="fixed.nii",
-...     interpolation="Gaussian",
+...     interpolator="Gaussian",
 ...     sigma=4.0,
 ...     alpha=1.0,
 ...     input_transforms=["affine.mat", "warp_field.nii.gz"],
 ...     invert_transforms=[True, False],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
-'antsApplyTransforms ... -n Gaussian[4.0, 1.0] -t [affine.mat, 1] -t [warp_field.nii.gz, 0] ...'
+'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat, 1] -t [warp_field.nii.gz, 0] ...'
 """
 
 __all__ = ["ApplyTransforms"]
@@ -55,6 +55,17 @@ def _format_output_parameters(
         else "[{}, {:%d}]".format(output_warp_field, save_warp_field)
         if save_warp_field
         else f"{output_image}"
+    )
+
+
+def _format_interpolation(interpolator: str, sigma: float, alpha: float, order: int) -> str:
+    return "-n {}{}".format(
+        interpolator,
+        f"[{order}]"
+        if interpolator == "BSpline"
+        else f"[{sigma},{alpha}]"
+        if interpolator in ("MultiLabel", "Gaussian")
+        else ""
     )
 
 
@@ -122,7 +133,15 @@ class ApplyTransforms(ShellCommandTask):
 
         invert_transform: bool = field(default=False, metadata={"help_string": "invert composite transform"})
 
-        interpolation: str = field(
+        interpolation_: str = field(
+            metadata={
+                "help_string": "interpolation parameter",
+                "readonly": True,
+                "formatter": _format_interpolation,
+            }
+        )
+
+        interpolator: str = field(
             default="Linear",
             metadata={
                 "help_string": "interpolation method",
@@ -136,24 +155,14 @@ class ApplyTransforms(ShellCommandTask):
                     "HammingWindowedSinc",
                     "LanczosWindowedSinc",
                 },
-                "formatter": lambda interpolation, sigma, alpha, spline_order: (
-                    f"-n {interpolation}"
-                    + (
-                        f"[{spline_order}]"
-                        if interpolation == "BSpline"
-                        else f"[{sigma}, {alpha}]"
-                        if interpolation in ("MultiLabel", "Gaussian")
-                        else ""
-                    )
-                ),
             },
         )
 
-        sigma: float = field(metadata={"help_string": "sigma parameter for MultiLabel and Gaussian interpolation"})
+        sigma: float = field(default=1.0, metadata={"help_string": "sigma parameter interpolation"})
 
-        alpha: float = field(metadata={"help_string": "alpha parameter for MultiLabel and Gaussian interpolation"})
+        alpha: float = field(default=1.0, metadata={"help_string": "alpha parameter for interpolation"})
 
-        spline_order: int = field(default=3, metadata={"help_string": "spline order for BSpline interpolation"})
+        order: int = field(default=3, metadata={"help_string": "order parameter for interpolation"})
 
         output_datatype: str = field(
             metadata={
