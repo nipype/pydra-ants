@@ -13,7 +13,7 @@ Examples
 ...     moving_image="moving.nii",
 ...     fixed_image="fixed.nii",
 ...     interpolation="BSpline",
-...     transform_list=["affine.mat"],
+...     input_transforms=["affine.mat"],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
 'antsApplyTransforms ... -n BSpline[3] -t affine.mat ...'
@@ -24,8 +24,8 @@ Examples
 ...     interpolation="Gaussian",
 ...     sigma=4.0,
 ...     alpha=1.0,
-...     transform_list=["affine.mat", "warp_field.nii.gz"],
-...     which_to_invert=[True, False],
+...     input_transforms=["affine.mat", "warp_field.nii.gz"],
+...     invert_transforms=[True, False],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
 'antsApplyTransforms ... -n Gaussian[4.0, 1.0] -t [affine.mat, 1] -t [warp_field.nii.gz, 0] ...'
@@ -163,21 +163,21 @@ class ApplyTransforms(ShellCommandTask):
             }
         )
 
-        transform_list: Sequence[PathLike] = field(
+        input_transforms: Sequence[PathLike] = field(
             metadata={
-                "help_string": "list of transforms to apply",
-                "formatter": lambda transform_list, which_to_invert: (
+                "help_string": "input transforms to apply",
+                "formatter": lambda input_transforms, invert_transforms: (
                     ""
-                    if not transform_list
-                    else " ".join(f"-t {f}" for f in transform_list)
-                    if not which_to_invert
-                    else " ".join(f"-t [{f}, {int(i)}]" for f, i in zip(transform_list, which_to_invert))
+                    if not input_transforms
+                    else " ".join(f"-t {f}" for f in input_transforms)
+                    if not invert_transforms
+                    else " ".join(f"-t [{f}, {int(i)}]" for f, i in zip(input_transforms, invert_transforms))
                 ),
             }
         )
 
-        which_to_invert: Sequence[bool] = field(
-            metadata={"help_string": "specify which transforms to invert", "requires": {"transform_list"}}
+        invert_transforms: Sequence[bool] = field(
+            metadata={"help_string": "which transforms to invert", "requires": {"input_transforms"}}
         )
 
         default_value: float = field(metadata={"help_string": "default voxel value", "argstr": "-f"})
