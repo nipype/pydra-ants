@@ -41,7 +41,7 @@ from pydra.engine.specs import ShellSpec, SpecInfo
 from pydra.engine.task import ShellCommandTask
 
 
-def _format_output_parameters(
+def _format_output(
     output_image: PathLike,
     save_warp_field: bool,
     output_warp_field: PathLike,
@@ -50,9 +50,9 @@ def _format_output_parameters(
     invert_transform: bool,
 ) -> str:
     return "-o {}".format(
-        "Linear[{}, {:%d}]".format(output_transform, invert_transform)
+        "Linear[{},{:%d}]".format(output_transform, invert_transform)
         if save_transform
-        else "[{}, {:%d}]".format(output_warp_field, save_warp_field)
+        else "[{},{:%d}]".format(output_warp_field, save_warp_field)
         if save_warp_field
         else f"{output_image}"
     )
@@ -98,12 +98,8 @@ class ApplyTransforms(ShellCommandTask):
 
         fixed_image: PathLike = field(metadata={"help_string": "fixed image", "mandatory": True, "argstr": "-r"})
 
-        output_parameters: str = field(
-            metadata={
-                "help_string": "output parameters",
-                "readonly": True,
-                "formatter": _format_output_parameters,
-            }
+        output_: str = field(
+            metadata={"help_string": "output parameter", "readonly": True, "formatter": _format_output}
         )
 
         output_image: str = field(
@@ -134,11 +130,7 @@ class ApplyTransforms(ShellCommandTask):
         invert_transform: bool = field(default=False, metadata={"help_string": "invert composite transform"})
 
         interpolation_: str = field(
-            metadata={
-                "help_string": "interpolation parameter",
-                "readonly": True,
-                "formatter": _format_interpolation,
-            }
+            metadata={"help_string": "interpolation parameter", "readonly": True, "formatter": _format_interpolation}
         )
 
         interpolator: str = field(
