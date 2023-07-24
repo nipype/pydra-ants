@@ -28,7 +28,7 @@ Examples
 ...     invert_transforms=[True, False],
 ... )
 >>> task.cmdline    # doctest: +ELLIPSIS
-'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat, 1] -t [warp_field.nii.gz, 0] ...'
+'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat,1] -t [warp_field.nii.gz,0] ...'
 """
 
 __all__ = ["ApplyTransforms"]
@@ -65,7 +65,7 @@ def _format_interpolation(interpolator: str, sigma: float, alpha: float, order: 
         if interpolator == "BSpline"
         else f"[{sigma},{alpha}]"
         if interpolator in ("MultiLabel", "Gaussian")
-        else ""
+        else "",
     )
 
 
@@ -180,7 +180,7 @@ class ApplyTransforms(ShellCommandTask):
                     if not input_transforms
                     else " ".join(f"-t {f}" for f in input_transforms)
                     if not invert_transforms
-                    else " ".join(f"-t [{f}, {int(i)}]" for f, i in zip(input_transforms, invert_transforms))
+                    else " ".join(f"-t [{f},{int(i)}]" for f, i in zip(input_transforms, invert_transforms))
                 ),
             }
         )
