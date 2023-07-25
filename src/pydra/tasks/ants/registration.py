@@ -232,18 +232,22 @@ class Registration(ShellCommandTask):
 
         rigid_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for rigid stage"})
 
-        rigid_convergence: Sequence[int] = field(
-            default=(1000, 500, 250, 0),
+        rigid_convergence_: Sequence[int] = field(
             metadata={
-                "help_string": "convergence for rigid stage",
-                "formatter": lambda enable_rigid_stage, rigid_convergence, rigid_threshold, rigid_window_size: (
+                "help_string": "convergence parameter for rigid stage",
+                "readonly": True,
+                "formatter": lambda enable_rigid_stage, rigid_num_iterations, rigid_threshold, rigid_window_size: (
                     "-c [{},{},{}]".format(
-                        "x".join(str(c) for c in rigid_convergence), rigid_threshold, rigid_window_size
+                        "x".join(str(c) for c in rigid_num_iterations), rigid_threshold, rigid_window_size
                     )
                     if enable_rigid_stage
                     else ""
                 ),
             },
+        )
+
+        rigid_num_iterations: Sequence[int] = field(
+            default=(1000, 500, 250, 0), metadata={"help_string": "number of iterations for rigid stage"}
         )
 
         rigid_threshold: float = field(default=1e-6, metadata={"help_string": "convergence threshold for rigid stage"})
@@ -325,18 +329,22 @@ class Registration(ShellCommandTask):
 
         affine_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for affine stage"})
 
-        affine_convergence: Sequence[int] = field(
-            default=(1000, 500, 250, 0),
+        affine_convergence_: Sequence[int] = field(
             metadata={
-                "help_string": "convergence for affine stage",
-                "formatter": lambda enable_affine_stage, affine_convergence, affine_threshold, affine_window_size: (
+                "help_string": "convergence parameter for affine stage",
+                "readonly": True,
+                "formatter": lambda enable_affine_stage, affine_num_iterations, affine_threshold, affine_window_size: (
                     "-c [{},{},{}]".format(
-                        "x".join(str(c) for c in affine_convergence), affine_threshold, affine_window_size
+                        "x".join(str(c) for c in affine_num_iterations), affine_threshold, affine_window_size
                     )
                     if enable_affine_stage
                     else ""
                 ),
             },
+        )
+
+        affine_num_iterations: Sequence[int] = field(
+            default=(1000, 500, 250, 0), metadata={"help_string": "number of iterations for affine stage"}
         )
 
         affine_threshold: float = field(
@@ -438,16 +446,20 @@ class Registration(ShellCommandTask):
 
         syn_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for SyN stage"})
 
-        syn_convergence: Sequence[int] = field(
-            default=(100, 70, 50, 20),
+        syn_convergence_: str = field(
             metadata={
-                "help_string": "convergence for SyN stage",
-                "formatter": lambda enable_syn_stage, syn_convergence, syn_threshold, syn_window_size: (
-                    "-c [{},{},{}]".format("x".join(str(c) for c in syn_convergence), syn_threshold, syn_window_size)
+                "help_string": "convergence parameter for SyN stage",
+                "readonly": True,
+                "formatter": lambda enable_syn_stage, syn_num_iterations, syn_threshold, syn_window_size: (
+                    "-c [{},{},{}]".format("x".join(str(c) for c in syn_num_iterations), syn_threshold, syn_window_size)
                     if enable_syn_stage
                     else ""
                 ),
             },
+        )
+
+        syn_num_iterations: Sequence[int] = field(
+            default=(100, 70, 50, 20), metadata={"help_string": "number of iterations for SyN stage"}
         )
 
         syn_threshold: float = field(default=1e-6, metadata={"help_string": "convergence threshold for SyN stage"})
@@ -696,7 +708,7 @@ def registration_syn(
         rigid_num_bins=32,
         rigid_sampling_strategy="Regular",
         rigid_sampling_rate=0.25,
-        rigid_convergence=(1000, 500, 250, 0 if quick else 100),
+        rigid_num_iterations=(1000, 500, 250, 0 if quick else 100),
         rigid_shrink_factors=(12, 8, 4, 2) if large else (8, 4, 2, 1),
         rigid_smoothing_sigmas=(4, 3, 2, 1) if large else (3, 2, 1, 0),
         enable_affine_stage=transform_type in {"a", "b", "s"},
@@ -706,7 +718,7 @@ def registration_syn(
         affine_num_bins=32,
         affine_sampling_strategy="Regular",
         affine_sampling_rate=0.25,
-        affine_convergence=(1000, 500, 250, 0 if quick else 100),
+        affine_num_iterations=(1000, 500, 250, 0 if quick else 100),
         affine_shrink_factors=(12, 8, 4, 2) if large else (8, 4, 2, 1),
         affine_smoothing_sigmas=(4, 3, 2, 1) if large else (3, 2, 1, 0),
         enable_syn_stage=transform_type[0] in {"b", "s"},
@@ -716,7 +728,7 @@ def registration_syn(
         syn_metric="CC" if reproducible else "MI",
         syn_radius=radius,
         syn_num_bins=num_bins,
-        syn_convergence=((100, 100, 70, 50, 0 if quick else 20) if large else (100, 70, 50, 0 if quick else 20)),
+        syn_num_iterations=((100, 100, 70, 50, 0 if quick else 20) if large else (100, 70, 50, 0 if quick else 20)),
         syn_shrink_factors=(10, 6, 4, 2, 1) if large else (8, 4, 2, 1),
         syn_smoothing_sigmas=(5, 3, 2, 1, 0) if large else (3, 2, 1, 0),
         use_histogram_matching=use_histogram_matching,
