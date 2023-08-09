@@ -1,8 +1,3 @@
-"""
-Registration
-============
-"""
-
 __all__ = ["Registration", "registration_syn", "registration_syn_quick"]
 
 from functools import partial

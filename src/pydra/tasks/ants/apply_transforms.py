@@ -1,36 +1,3 @@
-"""
-ApplyTransforms
-===============
-
-Examples
---------
-
->>> task = ApplyTransforms(moving_image="moving.nii", fixed_image="fixed.nii")
->>> task.cmdline    # doctest: +ELLIPSIS
-'antsApplyTransforms -e scalar -i moving.nii -r fixed.nii -o .../moving_warped.nii -n Linear ...'
-
->>> task = ApplyTransforms(
-...     moving_image="moving.nii",
-...     fixed_image="fixed.nii",
-...     interpolator="BSpline",
-...     input_transforms=["affine.mat"],
-... )
->>> task.cmdline    # doctest: +ELLIPSIS
-'antsApplyTransforms ... -n BSpline[3] -t affine.mat ...'
-
->>> task = ApplyTransforms(
-...     moving_image="moving.nii",
-...     fixed_image="fixed.nii",
-...     interpolator="Gaussian",
-...     sigma=4.0,
-...     alpha=1.0,
-...     input_transforms=["affine.mat", "warp_field.nii.gz"],
-...     invert_transforms=[True, False],
-... )
->>> task.cmdline    # doctest: +ELLIPSIS
-'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat,1] -t [warp_field.nii.gz,0] ...'
-"""
-
 __all__ = ["ApplyTransforms"]
 
 from os import PathLike
@@ -70,7 +37,35 @@ def _format_interpolation(interpolator: str, sigma: float, alpha: float, order: 
 
 
 class ApplyTransforms(ShellCommandTask):
-    """Task definition for antsApplyTransforms."""
+    """Task definition for antsApplyTransforms.
+
+    Examples
+    --------
+    >>> task = ApplyTransforms(moving_image="moving.nii", fixed_image="fixed.nii")
+    >>> task.cmdline    # doctest: +ELLIPSIS
+    'antsApplyTransforms -e scalar -i moving.nii -r fixed.nii -o .../moving_warped.nii -n Linear ...'
+
+    >>> task = ApplyTransforms(
+    ...     moving_image="moving.nii",
+    ...     fixed_image="fixed.nii",
+    ...     interpolator="BSpline",
+    ...     input_transforms=["affine.mat"],
+    ... )
+    >>> task.cmdline    # doctest: +ELLIPSIS
+    'antsApplyTransforms ... -n BSpline[3] -t affine.mat ...'
+
+    >>> task = ApplyTransforms(
+    ...     moving_image="moving.nii",
+    ...     fixed_image="fixed.nii",
+    ...     interpolator="Gaussian",
+    ...     sigma=4.0,
+    ...     alpha=1.0,
+    ...     input_transforms=["affine.mat", "warp_field.nii.gz"],
+    ...     invert_transforms=[True, False],
+    ... )
+    >>> task.cmdline    # doctest: +ELLIPSIS
+    'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat,1] -t [warp_field.nii.gz,0] ...'
+    """
 
     @define(kw_only=True)
     class InputSpec(ShellSpec):

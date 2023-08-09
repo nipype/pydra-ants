@@ -1,15 +1,3 @@
-"""
-CreateJacobianDeterminantImage
-==============================
-
-Examples
---------
-
->>> task = CreateJacobianDeterminantImage(dimensionality=3, warp_field="warp.nii.gz")
->>> task.cmdline    # doctest: +ELLIPSIS
-'CreateJacobianDeterminantImage 3 warp.nii.gz .../warp_jac.nii.gz 0 0'
-"""
-
 __all__ = ["CreateJacobianDeterminantImage"]
 
 from os import PathLike
@@ -20,7 +8,14 @@ from pydra.engine.task import ShellCommandTask
 
 
 class CreateJacobianDeterminantImage(ShellCommandTask):
-    """Task definition for CreateJacobianDeterminantImage."""
+    """Task definition for CreateJacobianDeterminantImage.
+
+    Examples
+    --------
+    >>> task = CreateJacobianDeterminantImage(dimensionality=3, warp_field="warp.nii.gz")
+    >>> task.cmdline    # doctest: +ELLIPSIS
+    'CreateJacobianDeterminantImage 3 warp.nii.gz .../warp_jac.nii.gz 0 0'
+    """
 
     @define(kw_only=True)
     class InputSpec(ShellSpec):

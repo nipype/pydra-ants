@@ -1,16 +1,3 @@
-"""
-Bias Field Correction
-=====================
-
-Examples
---------
-
->>> task = N4BiasFieldCorrection(input_image="input.nii")
->>> task.cmdline    # doctest: +ELLIPSIS
-'N4BiasFieldCorrection -i input.nii -r 1 -s 4 -b [200,3] -c [50x50x50x50,0.0] -t [0.15,0.01,200] \
--o .../input_corrected.nii'
-"""
-
 __all__ = ["N4BiasFieldCorrection"]
 
 from os import PathLike
@@ -22,7 +9,15 @@ from pydra.engine.task import ShellCommandTask
 
 
 class N4BiasFieldCorrection(ShellCommandTask):
-    """Task definition for N4BiasFieldCorrection."""
+    """Task definition for N4BiasFieldCorrection.
+
+    Examples
+    --------
+    >>> task = N4BiasFieldCorrection(input_image="input.nii")
+    >>> task.cmdline    # doctest: +ELLIPSIS
+    'N4BiasFieldCorrection -i input.nii -r 1 -s 4 -b [200,3] -c [50x50x50x50,0.0] -t [0.15,0.01,200] \
+-o .../input_corrected.nii'
+    """
 
     @define(kw_only=True)
     class InputSpec(ShellSpec):
