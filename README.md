@@ -28,7 +28,7 @@ segmentation and statistical analysis.
 - ApplyTransforms
 - CreateJacobianDeterminantImage
 - N4BiasFieldCorrection
-- RegistrationSyNQuick
+- Registration, registration_syn, registration_syn_quick
 
 ## Installation
 
