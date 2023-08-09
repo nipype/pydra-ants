@@ -70,11 +70,7 @@ class ApplyTransforms(ShellCommandTask):
     @define(kw_only=True)
     class InputSpec(ShellSpec):
         dimensionality: int = field(
-            metadata={
-                "help_string": "force image dimensionality (2, 3 or 4)",
-                "argstr": "-d",
-                "allowed_values": {2, 3, 4},
-            }
+            metadata={"help_string": "image dimensionality", "argstr": "-d", "allowed_values": {2, 3, 4}}
         )
 
         image_type: str = field(
