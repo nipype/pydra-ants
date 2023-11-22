@@ -1,0 +1,180 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.segmentation.LaplacianThickness' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Docs
+# ----
+# Calculates the cortical thickness from an anatomical image
+# 
+#     Examples
+#     --------
+# 
+#     >>> from nipype.interfaces.ants import LaplacianThickness
+#     >>> cort_thick = LaplacianThickness()
+#     >>> cort_thick.inputs.input_wm = 'white_matter.nii.gz'
+#     >>> cort_thick.inputs.input_gm = 'gray_matter.nii.gz'
+#     >>> cort_thick.cmdline
+#     'LaplacianThickness white_matter.nii.gz gray_matter.nii.gz white_matter_thickness.nii.gz'
+# 
+#     >>> cort_thick.inputs.output_image = 'output_thickness.nii.gz'
+#     >>> cort_thick.cmdline
+#     'LaplacianThickness white_matter.nii.gz gray_matter.nii.gz output_thickness.nii.gz'
+# 
+#     
+task_name: LaplacianThickness
+nipype_name: LaplacianThickness
+nipype_module: nipype.interfaces.ants.segmentation
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    input_wm: medimage/nifti-gz
+    # type=file|default=<undefined>: white matter segmentation image
+    input_gm: medimage/nifti-gz
+    # type=file|default=<undefined>: gray matter segmentation image
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    output_image: medimage/nifti-gz
+    # type=file: Cortical thickness
+    # type=str|default='': name of output file
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests:
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    input_wm:
+    # type=file|default=<undefined>: white matter segmentation image
+    input_gm:
+    # type=file|default=<undefined>: gray matter segmentation image
+    output_image:
+    # type=file: Cortical thickness
+    # type=str|default='': name of output file
+    smooth_param:
+    # type=float|default=0.0: Sigma of the Laplacian Recursive Image Filter (defaults to 1)
+    prior_thickness:
+    # type=float|default=0.0: Prior thickness (defaults to 500)
+    dT:
+    # type=float|default=0.0: Time delta used during integration (defaults to 0.01)
+    sulcus_prior:
+    # type=float|default=0.0: Positive floating point number for sulcus prior. Authors said that 0.15 might be a reasonable value
+    tolerance:
+    # type=float|default=0.0: Tolerance to reach during optimization (defaults to 0.001)
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    input_wm:
+    # type=file|default=<undefined>: white matter segmentation image
+    input_gm:
+    # type=file|default=<undefined>: gray matter segmentation image
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    output_image: '"output_thickness.nii.gz"'
+    # type=file: Cortical thickness
+    # type=str|default='': name of output file
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+doctests:
+- cmdline: LaplacianThickness white_matter.nii.gz gray_matter.nii.gz white_matter_thickness.nii.gz
+  # str - the expected cmdline output
+  inputs:
+  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+  # If the field is of file-format type and the value is None, then the
+  # '.mock()' method of the corresponding class is used instead.
+    input_wm:
+    # type=file|default=<undefined>: white matter segmentation image
+    input_gm:
+    # type=file|default=<undefined>: gray matter segmentation image
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  directive:
+  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+- cmdline: LaplacianThickness white_matter.nii.gz gray_matter.nii.gz output_thickness.nii.gz
+  # str - the expected cmdline output
+  inputs:
+  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+  # If the field is of file-format type and the value is None, then the
+  # '.mock()' method of the corresponding class is used instead.
+    output_image: '"output_thickness.nii.gz"'
+    # type=file: Cortical thickness
+    # type=str|default='': name of output file
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  directive:
+  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

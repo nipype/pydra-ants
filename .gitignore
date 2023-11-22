@@ -131,4 +131,11 @@ dmypy.json
 # Pycharm
 .idea
 
-_version.py
+# VS Code
+.vscode
+
+# Mac garbarge
+.DS_store
+
+/pydra/tasks/ants/auto
+/pydra/tasks/ants/_version.py

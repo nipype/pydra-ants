@@ -1,0 +1,151 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.legacy.buildtemplateparallel' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Docs
+# ----
+# Generate a optimal average template
+# 
+#     .. warning::
+# 
+#       This can take a VERY long time to complete
+# 
+#     Examples
+#     --------
+# 
+#     >>> from nipype.interfaces.ants.legacy import buildtemplateparallel
+#     >>> tmpl = buildtemplateparallel()
+#     >>> tmpl.inputs.in_files = ['T1.nii', 'structural.nii']
+#     >>> tmpl.inputs.max_iterations = [30, 90, 20]
+#     >>> tmpl.cmdline
+#     'buildtemplateparallel.sh -d 3 -i 4 -m 30x90x20 -o antsTMPL_ -c 0 -t GR T1.nii structural.nii'
+# 
+#     
+task_name: buildtemplateparallel
+nipype_name: buildtemplateparallel
+nipype_module: nipype.interfaces.ants.legacy
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    in_files: medimage/nifti1+list-of
+    # type=list|default=[]: list of images to generate template from
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    final_template_file: generic/file
+    # type=file: final ANTS template
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests:
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    dimension:
+    # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3 or 4)
+    out_prefix:
+    # type=str|default='antsTMPL_': Prefix that is prepended to all output files (default = antsTMPL_)
+    in_files:
+    # type=list|default=[]: list of images to generate template from
+    parallelization:
+    # type=enum|default=0|allowed[0,1,2]: control for parallel processing (0 = serial, 1 = use PBS, 2 = use PEXEC, 3 = use Apple XGrid
+    gradient_step_size:
+    # type=float|default=0.0: smaller magnitude results in more cautious steps (default = .25)
+    iteration_limit:
+    # type=int|default=4: iterations of template construction
+    num_cores:
+    # type=int|default=0: Requires parallelization = 2 (PEXEC). Sets number of cpu cores to use
+    max_iterations:
+    # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
+    bias_field_correction:
+    # type=bool|default=False: Applies bias field correction to moving image
+    rigid_body_registration:
+    # type=bool|default=False: registers inputs before creating template (useful if no initial template available)
+    similarity_metric:
+    # type=enum|default='PR'|allowed['CC','MI','MSQ','PR']: Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
+    transformation_model:
+    # type=enum|default='GR'|allowed['DD','EL','EX','GR','S2','SY']: Type of transofmration model used for registration (EL = elastic transformation model, SY = SyN with time, arbitrary number of time points, S2 =  SyN with time optimized for 2 time points, GR = greedy SyN, EX = exponential, DD = diffeomorphic demons style exponential mapping
+    use_first_as_target:
+    # type=bool|default=False: uses first volume as target of all inputs. When not used, an unbiased average image is used to start.
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    in_files:
+    # type=list|default=[]: list of images to generate template from
+    max_iterations: '[30, 90, 20]'
+    # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+doctests:
+- cmdline: buildtemplateparallel.sh -d 3 -i 4 -m 30x90x20 -o antsTMPL_ -c 0 -t GR T1.nii structural.nii
+  # str - the expected cmdline output
+  inputs:
+  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+  # If the field is of file-format type and the value is None, then the
+  # '.mock()' method of the corresponding class is used instead.
+    in_files:
+    # type=list|default=[]: list of images to generate template from
+    max_iterations: '[30, 90, 20]'
+    # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  directive:
+  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

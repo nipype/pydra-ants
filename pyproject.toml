@@ -1,34 +1,83 @@
 [build-system]
-requires = ["flit_scm"]
-build-backend = "flit_scm:buildapi"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
 [project]
 name = "pydra-ants"
-description = "Pydra task package for ANTs tools"
-requires-python = ">=3.7"
-dependencies = ["pydra >=0.6.1"]
+description = "Pydra tasks package for ants"
+readme = "README.rst"
+requires-python = ">=3.8"
+dependencies = [
+    "pydra >=0.22",
+    "fileformats >=0.8.3",
+    "fileformats-datascience >=0.1",
+    "fileformats-medimage >=0.4.1",
+    "fileformats-medimage-ants"
+]
+license = {file = "LICENSE"}
+authors = [{name = "Nipype developers", email = "neuroimaging@python.org"}]
+maintainers = [{name = "Nipype developers", email = "neuroimaging@python.org"}]
+keywords = ["pydra"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
 dynamic = ["version"]
 
 [project.optional-dependencies]
+dev = [
+    "black",
+    "pre-commit",
+]
 doc = [
-  "packaging",
-  "sphinx >= 2.1.2",
-  "sphinx_rtd_theme",
-  "sphinxcontrib-apidoc ~= 0.3.0",
-  "sphinxcontrib-napoleon",
-  "sphinxcontrib-versioning",
+    "packaging",
+    "sphinx >=2.1.2",
+    "sphinx_rtd_theme",
+    "sphinxcontrib-apidoc ~=0.3.0",
+    "sphinxcontrib-napoleon",
+    "sphinxcontrib-versioning",
 ]
 test = [
-  "pytest >= 4.4.0",
-  "pytest-cov",
-  "pytest-env",
-  "pytest-xdist",
-  "pytest-rerunfailures",
-  "codecov",
+    "pytest >= 4.4.0",
+    "pytest-cov",
+    "pytest-env",
+    "pytest-xdist",
+    "pytest-rerunfailures",
+    "codecov",
+    "fileformats-extras",
+    "fileformats-datascience-extras",
+    "fileformats-medimage-extras",
+    "fileformats-medimage-ants-extras"
 ]
 
-[tool.flit.module]
-name = "pydra.tasks.ants"
+[tool.hatch.version]
+source = "vcs"
 
-[tool.setuptools_scm]
-write_to = "pydra/tasks/ants/_version.py"
+[tool.hatch.build.hooks.vcs]
+version-file = "pydra/tasks/ants/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["pydra"]
+include-only = ["pydra/tasks/ants"]
+
+[tool.black]
+target-version = ["py38"]
+exclude = "_version.py"
+
+[tool.codespell]
+ignore-words = ".codespell-ignorewords"
+
+[tool.flake8]
+doctests = true
+per-file-ignores = [
+    "__init__.py:F401,F403"
+]
+max-line-length = 88
+select = "C,E,F,W,B,B950"
+extend-ignore = ['E203', 'E501', 'E129', 'W503']
