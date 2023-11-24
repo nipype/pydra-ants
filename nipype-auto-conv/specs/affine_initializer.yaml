@@ -34,7 +34,7 @@ inputs:
     # type=file|default=<undefined>: reference image
     moving_image: medimage/nifti1
     # type=file|default=<undefined>: moving image
-    out_file: generic/file
+    out_file: Path
     # type=file: output transform file
     # type=file|default='transform.mat': output transform file
   metadata:

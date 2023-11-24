@@ -27,6 +27,7 @@ inputs:
   # list[str] - fields to omit from the Pydra interface
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
+    dimension: dim
   types:
   # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
   # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
@@ -71,19 +72,15 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    dimension:
+    dimension: 3
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
     reference_image:
     # type=file|default=<undefined>: template file to warp to
     input_image:
     # type=file|default=<undefined>: input image to warp to template
-    force_proceed:
-    # type=bool|default=False: force script to proceed even if headers may be incompatible
-    inverse_warp_template_labels:
-    # type=bool|default=False: Applies inverse warp to the template labels to estimate label positions in target space (use for template-based segmentation)
-    max_iterations:
+    
     # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations
-    bias_field_correction:
+    bias_field_correction: False
     # type=bool|default=False: Applies bias field correction to moving image
     similarity_metric:
     # type=enum|default='PR'|allowed['CC','MI','MSQ','PR']: Type of similartiy metric used for registration (CC = cross correlation, MI = mutual information, PR = probability mapping, MSQ = mean square difference)
@@ -95,10 +92,7 @@ tests:
     # type=bool|default=False: Perform a quality check of the result
     num_threads:
     # type=int|default=1: Number of ITK threads to use
-    args:
-    # type=str|default='': Additional parameters to the command
-    environ:
-    # type=dict|default={}: Environment variables
+
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys

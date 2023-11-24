@@ -49,7 +49,7 @@ inputs:
     # type=file|default=<undefined>: fixed mage mask
     moving_image_mask: generic/file
     # type=file|default=<undefined>: moving mage mask
-    output_transform: generic/file
+    output_transform: Path
     # type=file: output file name
     # type=file|default='initialization.mat': output file name
   metadata:
@@ -65,7 +65,7 @@ outputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    output_transform: generic/file
+    output_transform: Path
     # type=file: output file name
     # type=file|default='initialization.mat': output file name
   callables:
