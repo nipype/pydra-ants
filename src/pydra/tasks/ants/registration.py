@@ -1,13 +1,17 @@
-__all__ = ["Registration", "registration_syn", "registration_syn_quick"]
+from __future__ import annotations
 
 from functools import partial
-from os import PathLike
 from pathlib import Path
-from typing import Optional, Sequence
+from typing import TYPE_CHECKING, Sequence
 
 from attrs import NOTHING, define, field
 from pydra.engine.specs import File, ShellOutSpec, ShellSpec, SpecInfo
 from pydra.engine.task import ShellCommandTask
+
+if TYPE_CHECKING:
+    from os import PathLike
+
+__all__ = ["Registration", "registration_syn", "registration_syn_quick"]
 
 
 class Registration(ShellCommandTask):
@@ -548,6 +552,7 @@ class Registration(ShellCommandTask):
 
 
 def registration_syn(
+    *,
     dimensionality: int,
     fixed_image: PathLike,
     moving_image: PathLike,
@@ -557,13 +562,13 @@ def registration_syn(
     gradient_step: float = 0.1,
     radius: int = 4,
     spline_distance: int = 26,
-    fixed_mask: Optional[PathLike] = None,
-    moving_mask: Optional[PathLike] = None,
+    fixed_mask: PathLike | None = None,
+    moving_mask: PathLike | None = None,
     use_float_precision: bool = False,
     use_minc_format: bool = False,
     use_histogram_matching: bool = False,
     reproducible: bool = False,
-    random_seed: Optional[int] = None,
+    random_seed: int | None = None,
     verbose: bool = False,
     large: bool = False,
     quick: bool = False,

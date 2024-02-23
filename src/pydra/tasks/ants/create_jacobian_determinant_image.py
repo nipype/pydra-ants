@@ -1,10 +1,10 @@
-__all__ = ["CreateJacobianDeterminantImage"]
-
 from os import PathLike
 
 from attrs import define, field
 from pydra.engine.specs import ShellSpec, SpecInfo
 from pydra.engine.task import ShellCommandTask
+
+__all__ = ["CreateJacobianDeterminantImage"]
 
 
 class CreateJacobianDeterminantImage(ShellCommandTask):

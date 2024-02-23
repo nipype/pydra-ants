@@ -9,6 +9,7 @@ from pydra.engine.task import ShellCommandTask
 
 
 def _format_output(
+    *,
     output_image: PathLike,
     save_warp_field: bool,
     output_warp_field: PathLike,
@@ -17,9 +18,9 @@ def _format_output(
     invert_transform: bool,
 ) -> str:
     return "-o {}".format(
-        "Linear[{},{:%d}]".format(output_transform, invert_transform)
+        f"Linear[{output_transform},{invert_transform:%d}]"
         if save_transform
-        else "[{},{:%d}]".format(output_warp_field, save_warp_field)
+        else f"[{output_warp_field},{save_warp_field:%d}]"
         if save_warp_field
         else f"{output_image}"
     )
