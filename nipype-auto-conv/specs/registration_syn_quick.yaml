@@ -5,14 +5,14 @@
 #
 # Docs
 # ----
-# 
+#
 #     Registration using a symmetric image normalization method (SyN).
 #     You can read more in Avants et al.; Med Image Anal., 2008
 #     (https://www.ncbi.nlm.nih.gov/pubmed/17659998).
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import RegistrationSynQuick
 #     >>> reg = RegistrationSynQuick()
 #     >>> reg.inputs.fixed_image = 'fixed1.nii'
@@ -21,9 +21,9 @@
 #     >>> reg.cmdline
 #     'antsRegistrationSyNQuick.sh -d 3 -f fixed1.nii -r 32 -m moving1.nii -n 2 -o transform -p d -s 26 -t s'
 #     >>> reg.run()  # doctest: +SKIP
-# 
+#
 #     example for multiple images
-# 
+#
 #     >>> from nipype.interfaces.ants import RegistrationSynQuick
 #     >>> reg = RegistrationSynQuick()
 #     >>> reg.inputs.fixed_image = ['fixed1.nii', 'fixed2.nii']
@@ -32,7 +32,7 @@
 #     >>> reg.cmdline
 #     'antsRegistrationSyNQuick.sh -d 3 -f fixed1.nii -f fixed2.nii -r 32 -m moving1.nii -m moving2.nii -n 2 -o transform -p d -s 26 -t s'
 #     >>> reg.run()  # doctest: +SKIP
-#     
+#
 task_name: RegistrationSynQuick
 nipype_name: RegistrationSynQuick
 nipype_module: nipype.interfaces.ants.registration
@@ -96,7 +96,7 @@ tests:
     num_threads:
     # type=int|default=1: Number of threads (default = 1)
     transform_type:
-    # type=enum|default='s'|allowed['a','b','br','r','s','sr','t']: Transform type    * t:  translation   * r:  rigid   * a:  rigid + affine   * s:  rigid + affine + deformable syn (default)   * sr: rigid + deformable syn   * b:  rigid + affine + deformable b-spline syn   * br: rigid + deformable b-spline syn  
+    # type=enum|default='s'|allowed['a','b','br','r','s','sr','t']: Transform type    * t:  translation   * r:  rigid   * a:  rigid + affine   * s:  rigid + affine + deformable syn (default)   * sr: rigid + deformable syn   * b:  rigid + affine + deformable b-spline syn   * br: rigid + deformable b-spline syn
     use_histogram_matching:
     # type=bool|default=False: use histogram matching
     histogram_bins:
@@ -119,8 +119,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -143,8 +143,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -167,8 +167,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

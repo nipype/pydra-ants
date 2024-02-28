@@ -22,12 +22,20 @@ class N4BiasFieldCorrection(ShellCommandTask):
     @define(kw_only=True)
     class InputSpec(ShellSpec):
         dimensionality: int = field(
-            metadata={"help_string": "image dimensionality", "argstr": "-d", "allowed_values": {2, 3, 4}}
+            metadata={
+                "help_string": "image dimensionality",
+                "argstr": "-d",
+                "allowed_values": {2, 3, 4},
+            }
         )
 
-        input_image: PathLike = field(metadata={"help_string": "input image", "mandatory": True, "argstr": "-i"})
+        input_image: PathLike = field(
+            metadata={"help_string": "input image", "mandatory": True, "argstr": "-i"}
+        )
 
-        mask_image: PathLike = field(metadata={"help_string": "mask image", "argstr": "-x"})
+        mask_image: PathLike = field(
+            metadata={"help_string": "mask image", "argstr": "-x"}
+        )
 
         rescale_intensities: bool = field(
             default=True,
@@ -37,9 +45,13 @@ class N4BiasFieldCorrection(ShellCommandTask):
             },
         )
 
-        weight_image: PathLike = field(metadata={"help_string": "weight image", "argstr": "-w"})
+        weight_image: PathLike = field(
+            metadata={"help_string": "weight image", "argstr": "-w"}
+        )
 
-        shrink_factor: int = field(default=4, metadata={"help_string": "shrink factor", "argstr": "-s"})
+        shrink_factor: int = field(
+            default=4, metadata={"help_string": "shrink factor", "argstr": "-s"}
+        )
 
         bspline_fitting_: str = field(
             metadata={
@@ -49,7 +61,9 @@ class N4BiasFieldCorrection(ShellCommandTask):
             }
         )
 
-        spline_distance: float = field(default=200, metadata={"help_string": "spline distance"})
+        spline_distance: float = field(
+            default=200, metadata={"help_string": "spline distance"}
+        )
 
         spline_order: int = field(default=3, metadata={"help_string": "spline order"})
 
@@ -58,7 +72,9 @@ class N4BiasFieldCorrection(ShellCommandTask):
                 "help_string": "convergence parameters",
                 "readonly": True,
                 "formatter": lambda num_iterations, threshold: (
-                    "-c [{},{}]".format("x".join(str(i) for i in num_iterations), threshold)
+                    "-c [{},{}]".format(
+                        "x".join(str(i) for i in num_iterations), threshold
+                    )
                 ),
             }
         )
@@ -67,7 +83,9 @@ class N4BiasFieldCorrection(ShellCommandTask):
             default=(50, 50, 50, 50), metadata={"help_string": "number of iterations"}
         )
 
-        threshold: float = field(default=0.0, metadata={"help_string": "convergence threshold"})
+        threshold: float = field(
+            default=0.0, metadata={"help_string": "convergence threshold"}
+        )
 
         histogram_sharpening_: str = field(
             metadata={
@@ -77,30 +95,46 @@ class N4BiasFieldCorrection(ShellCommandTask):
             }
         )
 
-        bias_field_fwhm: float = field(default=0.15, metadata={"help_string": "Bias field FWHM"})
+        bias_field_fwhm: float = field(
+            default=0.15, metadata={"help_string": "Bias field FWHM"}
+        )
 
-        wiener_filter_noise: float = field(default=0.01, metadata={"help_string": "Wiener filter noise"})
+        wiener_filter_noise: float = field(
+            default=0.01, metadata={"help_string": "Wiener filter noise"}
+        )
 
-        num_histogram_bins: int = field(default=200, metadata={"help_string": "number of histogram bins"})
+        num_histogram_bins: int = field(
+            default=200, metadata={"help_string": "number of histogram bins"}
+        )
 
         output_ = field(
             metadata={
                 "help_string": "output parameters",
                 "readonly": True,
                 "formatter": lambda output_image, save_bias_field, output_bias_field: (
-                    f"-o [{output_image},{output_bias_field}]" if save_bias_field else f"-o {output_image}"
+                    f"-o [{output_image},{output_bias_field}]"
+                    if save_bias_field
+                    else f"-o {output_image}"
                 ),
             }
         )
 
         output_image: str = field(
-            metadata={"help_string": "output image", "output_file_template": "{input_image}_corrected"}
+            metadata={
+                "help_string": "output image",
+                "output_file_template": "{input_image}_corrected",
+            }
         )
 
-        save_bias_field: bool = field(default=False, metadata={"help_string": "save bias field"})
+        save_bias_field: bool = field(
+            default=False, metadata={"help_string": "save bias field"}
+        )
 
         output_bias_field: str = field(
-            metadata={"help_string": "output bias field", "output_file_template": "{input_image}_biasfield"}
+            metadata={
+                "help_string": "output bias field",
+                "output_file_template": "{input_image}_biasfield",
+            }
         )
 
     input_spec = SpecInfo(name="Input", bases=(InputSpec,))

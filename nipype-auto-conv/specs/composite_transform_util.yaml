@@ -5,13 +5,13 @@
 #
 # Docs
 # ----
-# 
+#
 #     ANTs utility which can combine or break apart transform files into their individual
 #     constituent components.
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import CompositeTransformUtil
 #     >>> tran = CompositeTransformUtil()
 #     >>> tran.inputs.process = 'disassemble'
@@ -19,9 +19,9 @@
 #     >>> tran.cmdline
 #     'CompositeTransformUtil --disassemble output_Composite.h5 transform'
 #     >>> tran.run()  # doctest: +SKIP
-# 
+#
 #     example for assembling transformation files
-# 
+#
 #     >>> from nipype.interfaces.ants import CompositeTransformUtil
 #     >>> tran = CompositeTransformUtil()
 #     >>> tran.inputs.process = 'assemble'
@@ -30,7 +30,7 @@
 #     >>> tran.cmdline
 #     'CompositeTransformUtil --assemble my.h5 AffineTransform.mat DisplacementFieldTransform.nii.gz '
 #     >>> tran.run()  # doctest: +SKIP
-#     
+#
 task_name: CompositeTransformUtil
 nipype_name: CompositeTransformUtil
 nipype_module: nipype.interfaces.ants.registration
@@ -104,8 +104,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -126,8 +126,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -151,8 +151,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

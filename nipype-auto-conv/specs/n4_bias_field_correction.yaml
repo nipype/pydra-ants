@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Bias field correction.
-# 
+#
 #     N4 is a variant of the popular N3 (nonparameteric nonuniform normalization)
 #     retrospective bias correction algorithm. Based on the assumption that the
 #     corruption of the low frequency bias field can be modeled as a convolution of
@@ -16,14 +16,14 @@
 #     the intensities, and then spatially smoothing this result by a B-spline modeling
 #     of the bias field itself. The modifications from and improvements obtained over
 #     the original N3 algorithm are described in [Tustison2010]_.
-# 
+#
 #     .. [Tustison2010] N. Tustison et al.,
 #       N4ITK: Improved N3 Bias Correction, IEEE Transactions on Medical Imaging,
 #       29(6):1310-1320, June 2010.
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> import copy
 #     >>> from nipype.interfaces.ants import N4BiasFieldCorrection
 #     >>> n4 = N4BiasFieldCorrection()
@@ -37,7 +37,7 @@
 #     -d 3 --input-image structural.nii
 #     --convergence [ 50x50x30x20 ] --output structural_corrected.nii
 #     --shrink-factor 3'
-# 
+#
 #     >>> n4_2 = copy.deepcopy(n4)
 #     >>> n4_2.inputs.convergence_threshold = 1e-6
 #     >>> n4_2.cmdline
@@ -45,7 +45,7 @@
 #     -d 3 --input-image structural.nii
 #     --convergence [ 50x50x30x20, 1e-06 ] --output structural_corrected.nii
 #     --shrink-factor 3'
-# 
+#
 #     >>> n4_3 = copy.deepcopy(n4_2)
 #     >>> n4_3.inputs.bspline_order = 5
 #     >>> n4_3.cmdline
@@ -53,7 +53,7 @@
 #     -d 3 --input-image structural.nii
 #     --convergence [ 50x50x30x20, 1e-06 ] --output structural_corrected.nii
 #     --shrink-factor 3'
-# 
+#
 #     >>> n4_4 = N4BiasFieldCorrection()
 #     >>> n4_4.inputs.input_image = 'structural.nii'
 #     >>> n4_4.inputs.save_bias = True
@@ -61,7 +61,7 @@
 #     >>> n4_4.cmdline
 #     'N4BiasFieldCorrection -d 3 --input-image structural.nii
 #     --output [ structural_corrected.nii, structural_bias.nii ]'
-# 
+#
 #     >>> n4_5 = N4BiasFieldCorrection()
 #     >>> n4_5.inputs.input_image = 'structural.nii'
 #     >>> n4_5.inputs.dimension = 3
@@ -69,8 +69,8 @@
 #     >>> n4_5.cmdline
 #     'N4BiasFieldCorrection -d 3  --histogram-sharpening [0.12,0.02,200]
 #     --input-image structural.nii --output structural_corrected.nii'
-# 
-#     
+#
+#
 task_name: N4BiasFieldCorrection
 nipype_name: N4BiasFieldCorrection
 nipype_module: nipype.interfaces.ants.segmentation
@@ -90,7 +90,7 @@ inputs:
     mask_image: generic/file
     # type=file|default=<undefined>: image to specify region to perform final bias correction in
     weight_image: generic/file
-    # type=file|default=<undefined>: image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting. 
+    # type=file|default=<undefined>: image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.
     bias_image: generic/file
     # type=file: Estimated bias
     # type=file|default=<undefined>: Filename for the estimated bias.
@@ -131,20 +131,20 @@ tests:
     mask_image:
     # type=file|default=<undefined>: image to specify region to perform final bias correction in
     weight_image:
-    # type=file|default=<undefined>: image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting. 
+    # type=file|default=<undefined>: image for relative weighting (e.g. probability map of the white matter) of voxels during the B-spline fitting.
     output_image:
     # type=file: Warped image
     # type=str|default='': output file name
     bspline_fitting_distance:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     bspline_order:
-    # type=int|default=0: 
+    # type=int|default=0:
     shrink_factor:
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     convergence_threshold:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     save_bias:
     # type=bool|default=False: True if the estimated bias should be saved to file.
     bias_image:
@@ -170,8 +170,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -185,11 +185,11 @@ tests:
     input_image:
     # type=file|default=<undefined>: input for bias correction. Negative values or values close to zero should be processed prior to correction
     bspline_fitting_distance: '300'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     shrink_factor: '3'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '[50,50,30,20]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports: &id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -199,8 +199,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -210,7 +210,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     convergence_threshold: 1e-6
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -219,8 +219,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -230,7 +230,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     bspline_order: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -239,8 +239,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -263,8 +263,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -287,8 +287,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -306,11 +306,11 @@ doctests:
     input_image:
     # type=file|default=<undefined>: input for bias correction. Negative values or values close to zero should be processed prior to correction
     bspline_fitting_distance: '300'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     shrink_factor: '3'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '[50,50,30,20]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports: *id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -323,7 +323,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     convergence_threshold: 1e-6
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -336,7 +336,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     bspline_order: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys

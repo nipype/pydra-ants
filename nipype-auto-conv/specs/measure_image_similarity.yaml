@@ -5,12 +5,12 @@
 #
 # Docs
 # ----
-# 
-# 
-# 
+#
+#
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import MeasureImageSimilarity
 #     >>> sim = MeasureImageSimilarity()
 #     >>> sim.inputs.dimension = 3
@@ -25,7 +25,7 @@
 #     >>> sim.inputs.moving_image_mask = 'mask.nii.gz'
 #     >>> sim.cmdline
 #     'MeasureImageSimilarity --dimensionality 3 --masks ["mask.nii","mask.nii.gz"] --metric MI["T1.nii","resting.nii",1.0,5,Regular,1.0]'
-#     
+#
 task_name: MeasureImageSimilarity
 nipype_name: MeasureImageSimilarity
 nipype_module: nipype.interfaces.ants.registration
@@ -79,7 +79,7 @@ tests:
     moving_image:
     # type=file|default=<undefined>: Image to apply transformation to (generally a coregistered functional)
     metric:
-    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']: 
+    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
     metric_weight:
     # type=float|default=1.0: The "metricWeight" variable is not used.
     radius_or_number_of_bins:
@@ -106,8 +106,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -119,7 +119,7 @@ tests:
     dimension: '3'
     # type=enum|default=2|allowed[2,3,4]: Dimensionality of the fixed/moving image pair
     metric: '"MI"'
-    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']: 
+    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
     fixed_image:
     # type=file|default=<undefined>: Image to which the moving image is warped
     moving_image:
@@ -144,8 +144,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -161,7 +161,7 @@ doctests:
     dimension: '3'
     # type=enum|default=2|allowed[2,3,4]: Dimensionality of the fixed/moving image pair
     metric: '"MI"'
-    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']: 
+    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
     fixed_image:
     # type=file|default=<undefined>: Image to which the moving image is warped
     moving_image:

@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Operations over images.
-# 
+#
 #     Examples
 #     --------
 #     >>> ImageMath(
@@ -15,51 +15,51 @@
 #     ...     operation='+',
 #     ...     op2='2').cmdline
 #     'ImageMath 3 structural_maths.nii + structural.nii 2'
-# 
+#
 #     >>> ImageMath(
 #     ...     op1='structural.nii',
 #     ...     operation='Project',
 #     ...     op2='1 2').cmdline
 #     'ImageMath 3 structural_maths.nii Project structural.nii 1 2'
-# 
+#
 #     >>> ImageMath(
 #     ...     op1='structural.nii',
 #     ...     operation='G',
 #     ...     op2='4').cmdline
 #     'ImageMath 3 structural_maths.nii G structural.nii 4'
-# 
+#
 #     >>> ImageMath(
 #     ...     op1='structural.nii',
 #     ...     operation='TruncateImageIntensity',
 #     ...     op2='0.005 0.999 256').cmdline
 #     'ImageMath 3 structural_maths.nii TruncateImageIntensity structural.nii 0.005 0.999 256'
-# 
+#
 #     By default, Nipype copies headers from the first input image (``op1``)
 #     to the output image.
 #     For some operations, as the ``PadImage`` operation, the header cannot be copied from inputs to
 #     outputs, and so ``copy_header`` option is automatically set to ``False``.
-# 
+#
 #     >>> pad = ImageMath(
 #     ...     op1='structural.nii',
 #     ...     operation='PadImage')
 #     >>> pad.inputs.copy_header
 #     False
-# 
+#
 #     While the operation is set to ``PadImage``,
 #     setting ``copy_header = True`` will have no effect.
-# 
+#
 #     >>> pad.inputs.copy_header = True
 #     >>> pad.inputs.copy_header
 #     False
-# 
+#
 #     For any other operation, ``copy_header`` can be enabled/disabled normally:
-# 
+#
 #     >>> pad.inputs.operation = "ME"
 #     >>> pad.inputs.copy_header = True
 #     >>> pad.inputs.copy_header
 #     True
-# 
-#     
+#
+#
 task_name: ImageMath
 nipype_name: ImageMath
 nipype_module: nipype.interfaces.ants.utils
@@ -133,8 +133,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -157,8 +157,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -181,8 +181,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -205,8 +205,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -229,8 +229,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

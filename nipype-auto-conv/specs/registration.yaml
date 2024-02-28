@@ -6,33 +6,33 @@
 # Docs
 # ----
 # ANTs Registration command for registration of images
-# 
+#
 #     `antsRegistration <http://stnava.github.io/ANTs/>`_ registers a ``moving_image`` to a ``fixed_image``,
 #     using a predefined (sequence of) cost function(s) and transformation operations.
 #     The cost function is defined using one or more 'metrics', specifically
 #     local cross-correlation (``CC``), Mean Squares (``MeanSquares``), Demons (``Demons``),
 #     global correlation (``GC``), or Mutual Information (``Mattes`` or ``MI``).
-# 
+#
 #     ANTS can use both linear (``Translation``, ``Rigid``, ``Affine``, ``CompositeAffine``,
 #     or ``Translation``) and non-linear transformations (``BSpline``, ``GaussianDisplacementField``,
 #     ``TimeVaryingVelocityField``, ``TimeVaryingBSplineVelocityField``, ``SyN``, ``BSplineSyN``,
 #     ``Exponential``, or ``BSplineExponential``). Usually, registration is done in multiple
 #     *stages*. For example first an Affine, then a Rigid, and ultimately a non-linear
 #     (Syn)-transformation.
-# 
+#
 #     antsRegistration can be initialized using one or more transforms from moving_image
 #     to fixed_image with the ``initial_moving_transform``-input. For example, when you
 #     already have a warpfield that corrects for geometrical distortions in an EPI (functional) image,
 #     that you want to apply before an Affine registration to a structural image.
 #     You could put this transform into 'intial_moving_transform'.
-# 
+#
 #     The Registration-interface can output the resulting transform(s) that map moving_image to
 #     fixed_image in a single file as a ``composite_transform`` (if ``write_composite_transform``
 #     is set to ``True``), or a list of transforms as ``forwards_transforms``. It can also output
 #     inverse transforms (from ``fixed_image`` to ``moving_image``) in a similar fashion using
 #     ``inverse_composite_transform``. Note that the order of ``forward_transforms`` is in 'natural'
 #     order: the first element should be applied first, the last element should be applied last.
-# 
+#
 #     Note, however, that ANTS tools always apply lists of transformations in reverse order (the last
 #     transformation in the list is applied first). Therefore, if the output forward_transforms
 #     is a list, one can not directly feed it into, for example, ``ants.ApplyTransforms``. To
@@ -41,23 +41,23 @@
 #     ``reverse_forward_transforms`` outputs ``forward_transforms`` in reverse order and can be used for
 #     this purpose. Note also that, because ``composite_transform`` is always a single file, this
 #     output is preferred for  most use-cases.
-# 
+#
 #     More information can be found in the `ANTS
 #     manual <https://sourceforge.net/projects/advants/files/Documentation/ants.pdf/download>`_.
-# 
+#
 #     See below for some useful examples.
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     Set up a Registration node with some default settings. This Node registers
 #     'fixed1.nii' to 'moving1.nii' by first fitting a linear 'Affine' transformation, and
 #     then a non-linear 'SyN' transformation, both using the Mutual Information-cost
 #     metric.
-# 
+#
 #     The registration is initialized by first applying the (linear) transform
 #     trans.mat.
-# 
+#
 #     >>> import copy, pprint
 #     >>> from nipype.interfaces.ants import Registration
 #     >>> reg = Registration()
@@ -88,51 +88,51 @@
 #     >>> reg.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
 #     >>> reg.run()  # doctest: +SKIP
-# 
+#
 #     Same as reg1, but first invert the initial transform ('trans.mat') before applying it.
-# 
+#
 #     >>> reg.inputs.invert_initial_moving_transform = True
 #     >>> reg1 = copy.deepcopy(reg)
 #     >>> reg1.inputs.winsorize_lower_quantile = 0.025
 #     >>> reg1.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 1.0 ]  --write-composite-transform 1'
 #     >>> reg1.run()  # doctest: +SKIP
-# 
+#
 #     Clip extremely high intensity data points using winsorize_upper_quantile. All data points
 #     higher than the 0.975 quantile are set to the value of the 0.975 quantile.
-# 
+#
 #     >>> reg2 = copy.deepcopy(reg)
 #     >>> reg2.inputs.winsorize_upper_quantile = 0.975
 #     >>> reg2.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 0.975 ]  --write-composite-transform 1'
-# 
+#
 #     Clip extremely low intensity data points using winsorize_lower_quantile. All data points
 #     lower than the 0.025 quantile are set to the original value at the 0.025 quantile.
-# 
-# 
+#
+#
 #     >>> reg3 = copy.deepcopy(reg)
 #     >>> reg3.inputs.winsorize_lower_quantile = 0.025
 #     >>> reg3.inputs.winsorize_upper_quantile = 0.975
 #     >>> reg3.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 0.975 ]  --write-composite-transform 1'
-# 
+#
 #     Use float instead of double for computations (saves memory usage)
-# 
+#
 #     >>> reg3a = copy.deepcopy(reg)
 #     >>> reg3a.inputs.float = True
 #     >>> reg3a.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 1 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     Force to use double instead of float for computations (more precision and memory usage).
-# 
+#
 #     >>> reg3b = copy.deepcopy(reg)
 #     >>> reg3b.inputs.float = False
 #     >>> reg3b.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 0 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     'collapse_output_transforms' can be used to put all transformation in a single 'composite_transform'-
 #     file. Note that forward_transforms will now be an empty list.
-# 
+#
 #     >>> # Test collapse transforms flag
 #     >>> reg4 = copy.deepcopy(reg)
 #     >>> reg4.inputs.save_state = 'trans.mat'
@@ -156,8 +156,8 @@
 #      'warped_image': '...data/output_warped_image.nii.gz'}
 #     >>> reg4.cmdline
 #     'antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
-# 
+#
+#
 #     >>> # Test collapse transforms flag
 #     >>> reg4b = copy.deepcopy(reg4)
 #     >>> reg4b.inputs.write_composite_transform = False
@@ -181,7 +181,7 @@
 #     >>> reg4b.aggregate_outputs()  # doctest: +SKIP
 #     >>> reg4b.cmdline
 #     'antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 0'
-# 
+#
 #     One can use multiple similarity metrics in a single registration stage.The Node below first
 #     performs a linear registration using only the Mutual Information ('Mattes')-metric.
 #     In a second stage, it performs a non-linear registration ('Syn') using both a
@@ -189,7 +189,7 @@
 #     equally ('metric_weight' is .5 for both). The Mutual Information- metric uses 32 bins.
 #     The local cross-correlations (correlations between every voxel's neighborhoods) is computed
 #     with a radius of 4.
-# 
+#
 #     >>> # Test multiple metrics per stage
 #     >>> reg5 = copy.deepcopy(reg)
 #     >>> reg5.inputs.fixed_image = 'fixed1.nii'
@@ -201,64 +201,64 @@
 #     >>> reg5.inputs.sampling_percentage = [0.05, [0.05, 0.10]]
 #     >>> reg5.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed1.nii, moving1.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     ANTS Registration can also use multiple modalities to perform the registration. Here it is assumed
 #     that fixed1.nii and fixed2.nii are in the same space, and so are moving1.nii and
 #     moving2.nii. First, a linear registration is performed matching fixed1.nii to moving1.nii,
 #     then a non-linear registration is performed to match fixed2.nii to moving2.nii, starting from
 #     the transformation of the first step.
-# 
+#
 #     >>> # Test multiple inputS
 #     >>> reg6 = copy.deepcopy(reg5)
 #     >>> reg6.inputs.fixed_image = ['fixed1.nii', 'fixed2.nii']
 #     >>> reg6.inputs.moving_image = ['moving1.nii', 'moving2.nii']
 #     >>> reg6.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed2.nii, moving2.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     Different methods can be used for the interpolation when applying transformations.
-# 
+#
 #     >>> # Test Interpolation Parameters (BSpline)
 #     >>> reg7a = copy.deepcopy(reg)
 #     >>> reg7a.inputs.interpolation = 'BSpline'
 #     >>> reg7a.inputs.interpolation_parameters = (3,)
 #     >>> reg7a.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation BSpline[ 3 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     >>> # Test Interpolation Parameters (MultiLabel/Gaussian)
 #     >>> reg7b = copy.deepcopy(reg)
 #     >>> reg7b.inputs.interpolation = 'Gaussian'
 #     >>> reg7b.inputs.interpolation_parameters = (1.0, 1.0)
 #     >>> reg7b.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Gaussian[ 1.0, 1.0 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     BSplineSyN non-linear registration with custom parameters.
-# 
+#
 #     >>> # Test Extended Transform Parameters
 #     >>> reg8 = copy.deepcopy(reg)
 #     >>> reg8.inputs.transforms = ['Affine', 'BSplineSyN']
 #     >>> reg8.inputs.transform_parameters = [(2.0,), (0.25, 26, 0, 3)]
 #     >>> reg8.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform BSplineSyN[ 0.25, 26, 0, 3 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     Mask the fixed image in the second stage of the registration (but not the first).
-# 
+#
 #     >>> # Test masking
 #     >>> reg9 = copy.deepcopy(reg)
 #     >>> reg9.inputs.fixed_image_masks = ['NULL', 'fixed1.nii']
 #     >>> reg9.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ NULL, NULL ] --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ fixed1.nii, NULL ] --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-# 
+#
 #     Here we use both a warpfield and a linear transformation, before registration commences.  Note that
 #     the first transformation that needs to be applied ('ants_Warp.nii.gz') is last in the list of
 #     'initial_moving_transform'.
-# 
+#
 #     >>> # Test initialization with multiple transforms matrices (e.g., unwarp and affine transform)
 #     >>> reg10 = copy.deepcopy(reg)
 #     >>> reg10.inputs.initial_moving_transform = ['func_to_struct.mat', 'ants_Warp.nii.gz']
 #     >>> reg10.inputs.invert_initial_moving_transform = [False, False]
 #     >>> reg10.cmdline
 #     'antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ func_to_struct.mat, 0 ] [ ants_Warp.nii.gz, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ]  --write-composite-transform 1'
-#     
+#
 task_name: Registration
 nipype_name: Registration
 nipype_module: nipype.interfaces.ants.registration
@@ -355,75 +355,75 @@ tests:
     initial_moving_transform_com:
     # type=enum|default=0|allowed[0,1,2]: Align the moving_image and fixed_image before registration using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
     metric_item_trait:
-    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']: 
+    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
     metric_stage_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     metric:
     # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
     metric_weight_item_trait:
-    # type=float|default=1.0: 
+    # type=float|default=1.0:
     metric_weight_stage_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     metric_weight:
     # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
     radius_bins_item_trait:
-    # type=int|default=5: 
+    # type=int|default=5:
     radius_bins_stage_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     radius_or_number_of_bins:
     # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
     sampling_strategy_item_trait:
-    # type=enum|default='None'|allowed['None','Random','Regular',None]: 
+    # type=enum|default='None'|allowed['None','Random','Regular',None]:
     sampling_strategy_stage_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     sampling_strategy:
     # type=list|default=[]: the metric sampling strategy (strategies) for each stage
     sampling_percentage_item_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     sampling_percentage_stage_trait:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     sampling_percentage:
     # type=list|default=[]: the metric sampling percentage(s) to use for each stage
     use_estimate_learning_rate_once:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_histogram_matching:
     # type=traitcompound|default=True: Histogram match the images before registration.
     interpolation:
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     write_composite_transform:
-    # type=bool|default=False: 
+    # type=bool|default=False:
     collapse_output_transforms:
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
     initialize_transforms_per_stage:
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine). 
+    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
     float:
     # type=bool|default=False: Use float instead of double for computations.
     transforms:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     transform_parameters:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     restrict_deformation:
     # type=list|default=[]: This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the  first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation.  Low-dimensional restriction only works if there are no preceding transformations.
     number_of_iterations:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     smoothing_sigmas:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     sigma_units:
     # type=list|default=[]: units for smoothing sigmas
     shrink_factors:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     convergence_threshold:
-    # type=list|default=[1e-06]: 
+    # type=list|default=[1e-06]:
     convergence_window_size:
-    # type=list|default=[10]: 
+    # type=list|default=[10]:
     output_transform_prefix:
-    # type=str|default='transform': 
+    # type=str|default='transform':
     output_warped_image:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     output_inverse_warped_image:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     winsorize_upper_quantile:
     # type=range|default=1.0: The Upper quantile to clip image ranges
     winsorize_lower_quantile:
@@ -431,7 +431,7 @@ tests:
     random_seed:
     # type=int|default=0: Fixed seed for random number generation
     verbose:
-    # type=bool|default=False: 
+    # type=bool|default=False:
     num_threads:
     # type=int|default=1: Number of ITK threads to use
     args:
@@ -446,8 +446,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -461,23 +461,23 @@ tests:
     moving_image:
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     output_transform_prefix: '"output_"'
-    # type=str|default='transform': 
+    # type=str|default='transform':
     initial_moving_transform:
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
     transforms: '["Affine", "SyN"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     transform_parameters: '[(2.0,), (0.25, 3.0, 0.0)]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     number_of_iterations: '[[1500, 200], [100, 50, 30]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
     write_composite_transform: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     collapse_output_transforms: 'False'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
     initialize_transforms_per_stage: 'False'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine). 
+    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
     metric: '["Mattes"]*2'
     # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
     metric_weight: '[1]*2 # Default (value ignored currently by ANTs)'
@@ -489,21 +489,21 @@ tests:
     sampling_percentage: '[0.05, None]'
     # type=list|default=[]: the metric sampling percentage(s) to use for each stage
     convergence_threshold: '[1.e-8, 1.e-9]'
-    # type=list|default=[1e-06]: 
+    # type=list|default=[1e-06]:
     convergence_window_size: '[20]*2'
-    # type=list|default=[10]: 
+    # type=list|default=[10]:
     smoothing_sigmas: '[[1,0], [2,1,0]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     sigma_units: '["vox"] * 2'
     # type=list|default=[]: units for smoothing sigmas
     shrink_factors: '[[2,1], [3,2,1]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_estimate_learning_rate_once: '[True, True]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_histogram_matching: '[True, True] # This is the default'
     # type=traitcompound|default=True: Histogram match the images before registration.
     output_warped_image: '"output_warped_image.nii.gz"'
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports: &id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -514,8 +514,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -536,8 +536,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -556,8 +556,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -578,8 +578,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -598,8 +598,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -618,8 +618,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -634,7 +634,7 @@ tests:
     restore_state:
     # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
     initialize_transforms_per_stage: 'True'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine). 
+    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
     collapse_output_transforms: 'True'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
   imports:
@@ -645,8 +645,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -656,7 +656,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     write_composite_transform: 'False'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -665,8 +665,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -697,8 +697,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -719,8 +719,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -730,9 +730,9 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (3,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -741,8 +741,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -752,9 +752,9 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     interpolation: '"Gaussian"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (1.0, 1.0)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -763,8 +763,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -774,9 +774,9 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     transforms: '["Affine", "BSplineSyN"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -785,8 +785,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -805,8 +805,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -827,8 +827,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -846,23 +846,23 @@ doctests:
     moving_image:
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     output_transform_prefix: '"output_"'
-    # type=str|default='transform': 
+    # type=str|default='transform':
     initial_moving_transform:
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
     transforms: '["Affine", "SyN"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     transform_parameters: '[(2.0,), (0.25, 3.0, 0.0)]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     number_of_iterations: '[[1500, 200], [100, 50, 30]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
     write_composite_transform: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     collapse_output_transforms: 'False'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
     initialize_transforms_per_stage: 'False'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine). 
+    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
     metric: '["Mattes"]*2'
     # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
     metric_weight: '[1]*2 # Default (value ignored currently by ANTs)'
@@ -874,21 +874,21 @@ doctests:
     sampling_percentage: '[0.05, None]'
     # type=list|default=[]: the metric sampling percentage(s) to use for each stage
     convergence_threshold: '[1.e-8, 1.e-9]'
-    # type=list|default=[1e-06]: 
+    # type=list|default=[1e-06]:
     convergence_window_size: '[20]*2'
-    # type=list|default=[10]: 
+    # type=list|default=[10]:
     smoothing_sigmas: '[[1,0], [2,1,0]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     sigma_units: '["vox"] * 2'
     # type=list|default=[]: units for smoothing sigmas
     shrink_factors: '[[2,1], [3,2,1]]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_estimate_learning_rate_once: '[True, True]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_histogram_matching: '[True, True] # This is the default'
     # type=traitcompound|default=True: Histogram match the images before registration.
     output_warped_image: '"output_warped_image.nii.gz"'
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports: *id001
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -975,7 +975,7 @@ doctests:
     restore_state:
     # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
     initialize_transforms_per_stage: 'True'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine). 
+    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
     collapse_output_transforms: 'True'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
   imports:
@@ -990,7 +990,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     write_composite_transform: 'False'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -1043,9 +1043,9 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (3,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -1058,9 +1058,9 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     interpolation: '"Gaussian"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (1.0, 1.0)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -1073,9 +1073,9 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     transforms: '["Affine", "BSplineSyN"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys

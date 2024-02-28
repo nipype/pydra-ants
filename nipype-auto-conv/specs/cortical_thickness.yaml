@@ -5,7 +5,7 @@
 #
 # Docs
 # ----
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants.segmentation import CorticalThickness
@@ -23,8 +23,8 @@
 #     'antsCorticalThickness.sh -a T1.nii.gz -m ProbabilityMaskOfStudyTemplate.nii.gz
 #     -e study_template.nii.gz -d 3 -s nii.gz -o antsCT_
 #     -p nipype_priors/BrainSegmentationPrior%02d.nii.gz -t brain_study_template.nii.gz'
-# 
-#     
+#
+#
 task_name: CorticalThickness
 nipype_name: CorticalThickness
 nipype_module: nipype.interfaces.ants.segmentation
@@ -46,7 +46,7 @@ inputs:
     brain_probability_mask: medimage/nifti-gz
     # type=file|default=<undefined>: brain probability mask in template space
     segmentation_priors: medimage/nifti-gz+list-of
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     t1_registration_template: medimage/nifti-gz
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
     extraction_registration_mask: generic/file
@@ -110,7 +110,7 @@ tests:
     brain_probability_mask:
     # type=file|default=<undefined>: brain probability mask in template space
     segmentation_priors:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     out_prefix:
     # type=str|default='antsCT_': Prefix that is prepended to all output files
     image_suffix:
@@ -157,8 +157,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -176,7 +176,7 @@ tests:
     brain_probability_mask:
     # type=file|default=<undefined>: brain probability mask in template space
     segmentation_priors:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     t1_registration_template:
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
   imports:
@@ -187,8 +187,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -210,7 +210,7 @@ doctests:
     brain_probability_mask:
     # type=file|default=<undefined>: brain probability mask in template space
     segmentation_priors:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     t1_registration_template:
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
   imports:

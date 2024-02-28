@@ -6,10 +6,10 @@
 # Docs
 # ----
 # Warps a time-series from one space to another
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import WarpTimeSeriesImageMultiTransform
 #     >>> wtsimt = WarpTimeSeriesImageMultiTransform()
 #     >>> wtsimt.inputs.input_image = 'resting.nii'
@@ -17,7 +17,7 @@
 #     >>> wtsimt.inputs.transformation_series = ['ants_Warp.nii.gz','ants_Affine.txt']
 #     >>> wtsimt.cmdline
 #     'WarpTimeSeriesImageMultiTransform 4 resting.nii resting_wtsimt.nii -R ants_deformed.nii.gz ants_Warp.nii.gz ants_Affine.txt'
-# 
+#
 #     >>> wtsimt = WarpTimeSeriesImageMultiTransform()
 #     >>> wtsimt.inputs.input_image = 'resting.nii'
 #     >>> wtsimt.inputs.reference_image = 'ants_deformed.nii.gz'
@@ -25,7 +25,7 @@
 #     >>> wtsimt.inputs.invert_affine = [1] # # this will invert the 1st Affine file: ants_Affine.txt
 #     >>> wtsimt.cmdline
 #     'WarpTimeSeriesImageMultiTransform 4 resting.nii resting_wtsimt.nii -R ants_deformed.nii.gz ants_Warp.nii.gz -i ants_Affine.txt'
-#     
+#
 task_name: WarpTimeSeriesImageMultiTransform
 nipype_name: WarpTimeSeriesImageMultiTransform
 nipype_module: nipype.interfaces.ants.resampling
@@ -106,8 +106,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -130,8 +130,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -156,8 +156,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
