@@ -42,13 +42,6 @@ Documentation = "https://github.com/aramis-lab/pydra-ants#readme"
 Issues = "https://github.com/aramis-lab/pydra-ants/issues"
 Source = "https://github.com/aramis-lab/pydra-ants"
 
-[tool.black]
-target-version = ["py37"]
-line-length = 120
-
-[tool.isort]
-profile = "black"
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = [
