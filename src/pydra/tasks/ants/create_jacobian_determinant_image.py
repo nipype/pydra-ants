@@ -12,8 +12,10 @@ class CreateJacobianDeterminantImage(ShellCommandTask):
 
     Examples
     --------
-    >>> task = CreateJacobianDeterminantImage(dimensionality=3, warp_field="warp.nii.gz")
-    >>> task.cmdline    # doctest: +ELLIPSIS
+    >>> task = CreateJacobianDeterminantImage(
+    ...     dimensionality=3, warp_field="warp.nii.gz"
+    ... )
+    >>> task.cmdline  # doctest: +ELLIPSIS
     'CreateJacobianDeterminantImage 3 warp.nii.gz .../warp_jac.nii.gz 0 0'
     """
 

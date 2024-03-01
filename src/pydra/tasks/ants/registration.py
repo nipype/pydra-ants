@@ -14,6 +14,99 @@ if TYPE_CHECKING:
 __all__ = ["Registration", "registration_syn", "registration_syn_quick"]
 
 
+def _format_rigid_metric(
+    enable_rigid_stage,
+    rigid_metric,
+    fixed_image,
+    moving_image,
+    rigid_radius,
+    rigid_num_bins,
+    rigid_sampling_strategy,
+    rigid_sampling_rate,
+):
+    return (
+        "-m {}[{},{},1,{},{},{}]".format(
+            rigid_metric,
+            fixed_image,
+            moving_image,
+            rigid_num_bins if rigid_metric in {"MI", "Mattes"} else rigid_radius,
+            rigid_sampling_strategy,
+            rigid_sampling_rate,
+        )
+        if enable_rigid_stage
+        else ""
+    )
+
+
+def _format_affine_metric(
+    enable_affine_stage,
+    affine_metric,
+    fixed_image,
+    moving_image,
+    affine_radius,
+    affine_num_bins,
+    affine_sampling_strategy,
+    affine_sampling_rate,
+):
+    return (
+        "-m {}[{},{},1,{},{},{}]".format(
+            affine_metric,
+            fixed_image,
+            moving_image,
+            affine_num_bins if affine_metric in {"MI", "Mattes"} else affine_radius,
+            affine_sampling_strategy,
+            affine_sampling_rate,
+        )
+        if enable_affine_stage
+        else ""
+    )
+
+
+def _format_syn_metric(
+    enable_syn_stage,
+    syn_metric,
+    fixed_image,
+    moving_image,
+    syn_radius,
+    syn_num_bins,
+    syn_sampling_strategy,
+    syn_sampling_rate,
+):
+    return (
+        "-m {}[{},{},1,{},{},{}]".format(
+            syn_metric,
+            fixed_image,
+            moving_image,
+            syn_num_bins if syn_metric in {"MI", "Mattes"} else syn_radius,
+            syn_sampling_strategy,
+            syn_sampling_rate,
+        )
+        if enable_syn_stage
+        else ""
+    )
+
+
+def _format_syn_transform_type(
+    enable_syn_stage,
+    syn_transform_type,
+    syn_gradient_step,
+    syn_flow_sigma,
+    syn_total_sigma,
+    syn_spline_distance,
+    syn_spline_order,
+):
+    return (
+        "-t {}[{}]".format(
+            syn_transform_type,
+            f"{syn_gradient_step},{syn_spline_distance},0,{syn_spline_order}"
+            if syn_transform_type == "BSplineSyn"
+            else f"{syn_gradient_step},{syn_flow_sigma},{syn_total_sigma}",
+        )
+        if enable_syn_stage
+        else ""
+    )
+
+
 class Registration(ShellCommandTask):
     """Task definition for antsRegistration."""
 
@@ -202,18 +295,7 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "rigid metric parameter",
                 "allowed_values": {"CC", "MI", "Mattes", "MeanSquares", "Demons", "GC"},
-                "formatter": lambda enable_rigid_stage, rigid_metric, fixed_image, moving_image, rigid_radius, rigid_num_bins, rigid_sampling_strategy, rigid_sampling_rate: (
-                    "-m {}[{},{},1,{},{},{}]".format(
-                        rigid_metric,
-                        fixed_image,
-                        moving_image,
-                        rigid_num_bins if rigid_metric in {"MI", "Mattes"} else rigid_radius,
-                        rigid_sampling_strategy,
-                        rigid_sampling_rate,
-                    )
-                    if enable_rigid_stage
-                    else ""
-                ),
+                "formatter": _format_rigid_metric,
             }
         )
 
@@ -299,18 +381,7 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "metric parameter for affine stage",
                 "allowed_values": {"CC", "MI", "Mattes", "MeanSquares", "Demons", "GC"},
-                "formatter": lambda enable_affine_stage, affine_metric, fixed_image, moving_image, affine_radius, affine_num_bins, affine_sampling_strategy, affine_sampling_rate: (
-                    "-m {}[{},{},1,{},{},{}]".format(
-                        affine_metric,
-                        fixed_image,
-                        moving_image,
-                        affine_num_bins if affine_metric in {"MI", "Mattes"} else affine_radius,
-                        affine_sampling_strategy,
-                        affine_sampling_rate,
-                    )
-                    if enable_affine_stage
-                    else ""
-                ),
+                "formatter": _format_affine_metric,
             }
         )
 
@@ -388,16 +459,7 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "transform type for SyN stage",
                 "allowed_values": {"GaussianDisplacementField", "SyN", "BSplineSyN"},
-                "formatter": lambda enable_syn_stage, syn_transform_type, syn_gradient_step, syn_flow_sigma, syn_total_sigma, syn_spline_distance, syn_spline_order: (
-                    "-t {}[{}]".format(
-                        syn_transform_type,
-                        f"{syn_gradient_step},{syn_spline_distance},0,{syn_spline_order}"
-                        if syn_transform_type == "BSplineSyn"
-                        else f"{syn_gradient_step},{syn_flow_sigma},{syn_total_sigma}",
-                    )
-                    if enable_syn_stage
-                    else ""
-                ),
+                "formatter": _format_syn_transform_type,
             },
         )
 
@@ -416,18 +478,7 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "metric for SyN stage",
                 "allowed_values": {"CC", "MI", "Mattes", "MeanSquares", "Demons", "GC"},
-                "formatter": lambda enable_syn_stage, syn_metric, fixed_image, moving_image, syn_radius, syn_num_bins, syn_sampling_strategy, syn_sampling_rate: (
-                    "-m {}[{},{},1,{},{},{}]".format(
-                        syn_metric,
-                        fixed_image,
-                        moving_image,
-                        syn_num_bins if syn_metric in {"MI", "Mattes"} else syn_radius,
-                        syn_sampling_strategy,
-                        syn_sampling_rate,
-                    )
-                    if enable_syn_stage
-                    else ""
-                ),
+                "formatter": _format_syn_metric,
             },
         )
 

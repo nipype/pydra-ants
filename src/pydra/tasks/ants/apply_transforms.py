@@ -43,7 +43,7 @@ class ApplyTransforms(ShellCommandTask):
     Examples
     --------
     >>> task = ApplyTransforms(moving_image="moving.nii", fixed_image="fixed.nii")
-    >>> task.cmdline    # doctest: +ELLIPSIS
+    >>> task.cmdline  # doctest: +ELLIPSIS
     'antsApplyTransforms -e scalar -i moving.nii -r fixed.nii -o .../moving_warped.nii -n Linear ...'
 
     >>> task = ApplyTransforms(
@@ -52,7 +52,7 @@ class ApplyTransforms(ShellCommandTask):
     ...     interpolator="BSpline",
     ...     input_transforms=["affine.mat"],
     ... )
-    >>> task.cmdline    # doctest: +ELLIPSIS
+    >>> task.cmdline  # doctest: +ELLIPSIS
     'antsApplyTransforms ... -n BSpline[3] -t affine.mat ...'
 
     >>> task = ApplyTransforms(
@@ -64,7 +64,7 @@ class ApplyTransforms(ShellCommandTask):
     ...     input_transforms=["affine.mat", "warp_field.nii.gz"],
     ...     invert_transforms=[True, False],
     ... )
-    >>> task.cmdline    # doctest: +ELLIPSIS
+    >>> task.cmdline  # doctest: +ELLIPSIS
     'antsApplyTransforms ... -n Gaussian[4.0,1.0] -t [affine.mat,1] -t [warp_field.nii.gz,0] ...'
     """
 
