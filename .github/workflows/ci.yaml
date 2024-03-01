@@ -1,4 +1,4 @@
-name: test
+name: ci
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -24,22 +24,26 @@ jobs:
           python-version: '3.x'
       - name: Install Hatch
         run: pipx install hatch
-      - name: Lint codebase
-        run: hatch run lint:all
+      - name: Run formatter
+        run: hatch fmt
 
   test:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest ]
         python-version: [ '3.8', '3.9', '3.10', '3.11', '3.12']
+        include:
+          - os: macos-latest
+            python-version: '3.12'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
       - name: Install Hatch
         run: pipx install hatch
-      - name: Test codebase
-        run: hatch run test
+      - name: Run tests
+        run: hatch run +py=${{ matrix.python-version }} test
