@@ -62,3 +62,6 @@ addopts = [
 ]
 pythonpath = ["src"]
 testpaths = ["src"]
+
+[tool.ruff.lint]
+ignore = ["FBT001", "FA100"]
