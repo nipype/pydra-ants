@@ -8,7 +8,7 @@ version = "0.0.5"
 description = "Pydra tasks for ANTs"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
+license = "Apache-2.0"
 keywords = [
   "ants",
   "neuroimaging",
