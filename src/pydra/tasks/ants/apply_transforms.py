@@ -9,7 +9,6 @@ from pydra.engine.task import ShellCommandTask
 
 
 def _format_output(
-    *,
     output_image: PathLike,
     save_warp_field: bool,
     output_warp_field: PathLike,
