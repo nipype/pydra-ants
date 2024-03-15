@@ -1,15 +1,11 @@
-from __future__ import annotations
-
 from functools import partial
+from os import PathLike
 from pathlib import Path
-from typing import TYPE_CHECKING, Sequence
+from typing import Optional, Sequence
 
 from attrs import NOTHING, define, field
 from pydra.engine.specs import File, ShellOutSpec, ShellSpec, SpecInfo
 from pydra.engine.task import ShellCommandTask
-
-if TYPE_CHECKING:
-    from os import PathLike
 
 __all__ = ["Registration", "registration_syn", "registration_syn_quick"]
 
@@ -613,13 +609,13 @@ def registration_syn(
     gradient_step: float = 0.1,
     radius: int = 4,
     spline_distance: int = 26,
-    fixed_mask: PathLike | None = None,
-    moving_mask: PathLike | None = None,
+    fixed_mask: Optional[PathLike] = None,
+    moving_mask: Optional[PathLike] = None,
     use_float_precision: bool = False,
     use_minc_format: bool = False,
     use_histogram_matching: bool = False,
     reproducible: bool = False,
-    random_seed: int | None = None,
+    random_seed: Optional[int] = None,
     verbose: bool = False,
     large: bool = False,
     quick: bool = False,
