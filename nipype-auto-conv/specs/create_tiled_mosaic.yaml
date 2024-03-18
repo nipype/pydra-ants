@@ -9,10 +9,10 @@
 #     provides useful functionality for common image analysis tasks. The basic
 #     usage of CreateTiledMosaic is to tile a 3-D image volume slice-wise into
 #     a 2-D image.
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants.visualization import CreateTiledMosaic
 #     >>> mosaic_slicer = CreateTiledMosaic()
 #     >>> mosaic_slicer.inputs.input_image = 'T1.nii.gz'
@@ -25,7 +25,7 @@
 #     >>> mosaic_slicer.inputs.slices = '[2 ,100 ,160]'
 #     >>> mosaic_slicer.cmdline
 #     'CreateTiledMosaic -a 0.50 -d 2 -i T1.nii.gz -x mask.nii.gz -o output.png -p [ -15x -50 , -15x -30 ,0] -r rgb.nii.gz -s [2 ,100 ,160]'
-#     
+#
 task_name: CreateTiledMosaic
 nipype_name: CreateTiledMosaic
 nipype_module: nipype.interfaces.ants.visualization
@@ -110,8 +110,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -145,8 +145,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

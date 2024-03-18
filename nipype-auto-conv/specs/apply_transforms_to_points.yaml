@@ -7,10 +7,10 @@
 # ----
 # ApplyTransformsToPoints, applied to an CSV file, transforms coordinates
 #     using provided transform (or a set of transforms).
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import ApplyTransforms
 #     >>> at = ApplyTransformsToPoints()
 #     >>> at.inputs.dimension = 3
@@ -19,9 +19,9 @@
 #     >>> at.inputs.invert_transform_flags = [False, False]
 #     >>> at.cmdline
 #     'antsApplyTransformsToPoints --dimensionality 3 --input moving.csv --output moving_transformed.csv --transform [ trans.mat, 0 ] --transform [ ants_Warp.nii.gz, 0 ]'
-# 
-# 
-#     
+#
+#
+#
 task_name: ApplyTransformsToPoints
 nipype_name: ApplyTransformsToPoints
 nipype_module: nipype.interfaces.ants.resampling
@@ -92,8 +92,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -118,8 +118,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

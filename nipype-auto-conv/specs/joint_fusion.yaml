@@ -5,23 +5,23 @@
 #
 # Docs
 # ----
-# 
+#
 #     An image fusion algorithm.
-# 
+#
 #     Developed by Hongzhi Wang and Paul Yushkevich, and it won segmentation challenges
 #     at MICCAI 2012 and MICCAI 2013.
 #     The original label fusion framework was extended to accommodate intensities by Brian
 #     Avants.
 #     This implementation is based on Paul's original ITK-style implementation
 #     and Brian's ANTsR implementation.
-# 
+#
 #     References include 1) H. Wang, J. W. Suh, S.
 #     Das, J. Pluta, C. Craige, P. Yushkevich, Multi-atlas segmentation with joint
 #     label fusion IEEE Trans. on Pattern Analysis and Machine Intelligence, 35(3),
 #     611-623, 2013. and 2) H. Wang and P. A. Yushkevich, Multi-atlas segmentation
 #     with joint label fusion and corrective learning--an open source implementation,
 #     Front. Neuroinform., 2013.
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants import JointFusion
@@ -33,12 +33,12 @@
 #     >>> jf.cmdline
 #     "antsJointFusion -a 0.1 -g ['rc1s1.nii', 'rc1s2.nii'] -l segmentation0.nii.gz
 #     -b 2.0 -o ants_fusion_label_output.nii -s 3x3x3 -t ['im1.nii']"
-# 
+#
 #     >>> jf.inputs.target_image = [ ['im1.nii', 'im2.nii'] ]
 #     >>> jf.cmdline
 #     "antsJointFusion -a 0.1 -g ['rc1s1.nii', 'rc1s2.nii'] -l segmentation0.nii.gz
 #     -b 2.0 -o ants_fusion_label_output.nii -s 3x3x3 -t ['im1.nii', 'im2.nii']"
-# 
+#
 #     >>> jf.inputs.atlas_image = [ ['rc1s1.nii','rc1s2.nii'],
 #     ...                                        ['rc2s1.nii','rc2s2.nii'] ]
 #     >>> jf.inputs.atlas_segmentation_image = ['segmentation0.nii.gz',
@@ -47,7 +47,7 @@
 #     "antsJointFusion -a 0.1 -g ['rc1s1.nii', 'rc1s2.nii'] -g ['rc2s1.nii', 'rc2s2.nii']
 #     -l segmentation0.nii.gz -l segmentation1.nii.gz -b 2.0 -o ants_fusion_label_output.nii
 #     -s 3x3x3 -t ['im1.nii', 'im2.nii']"
-# 
+#
 #     >>> jf.inputs.dimension = 3
 #     >>> jf.inputs.alpha = 0.5
 #     >>> jf.inputs.beta = 1.0
@@ -57,7 +57,7 @@
 #     "antsJointFusion -a 0.5 -g ['rc1s1.nii', 'rc1s2.nii'] -g ['rc2s1.nii', 'rc2s2.nii']
 #     -l segmentation0.nii.gz -l segmentation1.nii.gz -b 1.0 -d 3 -o ants_fusion_label_output.nii
 #     -p 3x2x1 -s 3 -t ['im1.nii', 'im2.nii']"
-# 
+#
 #     >>> jf.inputs.search_radius = ['mask.nii']
 #     >>> jf.inputs.verbose = True
 #     >>> jf.inputs.exclusion_image = ['roi01.nii', 'roi02.nii']
@@ -66,7 +66,7 @@
 #     "antsJointFusion -a 0.5 -g ['rc1s1.nii', 'rc1s2.nii'] -g ['rc2s1.nii', 'rc2s2.nii']
 #     -l segmentation0.nii.gz -l segmentation1.nii.gz -b 1.0 -d 3 -e 1[roi01.nii] -e 2[roi02.nii]
 #     -o ants_fusion_label_output.nii -p 3x2x1 -s mask.nii -t ['im1.nii', 'im2.nii'] -v"
-# 
+#
 #     >>> jf.inputs.out_label_fusion = 'ants_fusion_label_output.nii'
 #     >>> jf.inputs.out_intensity_fusion_name_format = 'ants_joint_fusion_intensity_%d.nii.gz'
 #     >>> jf.inputs.out_label_post_prob_name_format = 'ants_joint_fusion_posterior_%d.nii.gz'
@@ -77,8 +77,8 @@
 #     -o [ants_fusion_label_output.nii, ants_joint_fusion_intensity_%d.nii.gz,
 #     ants_joint_fusion_posterior_%d.nii.gz, ants_joint_fusion_voting_weight_%d.nii.gz]
 #     -p 3x2x1 -s mask.nii -t ['im1.nii', 'im2.nii'] -v"
-# 
-#     
+#
+#
 task_name: JointFusion
 nipype_name: JointFusion
 nipype_module: nipype.interfaces.ants.segmentation
@@ -100,7 +100,7 @@ inputs:
     mask_image: generic/file
     # type=file|default=<undefined>: If a mask image is specified, fusion is only performed in the mask region.
     out_label_fusion: medimage/nifti1
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
@@ -116,7 +116,7 @@ outputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     out_label_fusion: medimage/nifti1
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
@@ -160,7 +160,7 @@ tests:
     mask_image:
     # type=file|default=<undefined>: If a mask image is specified, fusion is only performed in the mask region.
     out_label_fusion:
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
     out_intensity_fusion_name_format:
     # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
@@ -184,8 +184,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -195,7 +195,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     out_label_fusion:
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
     # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
@@ -211,8 +211,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -231,8 +231,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -253,8 +253,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -281,8 +281,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -307,8 +307,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -318,7 +318,7 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     out_label_fusion:
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
     out_intensity_fusion_name_format: '"ants_joint_fusion_intensity_%d.nii.gz"'
     # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")
@@ -334,8 +334,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -349,7 +349,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     out_label_fusion:
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
     # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
@@ -437,7 +437,7 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     out_label_fusion:
-    # type=file: 
+    # type=file:
     # type=file|default=<undefined>: The output label fusion image.
     out_intensity_fusion_name_format: '"ants_joint_fusion_intensity_%d.nii.gz"'
     # type=str|default='': Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")

@@ -6,10 +6,10 @@
 # Docs
 # ----
 # Uses ANTS to generate matrices to warp data from one space to another.
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants.legacy import antsIntroduction
 #     >>> warp = antsIntroduction()
 #     >>> warp.inputs.reference_image = 'Template_6.nii'
@@ -17,8 +17,8 @@
 #     >>> warp.inputs.max_iterations = [30,90,20]
 #     >>> warp.cmdline
 #     'antsIntroduction.sh -d 3 -i structural.nii -m 30x90x20 -o ants_ -r Template_6.nii -t GR'
-# 
-#     
+#
+#
 task_name: antsIntroduction
 nipype_name: antsIntroduction
 nipype_module: nipype.interfaces.ants.legacy
@@ -107,8 +107,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -131,8 +131,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

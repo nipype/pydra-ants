@@ -5,15 +5,15 @@
 #
 # Docs
 # ----
-# 
+#
 #     A multivariate n-class segmentation algorithm.
-# 
+#
 #     A finite mixture modeling (FMM) segmentation approach with possibilities for
 #     specifying prior constraints. These prior constraints include the specification
 #     of a prior label image, prior probability images (one for each class), and/or an
 #     MRF prior to enforce spatial smoothing of the labels. Similar algorithms include
 #     FAST and SPM.
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants import Atropos
@@ -30,7 +30,7 @@
 #     --likelihood-model Gaussian --mask-image mask.nii --mrf [0.2,1x1x1] --convergence [5,1e-06]
 #     --output [structural_labeled.nii,POSTERIOR_%02d.nii.gz] --posterior-formulation Socrates[1]
 #     --use-random-seed 1'
-# 
+#
 #     >>> at = Atropos(
 #     ...     dimension=3, intensity_images='structural.nii', mask_image='mask.nii',
 #     ...     number_of_tissue_classes=2, likelihood_model='Gaussian', save_posteriors=True,
@@ -45,7 +45,7 @@
 #     --likelihood-model Gaussian --mask-image mask.nii --mrf [0.2,1x1x1] --convergence [5,1e-06]
 #     --output [structural_labeled.nii,POSTERIOR_%02d.nii.gz] --posterior-formulation Socrates[1]
 #     --use-random-seed 1'
-# 
+#
 #     >>> at = Atropos(
 #     ...     dimension=3, intensity_images='structural.nii', mask_image='mask.nii',
 #     ...     number_of_tissue_classes=2, likelihood_model='Gaussian', save_posteriors=True,
@@ -63,7 +63,7 @@
 #     --mrf [0.2,1x1x1] --convergence [5,1e-06]
 #     --output [structural_labeled.nii,POSTERIOR_%02d.nii.gz]
 #     --posterior-formulation Socrates[1] --use-random-seed 1'
-# 
+#
 #     >>> at = Atropos(
 #     ...     dimension=3, intensity_images='structural.nii', mask_image='mask.nii',
 #     ...     number_of_tissue_classes=2, likelihood_model='Gaussian', save_posteriors=True,
@@ -80,8 +80,8 @@
 #     --likelihood-model Gaussian --mask-image mask.nii --mrf [0.2,1x1x1] --convergence [5,1e-06]
 #     --output [structural_labeled.nii,POSTERIOR_%02d.nii.gz] --posterior-formulation Socrates[1]
 #     --use-random-seed 1'
-# 
-#     
+#
+#
 task_name: Atropos
 nipype_name: Atropos
 nipype_module: nipype.interfaces.ants.segmentation
@@ -97,9 +97,9 @@ inputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     intensity_images: medimage/nifti1+list-of
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image: medimage/nifti1
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -114,14 +114,14 @@ outputs:
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
     classified_image: generic/file
-    # type=file: 
+    # type=file:
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
   templates:
   # dict[str, str] - `output_file_template` values to be provided to output fields
     out_classified_image_name: out_classified_image_name
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
   requirements:
   # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
 tests:
@@ -131,47 +131,47 @@ tests:
     dimension:
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     initialization:
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     kmeans_init_centers:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     prior_image:
     # type=traitcompound|default=None: either a string pattern (e.g., 'prior%02d.nii') or an existing vector-image file.
     number_of_tissue_classes:
-    # type=int|default=0: 
+    # type=int|default=0:
     prior_weighting:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     prior_probability_threshold:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     likelihood_model:
-    # type=str|default='': 
+    # type=str|default='':
     mrf_smoothing_factor:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update:
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations:
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations:
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation:
-    # type=str|default='': 
+    # type=str|default='':
     use_random_seed:
     # type=bool|default=True: use random seed value over constant
     use_mixture_model_proportions:
-    # type=bool|default=False: 
+    # type=bool|default=False:
     out_classified_image_name:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     save_posteriors:
-    # type=bool|default=False: 
+    # type=bool|default=False:
     output_posteriors_name_template:
-    # type=str|default='POSTERIOR_%02d.nii.gz': 
+    # type=str|default='POSTERIOR_%02d.nii.gz':
     num_threads:
     # type=int|default=1: Number of ITK threads to use
     args:
@@ -186,8 +186,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -197,35 +197,35 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     initialization: '"Random"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -234,8 +234,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -245,37 +245,37 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     initialization: '"KMeans"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     kmeans_init_centers: '[100, 200]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -284,8 +284,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -295,41 +295,41 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     initialization: '"PriorProbabilityImages"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     prior_image: '"BrainSegmentationPrior%02d.nii.gz"'
     # type=traitcompound|default=None: either a string pattern (e.g., 'prior%02d.nii') or an existing vector-image file.
     prior_weighting: '0.8'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     prior_probability_threshold: '0.0000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -338,8 +338,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -349,39 +349,39 @@ tests:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
     initialization: '"PriorLabelImage"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     prior_image: '"segmentation0.nii.gz"'
     # type=traitcompound|default=None: either a string pattern (e.g., 'prior%02d.nii') or an existing vector-image file.
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     prior_weighting: '0.8'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -390,8 +390,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -405,35 +405,35 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     initialization: '"Random"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -446,37 +446,37 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     initialization: '"KMeans"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     kmeans_init_centers: '[100, 200]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -489,41 +489,41 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     initialization: '"PriorProbabilityImages"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     prior_image: '"BrainSegmentationPrior%02d.nii.gz"'
     # type=traitcompound|default=None: either a string pattern (e.g., 'prior%02d.nii') or an existing vector-image file.
     prior_weighting: '0.8'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     prior_probability_threshold: '0.0000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -536,39 +536,39 @@ doctests:
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
     initialization: '"PriorLabelImage"'
-    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']: 
+    # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     prior_image: '"segmentation0.nii.gz"'
     # type=traitcompound|default=None: either a string pattern (e.g., 'prior%02d.nii') or an existing vector-image file.
     number_of_tissue_classes: '2'
-    # type=int|default=0: 
+    # type=int|default=0:
     prior_weighting: '0.8'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
     intensity_images:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     mask_image:
-    # type=file|default=<undefined>: 
+    # type=file|default=<undefined>:
     likelihood_model: '"Gaussian"'
-    # type=str|default='': 
+    # type=str|default='':
     save_posteriors: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     mrf_smoothing_factor: '0.2'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     mrf_radius: '[1, 1, 1]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     icm_use_synchronous_update: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
     maximum_number_of_icm_terations: '1'
-    # type=int|default=0: 
+    # type=int|default=0:
     n_iterations: '5'
-    # type=int|default=0: 
+    # type=int|default=0:
     convergence_threshold: '0.000001'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     posterior_formulation: '"Socrates"'
-    # type=str|default='': 
+    # type=str|default='':
     use_mixture_model_proportions: 'True'
-    # type=bool|default=False: 
+    # type=bool|default=False:
   imports:
   # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys

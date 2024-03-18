@@ -5,7 +5,7 @@
 #
 # Docs
 # ----
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants import AverageImages
@@ -16,7 +16,7 @@
 #     >>> avg.inputs.images = ['rc1s1.nii', 'rc1s1.nii']
 #     >>> avg.cmdline
 #     'AverageImages 3 average.nii.gz 1 rc1s1.nii rc1s1.nii'
-#     
+#
 task_name: AverageImages
 nipype_name: AverageImages
 nipype_module: nipype.interfaces.ants.utils
@@ -86,8 +86,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -113,8 +113,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

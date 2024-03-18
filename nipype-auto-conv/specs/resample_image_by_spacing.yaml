@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Resample an image with a given spacing.
-# 
+#
 #     Examples
 #     --------
 #     >>> res = ResampleImageBySpacing(dimension=3)
@@ -16,7 +16,7 @@
 #     >>> res.inputs.out_spacing = (4, 4, 4)
 #     >>> res.cmdline  #doctest: +ELLIPSIS
 #     'ResampleImageBySpacing 3 structural.nii output.nii.gz 4 4 4'
-# 
+#
 #     >>> res = ResampleImageBySpacing(dimension=3)
 #     >>> res.inputs.input_image = 'structural.nii'
 #     >>> res.inputs.output_image = 'output.nii.gz'
@@ -24,7 +24,7 @@
 #     >>> res.inputs.apply_smoothing = True
 #     >>> res.cmdline  #doctest: +ELLIPSIS
 #     'ResampleImageBySpacing 3 structural.nii output.nii.gz 4 4 4 1'
-# 
+#
 #     >>> res = ResampleImageBySpacing(dimension=3)
 #     >>> res.inputs.input_image = 'structural.nii'
 #     >>> res.inputs.output_image = 'output.nii.gz'
@@ -34,8 +34,8 @@
 #     >>> res.inputs.nn_interp = False
 #     >>> res.cmdline  #doctest: +ELLIPSIS
 #     'ResampleImageBySpacing 3 structural.nii output.nii.gz 0.4 0.4 0.4 1 2 0'
-# 
-#     
+#
+#
 task_name: ResampleImageBySpacing
 nipype_name: ResampleImageBySpacing
 nipype_module: nipype.interfaces.ants.utils
@@ -111,8 +111,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -138,8 +138,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -167,8 +167,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -200,8 +200,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
