@@ -7,10 +7,10 @@
 # ----
 # ApplyTransforms, applied to an input image, transforms it according to a
 #     reference image and a transform (or a set of transforms).
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import ApplyTransforms
 #     >>> at = ApplyTransforms()
 #     >>> at.inputs.input_image = 'moving1.nii'
@@ -18,7 +18,7 @@
 #     >>> at.inputs.transforms = 'identity'
 #     >>> at.cmdline
 #     'antsApplyTransforms --default-value 0 --float 0 --input moving1.nii --interpolation Linear --output moving1_trans.nii --reference-image fixed1.nii --transform identity'
-# 
+#
 #     >>> at = ApplyTransforms()
 #     >>> at.inputs.dimension = 3
 #     >>> at.inputs.input_image = 'moving1.nii'
@@ -30,7 +30,7 @@
 #     >>> at.inputs.invert_transform_flags = [False, True]
 #     >>> at.cmdline
 #     'antsApplyTransforms --default-value 0 --dimensionality 3 --float 0 --input moving1.nii --interpolation Linear --output deformed_moving1.nii --reference-image fixed1.nii --transform ants_Warp.nii.gz --transform [ trans.mat, 1 ]'
-# 
+#
 #     >>> at1 = ApplyTransforms()
 #     >>> at1.inputs.dimension = 3
 #     >>> at1.inputs.input_image = 'moving1.nii'
@@ -43,9 +43,9 @@
 #     >>> at1.inputs.invert_transform_flags = [False, False]
 #     >>> at1.cmdline
 #     'antsApplyTransforms --default-value 0 --dimensionality 3 --float 0 --input moving1.nii --interpolation BSpline[ 5 ] --output deformed_moving1.nii --reference-image fixed1.nii --transform ants_Warp.nii.gz --transform trans.mat'
-# 
+#
 #     Identity transforms may be used as part of a chain:
-# 
+#
 #     >>> at2 = ApplyTransforms()
 #     >>> at2.inputs.dimension = 3
 #     >>> at2.inputs.input_image = 'moving1.nii'
@@ -57,7 +57,7 @@
 #     >>> at2.inputs.transforms = ['identity', 'ants_Warp.nii.gz', 'trans.mat']
 #     >>> at2.cmdline
 #     'antsApplyTransforms --default-value 0 --dimensionality 3 --float 0 --input moving1.nii --interpolation BSpline[ 5 ] --output deformed_moving1.nii --reference-image fixed1.nii --transform identity --transform ants_Warp.nii.gz --transform trans.mat'
-#     
+#
 task_name: ApplyTransforms
 nipype_name: ApplyTransforms
 nipype_module: nipype.interfaces.ants.resampling
@@ -123,15 +123,15 @@ tests:
     reference_image:
     # type=file|default=<undefined>: reference image space that you wish to warp INTO
     interpolation:
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters:
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     transforms:
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
     invert_transform_flags:
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
     default_value:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     print_out_composite_warp_file:
     # type=bool|default=False: output a composite warp file instead of a transformed image
     float:
@@ -150,8 +150,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -174,8 +174,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -194,13 +194,13 @@ tests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"Linear"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
     invert_transform_flags: '[False, True]'
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -209,8 +209,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -229,15 +229,15 @@ tests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (5,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
     invert_transform_flags: '[False, False]'
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -246,8 +246,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -266,11 +266,11 @@ tests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (5,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["identity", "ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
   imports:
@@ -281,8 +281,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -322,13 +322,13 @@ doctests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"Linear"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
     invert_transform_flags: '[False, True]'
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -350,15 +350,15 @@ doctests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (5,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
     invert_transform_flags: '[False, False]'
-    # type=inputmultiobject|default=[]: 
+    # type=inputmultiobject|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -380,11 +380,11 @@ doctests:
     # type=file: Warped image
     # type=str|default='': output file name
     interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']: 
+    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
     interpolation_parameters: (5,)
-    # type=traitcompound|default=None: 
+    # type=traitcompound|default=None:
     default_value: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     transforms: '["identity", "ants_Warp.nii.gz", "trans.mat"]'
     # type=inputmultiobject|default=[]: transform files: will be applied in reverse order. For example, the last specified transform will be applied first.
   imports:

@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Extracts geometry measures using a label file and an optional image file
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants import LabelGeometry
@@ -16,12 +16,12 @@
 #     >>> label_extract.inputs.label_image = 'atlas.nii.gz'
 #     >>> label_extract.cmdline
 #     'LabelGeometryMeasures 3 atlas.nii.gz [] atlas.csv'
-# 
+#
 #     >>> label_extract.inputs.intensity_image = 'ants_Warp.nii.gz'
 #     >>> label_extract.cmdline
 #     'LabelGeometryMeasures 3 atlas.nii.gz ants_Warp.nii.gz atlas.csv'
-# 
-#     
+#
+#
 task_name: LabelGeometry
 nipype_name: LabelGeometry
 nipype_module: nipype.interfaces.ants.utils
@@ -93,8 +93,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -115,8 +115,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -135,8 +135,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

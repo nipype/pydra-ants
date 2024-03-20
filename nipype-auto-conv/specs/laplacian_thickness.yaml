@@ -6,22 +6,22 @@
 # Docs
 # ----
 # Calculates the cortical thickness from an anatomical image
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import LaplacianThickness
 #     >>> cort_thick = LaplacianThickness()
 #     >>> cort_thick.inputs.input_wm = 'white_matter.nii.gz'
 #     >>> cort_thick.inputs.input_gm = 'gray_matter.nii.gz'
 #     >>> cort_thick.cmdline
 #     'LaplacianThickness white_matter.nii.gz gray_matter.nii.gz white_matter_thickness.nii.gz'
-# 
+#
 #     >>> cort_thick.inputs.output_image = 'output_thickness.nii.gz'
 #     >>> cort_thick.cmdline
 #     'LaplacianThickness white_matter.nii.gz gray_matter.nii.gz output_thickness.nii.gz'
-# 
-#     
+#
+#
 task_name: LaplacianThickness
 nipype_name: LaplacianThickness
 nipype_module: nipype.interfaces.ants.segmentation
@@ -101,8 +101,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -123,8 +123,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -144,8 +144,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

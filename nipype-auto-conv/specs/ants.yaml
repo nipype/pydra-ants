@@ -7,10 +7,10 @@
 # ----
 # ANTS wrapper for registration of images
 #     (old, use Registration instead)
-# 
+#
 #     Examples
 #     --------
-# 
+#
 #     >>> from nipype.interfaces.ants import ANTS
 #     >>> ants = ANTS()
 #     >>> ants.inputs.dimension = 3
@@ -31,7 +31,7 @@
 #     >>> ants.inputs.number_of_affine_iterations = [10000,10000,10000,10000,10000]
 #     >>> ants.cmdline
 #     'ANTS 3 --MI-option 32x16000 --image-metric CC[ T1.nii, resting.nii, 1, 5 ] --number-of-affine-iterations 10000x10000x10000x10000x10000 --number-of-iterations 50x35x15 --output-naming MY --regularization Gauss[3.0,0.0] --transformation-model SyN[0.25] --use-Histogram-Matching 1'
-#     
+#
 task_name: ANTS
 nipype_name: ANTS
 nipype_module: nipype.interfaces.ants.registration
@@ -94,43 +94,43 @@ tests:
     moving_image:
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregisteredfunctional)
     metric:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     metric_weight:
     # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
     radius:
     # type=list|default=[]: radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation
     output_transform_prefix:
-    # type=str|default='out': 
+    # type=str|default='out':
     transformation_model:
-    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']: 
+    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']:
     gradient_step_length:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_time_steps:
-    # type=int|default=0: 
+    # type=int|default=0:
     delta_time:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     symmetry_type:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     use_histogram_matching:
-    # type=bool|default=True: 
+    # type=bool|default=True:
     number_of_iterations:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     smoothing_sigmas:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     subsampling_factors:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     affine_gradient_descent_option:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     mi_option:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     regularization:
-    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']: 
+    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']:
     regularization_gradient_field_sigma:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     regularization_deformation_field_sigma:
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_affine_iterations:
-    # type=list|default=[]: 
+    # type=list|default=[]:
     num_threads:
     # type=int|default=1: Number of ITK threads to use
     args:
@@ -145,8 +145,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -158,9 +158,9 @@ tests:
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
     output_transform_prefix: '"MY"'
-    # type=str|default='out': 
+    # type=str|default='out':
     metric: '["CC"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     fixed_image:
     # type=inputmultiobject|default=[]: image to which the moving image is warped
     moving_image:
@@ -170,23 +170,23 @@ tests:
     radius: '[5]'
     # type=list|default=[]: radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation
     transformation_model: '"SyN"'
-    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']: 
+    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']:
     gradient_step_length: '0.25'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_iterations: '[50, 35, 15]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_histogram_matching: 'True'
-    # type=bool|default=True: 
+    # type=bool|default=True:
     mi_option: '[32, 16000]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     regularization: '"Gauss"'
-    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']: 
+    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']:
     regularization_gradient_field_sigma: '3'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     regularization_deformation_field_sigma: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_affine_iterations: '[10000,10000,10000,10000,10000]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
@@ -195,8 +195,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -212,9 +212,9 @@ doctests:
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
     output_transform_prefix: '"MY"'
-    # type=str|default='out': 
+    # type=str|default='out':
     metric: '["CC"]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     fixed_image:
     # type=inputmultiobject|default=[]: image to which the moving image is warped
     moving_image:
@@ -224,23 +224,23 @@ doctests:
     radius: '[5]'
     # type=list|default=[]: radius of the region (i.e. number of layers around a voxel/pixel) that is used for computing cross correlation
     transformation_model: '"SyN"'
-    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']: 
+    # type=enum|default='Diff'|allowed['Diff','Elast','Exp','Greedy Exp','SyN']:
     gradient_step_length: '0.25'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_iterations: '[50, 35, 15]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     use_histogram_matching: 'True'
-    # type=bool|default=True: 
+    # type=bool|default=True:
     mi_option: '[32, 16000]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
     regularization: '"Gauss"'
-    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']: 
+    # type=enum|default='Gauss'|allowed['DMFFD','Gauss']:
     regularization_gradient_field_sigma: '3'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     regularization_deformation_field_sigma: '0'
-    # type=float|default=0.0: 
+    # type=float|default=0.0:
     number_of_affine_iterations: '[10000,10000,10000,10000,10000]'
-    # type=list|default=[]: 
+    # type=list|default=[]:
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys

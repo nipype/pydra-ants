@@ -5,7 +5,7 @@
 #
 # Docs
 # ----
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants import CreateJacobianDeterminantImage
@@ -15,7 +15,7 @@
 #     >>> jacobian.inputs.outputImage = 'out_name.nii.gz'
 #     >>> jacobian.cmdline
 #     'CreateJacobianDeterminantImage 3 ants_Warp.nii.gz out_name.nii.gz'
-#     
+#
 task_name: CreateJacobianDeterminantImage
 nipype_name: CreateJacobianDeterminantImage
 nipype_module: nipype.interfaces.ants.utils
@@ -87,8 +87,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -111,8 +111,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
