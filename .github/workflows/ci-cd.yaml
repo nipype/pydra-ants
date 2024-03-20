@@ -109,6 +109,9 @@ jobs:
         python-version: ['3.8', '3.11']
     steps:
 
+    - name: Install prerequisite packages
+      run: sudo apt install -y cmake
+
     - name: Removed unnecessary tools to free space
       run: |
         sudo rm -rf /usr/share/dotnet
@@ -123,8 +126,20 @@ jobs:
 
     - name: Install ants Package
       run: |
-        echo "NOT IMPLEMENTED YET"
-        exit 1  # This is a placeholder for the actual install command
+        workingDir=${PWD}
+        git clone https://github.com/ANTsX/ANTs.git
+        mkdir build install
+        cd build
+        cmake \
+            -DCMAKE_INSTALL_PREFIX=${workingDir}/install \
+            ../ANTs 2>&1 | tee cmake.log
+        make -j 4 2>&1 | tee build.log
+        cd ANTS-build
+        make install 2>&1 | tee install.log
+        echo "PATH=${workingDir}/install/bin:$PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=${workingDir}/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        which antsRegistration
+        antsRegistrationSyN.sh -h
 
     - name: Download tasks converted from Nipype
       uses: actions/download-artifact@v3
