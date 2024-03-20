@@ -51,6 +51,9 @@ inputs:
     # type=inputmultiobject|default=[]: Fixed image or source image or reference image
     moving_image: medimage/nifti1+list-of
     # type=inputmultiobject|default=[]: Moving image or target image
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -64,16 +67,16 @@ outputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    warped_image: generic/file
-    # type=file: Warped image
-    inverse_warped_image: generic/file
-    # type=file: Inverse warped image
-    out_matrix: generic/file
-    # type=file: Affine matrix
     forward_warp_field: generic/file
     # type=file: Forward warp field
     inverse_warp_field: generic/file
     # type=file: Inverse warp field
+    inverse_warped_image: generic/file
+    # type=file: Inverse warped image
+    out_matrix: generic/file
+    # type=file: Affine matrix
+    warped_image: generic/file
+    # type=file: Warped image
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -112,7 +115,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -136,7 +139,7 @@ tests:
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -160,7 +163,7 @@ tests:
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -188,7 +191,7 @@ doctests:
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -205,7 +208,7 @@ doctests:
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

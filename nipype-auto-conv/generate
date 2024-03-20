@@ -8,7 +8,7 @@ from importlib import import_module
 import yaml
 import nipype
 import nipype2pydra.utils
-from nipype2pydra.task import TaskConverter
+from nipype2pydra.task import get_converter
 
 
 SPECS_DIR = Path(__file__).parent / "specs"
@@ -35,6 +35,7 @@ auto_dir = PKG_ROOT / "pydra" / "tasks" / PKG_NAME / "auto"
 if auto_dir.exists():
     shutil.rmtree(auto_dir)
 
+all_interfaces = []
 for fspath in sorted(SPECS_DIR.glob("**/*.yaml")):
     with open(fspath) as f:
         spec = yaml.load(f, Loader=yaml.SafeLoader)
@@ -49,13 +50,14 @@ for fspath in sorted(SPECS_DIR.glob("**/*.yaml")):
 
     module_name = nipype2pydra.utils.to_snake_case(spec["task_name"])
 
-    converter = TaskConverter(
+    converter = get_converter(
         output_module=f"pydra.tasks.{PKG_NAME}.auto.{module_name}",
         callables_module=callables,  # type: ignore
         **spec,
     )
     converter.generate(PKG_ROOT)
     auto_init += f"from .{module_name} import {converter.task_name}\n"
+    all_interfaces.append(converter.task_name)
 
 
 with open(PKG_ROOT / "pydra" / "tasks" / PKG_NAME / "auto" / "_version.py", "w") as f:
@@ -67,6 +69,8 @@ nipype2pydra_version = "{nipype2pydra.__version__.split('.dev')[0]}"
 post_release = (nipype_version + nipype2pydra_version).replace(".", "")
 """
     )
+
+auto_init += "\n\n__all__ = [\n" + "\n".join(f"    \"{i}\"," for i in all_interfaces) + "\n]\n"
 
 with open(PKG_ROOT / "pydra" / "tasks" / PKG_NAME / "auto" / "__init__.py", "w") as f:
     f.write(auto_init)

@@ -42,12 +42,15 @@ inputs:
   # passed to the field in the automatically generated unittests.
     fixed_image: medimage/nifti1
     # type=file|default=<undefined>: Image to which the moving image is warped
-    moving_image: medimage/nifti1
-    # type=file|default=<undefined>: Image to apply transformation to (generally a coregistered functional)
     fixed_image_mask: medimage/nifti1
     # type=file|default=<undefined>: mask used to limit metric sampling region of the fixed image
+    moving_image: medimage/nifti1
+    # type=file|default=<undefined>: Image to apply transformation to (generally a coregistered functional)
     moving_image_mask: medimage/nifti-gz
     # type=file|default=<undefined>: mask used to limit metric sampling region of the moving image
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -64,6 +67,8 @@ outputs:
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
+    similarity: similarity_callable
+    # type=float: 
   templates:
   # dict[str, str] - `output_file_template` values to be provided to output fields
   requirements:
@@ -99,7 +104,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -137,7 +142,7 @@ tests:
     moving_image_mask:
     # type=file|default=<undefined>: mask used to limit metric sampling region of the moving image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -179,7 +184,7 @@ doctests:
     moving_image_mask:
     # type=file|default=<undefined>: mask used to limit metric sampling region of the moving image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

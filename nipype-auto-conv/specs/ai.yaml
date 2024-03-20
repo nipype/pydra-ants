@@ -43,15 +43,18 @@ inputs:
   # passed to the field in the automatically generated unittests.
     fixed_image: generic/file
     # type=file|default=<undefined>: Image to which the moving_image should be transformed
-    moving_image: generic/file
-    # type=file|default=<undefined>: Image that will be transformed to fixed_image
     fixed_image_mask: generic/file
     # type=file|default=<undefined>: fixed mage mask
+    moving_image: generic/file
+    # type=file|default=<undefined>: Image that will be transformed to fixed_image
     moving_image_mask: generic/file
     # type=file|default=<undefined>: moving mage mask
-    output_transform: generic/file
+    output_transform: Path
     # type=file: output file name
     # type=file|default='initialization.mat': output file name
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -113,7 +116,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically

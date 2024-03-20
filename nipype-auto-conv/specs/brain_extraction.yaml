@@ -37,12 +37,15 @@ inputs:
   # passed to the field in the automatically generated unittests.
     anatomical_image: medimage/nifti-gz
     # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_template: medimage/nifti-gz
-    # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
     brain_probability_mask: medimage/nifti-gz
     # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
+    brain_template: medimage/nifti-gz
+    # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
     extraction_registration_mask: generic/file
     # type=file|default=<undefined>: Mask (defined in the template space) used during registration for brain extraction. To limit the metric computation to a specific region.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -56,8 +59,6 @@ outputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    BrainExtractionMask: generic/file
-    # type=file: brain extraction mask
     BrainExtractionBrain: generic/file
     # type=file: brain extraction image
     BrainExtractionCSF: generic/file
@@ -72,6 +73,8 @@ outputs:
     # type=file: 
     BrainExtractionLaplacian: generic/file
     # type=file: 
+    BrainExtractionMask: generic/file
+    # type=file: brain extraction mask
     BrainExtractionPrior0GenericAffine: generic/file
     # type=file: 
     BrainExtractionPrior1InverseWarp: generic/file
@@ -132,7 +135,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -158,7 +161,7 @@ tests:
     brain_probability_mask:
     # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -188,7 +191,7 @@ doctests:
     brain_probability_mask:
     # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

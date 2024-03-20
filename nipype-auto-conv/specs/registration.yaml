@@ -277,23 +277,20 @@ inputs:
     # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
     fixed_image_mask: generic/file
     # type=file|default=<undefined>: Mask used to limit metric sampling region of the fixed imagein all stages
-    fixed_image_masks: generic/file+list-of
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
+    initial_moving_transform: datascience/text-matrix+list-of
+    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
     moving_image: medimage/nifti1+list-of
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     moving_image_mask: generic/file
     # type=file|default=<undefined>: mask used to limit metric sampling region of the moving imagein all stages
-    moving_image_masks: generic/file+list-of
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the moving image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
-    save_state: datascience/text-matrix
-    # type=file: The saved registration state to be restored
-    # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
     restore_state: datascience/text-matrix
     # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
-    initial_moving_transform: datascience/text-matrix+list-of
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform: generic/file+list-of
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+    save_state: Path
+    # type=file: The saved registration state to be restored
+    # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -309,18 +306,28 @@ outputs:
   # passed to the field in the automatically generated unittests.
     composite_transform: generic/file
     # type=file: Composite transform file
+    forward_transforms: generic/file+list-of
+    # type=list: List of output transforms for forward registration
     inverse_composite_transform: generic/file
     # type=file: Inverse composite transform file
-    warped_image: generic/file
-    # type=file: Outputs warped image
     inverse_warped_image: generic/file
     # type=file: Outputs the inverse of the warped image
+    reverse_forward_transforms: generic/file+list-of
+    # type=list: List of output transforms for forward registration reversed for antsApplyTransform
+    reverse_transforms: generic/file+list-of
+    # type=list: List of output transforms for reverse registration
     save_state: datascience/text-matrix
     # type=file: The saved registration state to be restored
     # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
+    warped_image: generic/file
+    # type=file: Outputs warped image
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
+    elapsed_time: elapsed_time_callable
+    # type=float: the total elapsed time as reported by ANTs
+    metric_value: metric_value_callable
+    # type=float: the final value of metric
   templates:
   # dict[str, str] - `output_file_template` values to be provided to output fields
   requirements:
@@ -439,7 +446,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -505,7 +512,7 @@ tests:
     output_warped_image: '"output_warped_image.nii.gz"'
     # type=traitcompound|default=None: 
   imports: &id001
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   - module: copy
   - module: pprint
@@ -524,12 +531,12 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    invert_initial_moving_transform:
+    invert_initial_moving_transform: 'True'
     # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
     winsorize_lower_quantile: '0.025'
     # type=range|default=0.0: The Lower quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -549,7 +556,7 @@ tests:
     winsorize_upper_quantile: '0.975'
     # type=range|default=1.0: The Upper quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -571,7 +578,7 @@ tests:
     winsorize_upper_quantile: '0.975'
     # type=range|default=1.0: The Upper quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -591,7 +598,7 @@ tests:
     float: 'True'
     # type=bool|default=False: Use float instead of double for computations.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -611,7 +618,7 @@ tests:
     float: 'False'
     # type=bool|default=False: Use float instead of double for computations.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -628,7 +635,7 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    save_state:
+    save_state: '"trans.mat"'
     # type=file: The saved registration state to be restored
     # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
     restore_state:
@@ -638,7 +645,7 @@ tests:
     collapse_output_transforms: 'True'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -658,7 +665,7 @@ tests:
     write_composite_transform: 'False'
     # type=bool|default=False: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -690,7 +697,7 @@ tests:
     sampling_percentage: '[0.05, [0.05, 0.10]]'
     # type=list|default=[]: the metric sampling percentage(s) to use for each stage
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -712,7 +719,7 @@ tests:
     moving_image:
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -734,7 +741,7 @@ tests:
     interpolation_parameters: (3,)
     # type=traitcompound|default=None: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -756,7 +763,7 @@ tests:
     interpolation_parameters: (1.0, 1.0)
     # type=traitcompound|default=None: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -778,7 +785,7 @@ tests:
     transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
     # type=list|default=[]: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -795,10 +802,10 @@ tests:
 - inputs:
   # dict[str, str] - values to provide to inputs fields in the task initialisation
   # (if not specified, will try to choose a sensible value)
-    fixed_image_masks:
+    fixed_image_masks: '["NULL", "fixed1.nii"]'
     # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -817,10 +824,10 @@ tests:
   # (if not specified, will try to choose a sensible value)
     initial_moving_transform:
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform:
+    invert_initial_moving_transform: '[False, False]'
     # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -890,7 +897,7 @@ doctests:
     output_warped_image: '"output_warped_image.nii.gz"'
     # type=traitcompound|default=None: 
   imports: *id001
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -900,12 +907,12 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    invert_initial_moving_transform:
+    invert_initial_moving_transform: 'True'
     # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
     winsorize_lower_quantile: '0.025'
     # type=range|default=0.0: The Lower quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -918,7 +925,7 @@ doctests:
     winsorize_upper_quantile: '0.975'
     # type=range|default=1.0: The Upper quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -933,7 +940,7 @@ doctests:
     winsorize_upper_quantile: '0.975'
     # type=range|default=1.0: The Upper quantile to clip image ranges
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -946,7 +953,7 @@ doctests:
     float: 'True'
     # type=bool|default=False: Use float instead of double for computations.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -959,7 +966,7 @@ doctests:
     float: 'False'
     # type=bool|default=False: Use float instead of double for computations.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -969,7 +976,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    save_state:
+    save_state: '"trans.mat"'
     # type=file: The saved registration state to be restored
     # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
     restore_state:
@@ -979,7 +986,7 @@ doctests:
     collapse_output_transforms: 'True'
     # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -992,7 +999,7 @@ doctests:
     write_composite_transform: 'False'
     # type=bool|default=False: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1017,7 +1024,7 @@ doctests:
     sampling_percentage: '[0.05, [0.05, 0.10]]'
     # type=list|default=[]: the metric sampling percentage(s) to use for each stage
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1032,7 +1039,7 @@ doctests:
     moving_image:
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1047,7 +1054,7 @@ doctests:
     interpolation_parameters: (3,)
     # type=traitcompound|default=None: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1062,7 +1069,7 @@ doctests:
     interpolation_parameters: (1.0, 1.0)
     # type=traitcompound|default=None: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1077,7 +1084,7 @@ doctests:
     transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
     # type=list|default=[]: 
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1087,10 +1094,10 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image_masks:
+    fixed_image_masks: '["NULL", "fixed1.nii"]'
     # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -1102,10 +1109,10 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     initial_moving_transform:
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform:
+    invert_initial_moving_transform: '[False, False]'
     # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

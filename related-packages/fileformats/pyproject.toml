@@ -8,8 +8,8 @@ description = "Classes for representing different file formats in Python classes
 readme = "README.rst"
 requires-python = ">=3.8"
 dependencies = [
-    "fileformats >= 0.4",
-    "fileformats-medimage > = 0.2"
+    "fileformats",
+    "fileformats-medimage"
 ]
 license = {file = "LICENSE"}
 authors = [
@@ -62,14 +62,14 @@ source = "vcs"
 raw-options = { root = "../.." }
 
 [tool.hatch.build.hooks.vcs]
-version-file = "fileformats/medimage_ants/_version.py"
+version-file = "fileformats/medimage_CHANGEME/_version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["fileformats"]
 
 [tool.black]
 target-version = ['py38']
-exclude = "fileformats/medimage_ants/_version.py"
+exclude = "fileformats/medimage_CHANGEME/_version.py"
 
 [tool.codespell]
 ignore-words = ".codespell-ignorewords"
