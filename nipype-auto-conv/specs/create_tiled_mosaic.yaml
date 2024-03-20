@@ -162,11 +162,11 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_image:
+    input_image: '"T1.nii.gz"'
     # type=file|default=<undefined>: Main input is a 3-D grayscale image.
-    rgb_image:
+    rgb_image: '"rgb.nii.gz"'
     # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
-    mask_image:
+    mask_image: '"mask.nii.gz"'
     # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
     output_image: '"output.png"'
     # type=file: image file

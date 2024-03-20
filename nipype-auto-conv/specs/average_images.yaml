@@ -137,7 +137,7 @@ doctests:
     # type=file|default='average.nii': the name of the resulting image.
     normalize: 'True'
     # type=bool|default=False: Normalize: if true, the 2nd image is divided by its mean. This will select the largest image to average into.
-    images:
+    images: '["rc1s1.nii", "rc1s1.nii"]'
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregistered functional)
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

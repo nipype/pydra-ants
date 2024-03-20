@@ -127,9 +127,9 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     imageDimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    deformationField:
+    deformationField: '"ants_Warp.nii.gz"'
     # type=file|default=<undefined>: deformation transformation file
-    outputImage:
+    outputImage: '"out_name.nii.gz"'
     # type=file|default=<undefined>: output filename
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

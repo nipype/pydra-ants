@@ -146,7 +146,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    input_image:
+    input_image: '"T1.nii.gz"'
     # type=file|default=<undefined>: Main input is a 3-D grayscale image.
     colormap: '"jet"'
     # type=enum|default='grey'|allowed['autumn','blue','cool','copper','custom','green','grey','hot','hsv','jet','overunder','red','spring','summer','winter']: Select a colormap

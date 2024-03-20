@@ -186,11 +186,11 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_image:
+    input_image: '"structural.nii"'
     # type=file|default=<undefined>: image to apply transformation to (generally a coregistered functional)
-    reference_image:
+    reference_image: '"ants_deformed.nii.gz"'
     # type=file|default=<undefined>: reference image space that you wish to warp INTO
-    transformation_series:
+    transformation_series: '["ants_Warp.nii.gz","ants_Affine.txt"]'
     # type=inputmultiobject|default=[]: transformation file(s) to be applied
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
@@ -203,11 +203,11 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_image:
+    input_image: '"diffusion_weighted.nii"'
     # type=file|default=<undefined>: image to apply transformation to (generally a coregistered functional)
-    reference_image:
+    reference_image: '"functional.nii"'
     # type=file|default=<undefined>: reference image space that you wish to warp INTO
-    transformation_series:
+    transformation_series: '["func2anat_coreg_Affine.txt","func2anat_InverseWarp.nii.gz",     "dwi2anat_Warp.nii.gz","dwi2anat_coreg_Affine.txt"]'
     # type=inputmultiobject|default=[]: transformation file(s) to be applied
     invert_affine: '[1]  # this will invert the 1st Affine file: "func2anat_coreg_Affine.txt"'
     # type=list|default=[]: List of Affine transformations to invert.E.g.: [1,4,5] inverts the 1st, 4th, and 5th Affines found in transformation_series. Note that indexing starts with 1 and does not include warp fields. Affine transformations are distinguished from warp fields by the word "affine" included in their filenames.

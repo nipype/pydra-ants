@@ -184,9 +184,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '"fixed1.nii"'
     # type=inputmultiobject|default=[]: Fixed image or source image or reference image
-    moving_image:
+    moving_image: '"moving1.nii"'
     # type=inputmultiobject|default=[]: Moving image or target image
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)
@@ -201,9 +201,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '["fixed1.nii", "fixed2.nii"]'
     # type=inputmultiobject|default=[]: Fixed image or source image or reference image
-    moving_image:
+    moving_image: '["moving1.nii", "moving2.nii"]'
     # type=inputmultiobject|default=[]: Moving image or target image
     num_threads: '2'
     # type=int|default=1: Number of threads (default = 1)

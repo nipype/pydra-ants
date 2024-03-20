@@ -124,7 +124,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    transforms:
+    transforms: '["trans.mat", "func_to_struct.mat"]'
     # type=inputmultiobject|default=[]: transforms to average
     output_affine_transform: '"MYtemplatewarp.mat"'
     # type=file|default=<undefined>: Outputfname.txt: the name of the resulting transform.
