@@ -16,6 +16,9 @@ on:
   repository_dispatch:
     types: [create-post-release]
 
+env: # Define environment variables
+  ANTS_VERSION: v2.5.1
+
 jobs:
 
   nipype-conv:
@@ -122,13 +125,16 @@ jobs:
       uses: actions/cache@v4
       with:
         path: install
-        key: ants-ubuntu-22.04
+        key: ants-${{ env.ANTS_VERSION }}-ubuntu-22.04
 
     - name: Install ANTs Package
       if: steps.cache-install.outputs.cache-hit != 'true'
       run: |
         workingDir=${PWD}
         git clone https://github.com/ANTsX/ANTs.git
+        pushd ./ANTs
+        git checkout ${{ env.ANTS_VERSION }}
+        popd
         mkdir build install
         cd build
         cmake -DCMAKE_INSTALL_PREFIX=${workingDir}/install ../ANTs
