@@ -1,0 +1,9 @@
+Pydra-Ants
+Copyright 2024 Pydra Development Team
+
+The ApplyTransforms, BiasCorrection, CreateJacobianDeterminantImage and Registration
+task interfaces were copied from the https://github.com/ghisvail/pydra-ants repository.
+
+The basis for the remaining task interfaces defined in this package were semi-automatically
+converted from Nipype interfaces (https://github.com/nipy/nipype) using the Nipype2Pydra
+tool (https://github.com/nipype/nipype2pydra).
