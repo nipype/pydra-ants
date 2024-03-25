@@ -5,4 +5,3 @@ from random import Random
 from fileformats.core import FileSet, SampleFileGenerator
 from fileformats.medimage_ants import (
 )
-

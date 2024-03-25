@@ -5,13 +5,13 @@
 #
 # Docs
 # ----
-# 
+#
 #     Nipype Interface to ANTs' KellyKapowski, also known as DiReCT.
-# 
+#
 #     DiReCT is a registration based estimate of cortical thickness. It was published
 #     in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based
 #     cortical thickness measurement, Neuroimage 2009, 45:867--879.
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants.segmentation import KellyKapowski
@@ -27,8 +27,8 @@
 #     --maximum-number-of-invert-displacement-field-iterations 20 --number-of-integration-points 10
 #     --segmentation-image "[segmentation0.nii.gz,2,3]" --smoothing-variance 1.000000
 #     --smoothing-velocity-field-parameter 1.500000 --thickness-prior-estimate 10.000000'
-# 
-#     
+#
+#
 task_name: KellyKapowski
 nipype_name: KellyKapowski
 nipype_module: nipype.interfaces.ants.segmentation
@@ -140,8 +140,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -166,8 +166,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

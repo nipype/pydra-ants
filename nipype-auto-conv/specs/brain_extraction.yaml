@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Atlas-based brain extraction.
-# 
+#
 #     Examples
 #     --------
 #     >>> from nipype.interfaces.ants.segmentation import BrainExtraction
@@ -19,8 +19,8 @@
 #     >>> brainextraction.cmdline
 #     'antsBrainExtraction.sh -a T1.nii.gz -m ProbabilityMaskOfStudyTemplate.nii.gz
 #     -e study_template.nii.gz -d 3 -s nii.gz -o highres001_'
-# 
-#     
+#
+#
 task_name: BrainExtraction
 nipype_name: BrainExtraction
 nipype_module: nipype.interfaces.ants.segmentation
@@ -66,35 +66,35 @@ outputs:
     BrainExtractionGM: generic/file
     # type=file: segmentation mask with only grey matter
     BrainExtractionInitialAffine: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionInitialAffineFixed: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionInitialAffineMoving: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionLaplacian: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionMask: generic/file
     # type=file: brain extraction mask
     BrainExtractionPrior0GenericAffine: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionPrior1InverseWarp: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionPrior1Warp: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionPriorWarped: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionSegmentation: generic/file
     # type=file: segmentation mask with CSF, GM, and WM
     BrainExtractionTemplateLaplacian: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionTmp: generic/file
-    # type=file: 
+    # type=file:
     BrainExtractionWM: generic/file
     # type=file: segmenration mask with only white matter
     N4Corrected0: generic/file
     # type=file: N4 bias field corrected image
     N4Truncated0: generic/file
-    # type=file: 
+    # type=file:
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -142,8 +142,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -168,8 +168,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true

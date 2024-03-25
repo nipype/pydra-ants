@@ -70,7 +70,9 @@ post_release = (nipype_version + nipype2pydra_version).replace(".", "")
 """
     )
 
-auto_init += "\n\n__all__ = [\n" + "\n".join(f"    \"{i}\"," for i in all_interfaces) + "\n]\n"
+auto_init += (
+    "\n\n__all__ = [\n" + "\n".join(f'    "{i}",' for i in all_interfaces) + "\n]\n"
+)
 
 with open(PKG_ROOT / "pydra" / "tasks" / PKG_NAME / "auto" / "__init__.py", "w") as f:
     f.write(auto_init)

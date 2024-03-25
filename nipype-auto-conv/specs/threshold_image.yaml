@@ -5,9 +5,9 @@
 #
 # Docs
 # ----
-# 
+#
 #     Apply thresholds on images.
-# 
+#
 #     Examples
 #     --------
 #     >>> thres = ThresholdImage(dimension=3)
@@ -19,7 +19,7 @@
 #     >>> thres.inputs.outside_value = 0.0
 #     >>> thres.cmdline  #doctest: +ELLIPSIS
 #     'ThresholdImage 3 structural.nii output.nii.gz 0.500000 1.000000 1.000000 0.000000'
-# 
+#
 #     >>> thres = ThresholdImage(dimension=3)
 #     >>> thres.inputs.input_image = 'structural.nii'
 #     >>> thres.inputs.output_image = 'output.nii.gz'
@@ -27,8 +27,8 @@
 #     >>> thres.inputs.num_thresholds = 4
 #     >>> thres.cmdline  #doctest: +ELLIPSIS
 #     'ThresholdImage 3 structural.nii output.nii.gz Kmeans 4'
-# 
-#     
+#
+#
 task_name: ThresholdImage
 nipype_name: ThresholdImage
 nipype_module: nipype.interfaces.ants.utils
@@ -117,8 +117,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -150,8 +150,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
@@ -179,8 +179,8 @@ tests:
   # be terminated before they complete for time-saving reasons, and therefore
   # these values will be ignored, when running in CI
   timeout: 10
-  # int - the value to set for the timeout in the generated test, 
-  # after which the test will be considered to have been initialised 
+  # int - the value to set for the timeout in the generated test,
+  # after which the test will be considered to have been initialised
   # successfully. Set to 0 to disable the timeout (warning, this could
   # lead to the unittests taking a very long time to complete)
   xfail: true
