@@ -71,15 +71,6 @@ Contributing to this package
 Developer installation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Install the `fileformats <https://arcanaframework.github.io/fileformats/>`__ packages
-corresponding to AFNI specific file formats
-
-
-.. code-block::
-
-   $ pip install -e ./related-packages/fileformats[dev]
-   $ pip install -e ./related-packages/fileformats-extras[dev]
-
 Install repo in developer mode from the source directory and install pre-commit to
 ensure consistent code-style and quality.
 
