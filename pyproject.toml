@@ -9,12 +9,7 @@ description = "Pydra tasks for ANTs"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "Apache-2.0"
-keywords = [
-  "ants",
-  "neuroimaging",
-  "pydra",
-  "registration",
-]
+keywords = ["ants", "neuroimaging", "pydra", "registration"]
 authors = [
   { name = "Ghislain Vaillant", email = "ghislain.vaillant@icm-institute.org" },
 ]
@@ -32,10 +27,7 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Libraries",
 ]
-dependencies = [
-  "attrs >=22.1.0",
-  "pydra >=0.22",
-]
+dependencies = ["attrs >=22.1.0", "pydra >=0.22"]
 
 [project.urls]
 Documentation = "https://github.com/aramis-lab/pydra-ants#readme"
@@ -56,10 +48,7 @@ python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = [
-  "--doctest-modules",
-  "--doctest-continue-on-failure",
-]
+addopts = ["--doctest-modules", "--doctest-continue-on-failure"]
 pythonpath = ["src"]
 testpaths = ["src"]
 
