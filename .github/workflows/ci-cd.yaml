@@ -42,7 +42,7 @@ jobs:
       run: python -m pip install --upgrade pip
 
     - name: Install requirements
-      run: python -m pip install ./related-packages/fileformats -r ./nipype-auto-conv/requirements.txt
+      run: python -m pip install -r ./nipype-auto-conv/requirements.txt
 
     - name: Run automatic Nipype > Pydra conversion
       run: ./nipype-auto-conv/generate
@@ -249,7 +249,7 @@ jobs:
 
     - name: Install task package to calculate post-release tag
       run: |
-        pip install "./related-packages/fileformats" "./related-packages/fileformats-extras" ".[test]"
+        pip install ".[test]"
 
     - name: Generate post-release tag based on Nipype and Nipype2Pydra versions
       id: post_release_tag
