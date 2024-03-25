@@ -164,7 +164,7 @@ cython_debug/
 
 # Generated files
 /pydra/tasks/ants/_version.py
-/related-packages/fileformats/fileformats/medimage_CHANGEME/_version.py
-/related-packages/fileformats-extras/fileformats/extras/medimage_CHANGEME/_version.py
+/related-packages/fileformats/fileformats/medimage_ants/_version.py
+/related-packages/fileformats-extras/fileformats/extras/medimage_ants/_version.py
 /pydra/tasks/ants/auto
 _version.py

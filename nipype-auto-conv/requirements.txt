@@ -2,6 +2,7 @@ black
 attrs>=22.1.0
 nipype
 pydra
+tqdm
 PyYAML>=6.0
 fileformats >=0.8
 fileformats-medimage >=0.4

@@ -5,6 +5,7 @@ from warnings import warn
 from pathlib import Path
 import shutil
 from importlib import import_module
+from tqdm import tqdm
 import yaml
 import nipype
 import nipype2pydra.utils
@@ -36,7 +37,9 @@ if auto_dir.exists():
     shutil.rmtree(auto_dir)
 
 all_interfaces = []
-for fspath in sorted(SPECS_DIR.glob("**/*.yaml")):
+for fspath in tqdm(
+    sorted(SPECS_DIR.glob("**/*.yaml")), "converting interfaces from Nipype to Pydra"
+):
     with open(fspath) as f:
         spec = yaml.load(f, Loader=yaml.SafeLoader)
 
