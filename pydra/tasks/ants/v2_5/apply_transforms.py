@@ -25,7 +25,9 @@ def _format_output(
     )
 
 
-def _format_interpolation(interpolator: str, sigma: float, alpha: float, order: int) -> str:
+def _format_interpolation(
+    interpolator: str, sigma: float, alpha: float, order: int
+) -> str:
     return "-n {}{}".format(
         interpolator,
         f"[{order}]"
@@ -70,7 +72,11 @@ class ApplyTransforms(ShellCommandTask):
     @define(kw_only=True)
     class InputSpec(ShellSpec):
         dimensionality: int = field(
-            metadata={"help_string": "image dimensionality", "argstr": "-d", "allowed_values": {2, 3, 4}}
+            metadata={
+                "help_string": "image dimensionality",
+                "argstr": "-d",
+                "allowed_values": {2, 3, 4},
+            }
         )
 
         image_type: str = field(
@@ -85,19 +91,32 @@ class ApplyTransforms(ShellCommandTask):
             },
         )
 
-        moving_image: PathLike = field(metadata={"help_string": "moving image", "mandatory": True, "argstr": "-i"})
+        moving_image: PathLike = field(
+            metadata={"help_string": "moving image", "mandatory": True, "argstr": "-i"}
+        )
 
-        fixed_image: PathLike = field(metadata={"help_string": "fixed image", "mandatory": True, "argstr": "-r"})
+        fixed_image: PathLike = field(
+            metadata={"help_string": "fixed image", "mandatory": True, "argstr": "-r"}
+        )
 
         output_: str = field(
-            metadata={"help_string": "output parameter", "readonly": True, "formatter": _format_output}
+            metadata={
+                "help_string": "output parameter",
+                "readonly": True,
+                "formatter": _format_output,
+            }
         )
 
         output_image: str = field(
-            metadata={"help_string": "output image", "output_file_template": "{moving_image}_warped"}
+            metadata={
+                "help_string": "output image",
+                "output_file_template": "{moving_image}_warped",
+            }
         )
 
-        save_warp_field: bool = field(metadata={"help_string": "save composite warp field"})
+        save_warp_field: bool = field(
+            metadata={"help_string": "save composite warp field"}
+        )
 
         output_warp_field: str = field(
             metadata={
@@ -107,7 +126,9 @@ class ApplyTransforms(ShellCommandTask):
             }
         )
 
-        save_transform: bool = field(metadata={"help_string": "save composite transform"})
+        save_transform: bool = field(
+            metadata={"help_string": "save composite transform"}
+        )
 
         output_transform: str = field(
             metadata={
@@ -118,10 +139,16 @@ class ApplyTransforms(ShellCommandTask):
             }
         )
 
-        invert_transform: bool = field(default=False, metadata={"help_string": "invert composite transform"})
+        invert_transform: bool = field(
+            default=False, metadata={"help_string": "invert composite transform"}
+        )
 
         interpolation_: str = field(
-            metadata={"help_string": "interpolation parameter", "readonly": True, "formatter": _format_interpolation}
+            metadata={
+                "help_string": "interpolation parameter",
+                "readonly": True,
+                "formatter": _format_interpolation,
+            }
         )
 
         interpolator: str = field(
@@ -141,17 +168,31 @@ class ApplyTransforms(ShellCommandTask):
             },
         )
 
-        sigma: float = field(default=1.0, metadata={"help_string": "sigma parameter interpolation"})
+        sigma: float = field(
+            default=1.0, metadata={"help_string": "sigma parameter interpolation"}
+        )
 
-        alpha: float = field(default=1.0, metadata={"help_string": "alpha parameter for interpolation"})
+        alpha: float = field(
+            default=1.0, metadata={"help_string": "alpha parameter for interpolation"}
+        )
 
-        order: int = field(default=3, metadata={"help_string": "order parameter for interpolation"})
+        order: int = field(
+            default=3, metadata={"help_string": "order parameter for interpolation"}
+        )
 
         output_datatype: str = field(
             metadata={
                 "help_string": "force output image datatype",
                 "argstr": "-u",
-                "allowed_values": {"char", "uchar", "short", "int", "float", "double", "default"},
+                "allowed_values": {
+                    "char",
+                    "uchar",
+                    "short",
+                    "int",
+                    "float",
+                    "double",
+                    "default",
+                },
             }
         )
 
@@ -163,16 +204,24 @@ class ApplyTransforms(ShellCommandTask):
                     if not input_transforms
                     else " ".join(f"-t {f}" for f in input_transforms)
                     if not invert_transforms
-                    else " ".join(f"-t [{f},{int(i)}]" for f, i in zip(input_transforms, invert_transforms))
+                    else " ".join(
+                        f"-t [{f},{int(i)}]"
+                        for f, i in zip(input_transforms, invert_transforms)
+                    )
                 ),
             }
         )
 
         invert_transforms: Sequence[bool] = field(
-            metadata={"help_string": "which transforms to invert", "requires": {"input_transforms"}}
+            metadata={
+                "help_string": "which transforms to invert",
+                "requires": {"input_transforms"},
+            }
         )
 
-        default_value: float = field(metadata={"help_string": "default voxel value", "argstr": "-f"})
+        default_value: float = field(
+            metadata={"help_string": "default voxel value", "argstr": "-f"}
+        )
 
         use_float_precision: bool = field(
             default=False,

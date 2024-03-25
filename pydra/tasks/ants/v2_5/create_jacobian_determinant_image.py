@@ -20,13 +20,28 @@ class CreateJacobianDeterminantImage(ShellCommandTask):
     @define(kw_only=True)
     class InputSpec(ShellSpec):
         dimensionality: int = field(
-            metadata={"help_string": "image dimensionality", "mandatory": True, "argstr": "", "allowed_values": {2, 3}}
+            metadata={
+                "help_string": "image dimensionality",
+                "mandatory": True,
+                "argstr": "",
+                "allowed_values": {2, 3},
+            }
         )
 
-        warp_field: PathLike = field(metadata={"help_string": "displacement field", "mandatory": True, "argstr": ""})
+        warp_field: PathLike = field(
+            metadata={
+                "help_string": "displacement field",
+                "mandatory": True,
+                "argstr": "",
+            }
+        )
 
         output_image: str = field(
-            metadata={"help_string": "output image", "argstr": "", "output_file_template": "{warp_field}_jac"}
+            metadata={
+                "help_string": "output image",
+                "argstr": "",
+                "output_file_template": "{warp_field}_jac",
+            }
         )
 
         calculate_log_jacobian: bool = field(
