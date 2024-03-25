@@ -124,20 +124,21 @@ jobs:
       if: github.event_name == 'repository_dispatch'
       run: git checkout $(git tag -l | grep 'v.*' | tail -n 1 | awk -F post '{print $1}')
 
-    - name: Install ants Package
+    - name: Install ANTs Package
       run: |
         workingDir=${PWD}
         git clone https://github.com/ANTsX/ANTs.git
         mkdir build install
         cd build
-        cmake \
-            -DCMAKE_INSTALL_PREFIX=${workingDir}/install \
-            ../ANTs 2>&1 | tee cmake.log
-        make -j 4 2>&1 | tee build.log
+        cmake -DCMAKE_INSTALL_PREFIX=${workingDir}/install ../ANTs
+        make -j 4
         cd ANTS-build
-        make install 2>&1 | tee install.log
+        make install
+        echo "Installation completed successfully"
         echo "PATH=${workingDir}/install/bin:$PATH" >> $GITHUB_ENV
         echo "LD_LIBRARY_PATH=${workingDir}/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "Checking ANTs installation"
+        $GITHB_ENV
         which antsRegistration
         antsRegistrationSyN.sh -h
 
