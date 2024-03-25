@@ -153,3 +153,10 @@ cython_debug/
 # Pycharm
 .idea
 
+# VSCode
+.vscode
+
+
+/pydra/tasks/ants/auto
+_version.py
+
