@@ -1,17 +1,26 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-authors = [
-  { name = "Ghislain Vaillant", email = "ghislain.vaillant@icm-institute.org" },
-]
+name = "pydra-ants"
+description = "Pydra tasks package for ANTs"
+readme = "README.rst"
+requires-python = ">=3.8"
+keywords = ["ants", "neuroimaging", "pydra", "registration"]
 dependencies = [
   "pydra >=0.22",
   "fileformats >=0.8.3",
   "fileformats-datascience >=0.1",
   "fileformats-medimage >=0.4.1",
-  #    "fileformats-medimage-ants"
+]
+license = { file = "LICENSE" }
+authors = [
+  { name = "Ghislain Vaillant", email = "ghislain.vaillant@icm-institute.org" },
+  { name = "Nipype developers", email = "neuroimaging@python.org" },
+]
+maintainers = [
+  { name = "Nipype developers", email = "neuroimaging@python.org" },
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -27,14 +36,59 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Libraries",
 ]
+dynamic = ["version"]
 
 [project.urls]
+Documentation = "https://github.com/nipype/pydra-ants#readme"
+Issues = "https://github.com/nipype/pydra-ants/issues"
+Source = "https://github.com/nipype/pydra-ants"
 
+[project.optional-dependencies]
+dev = ["black", "pre-commit"]
+doc = [
+  "packaging",
+  "sphinx >=2.1.2",
+  "sphinx_rtd_theme",
+  "sphinxcontrib-apidoc ~=0.3.0",
+  "sphinxcontrib-napoleon",
+  "sphinxcontrib-versioning",
+]
+test = [
+  "nipype2pydra",
+  "pytest >= 4.4.0",
+  "pytest-cov",
+  "pytest-env",
+  "pytest-xdist",
+  "pytest-rerunfailures",
+  "codecov",
+  "fileformats-extras",
+  "fileformats-datascience-extras",
+  "fileformats-medimage-extras",
+]
 
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
 version-file = "pydra/tasks/ants/_version.py"
+
 [tool.hatch.build.targets.wheel]
-only-include = ["src/pydra/tasks/ants"]
-sources = ["src"]
+packages = ["pydra"]
+include-only = ["pydra/tasks/ants"]
+
+[tool.black]
+target-version = ["py38"]
+exclude = "_version.py"
+
+[tool.codespell]
+ignore-words = ".codespell-ignorewords"
+
+[tool.flake8]
+doctests = true
+per-file-ignores = ["__init__.py:F401,F403"]
+max-line-length = 88
+select = "C,E,F,W,B,B950"
+extend-ignore = ['E203', 'E501', 'E129', 'W503']
 
 [tool.hatch.envs.default]
 dependencies = ["pytest"]
