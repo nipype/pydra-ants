@@ -125,7 +125,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: install
-        key: ants-${{ env.ANTS_VERSION }}-ubuntu-22.04
+        key: ants-${{ env.ANTS_VERSION }}-${{ runner.os }}
 
     - name: Install ANTs Package
       if: steps.cache-install.outputs.cache-hit != 'true'
