@@ -18,6 +18,7 @@ on:
 
 env: # Define environment variables
   ANTS_VERSION: v2.5.1
+  ANTS_INSTALL_PATH: $HOME/ants-install
 
 jobs:
 
@@ -124,26 +125,27 @@ jobs:
       id: cache-install
       uses: actions/cache@v4
       with:
-        path: install
+        path: ${{ env.ANTS_INSTALL_PATH }}
         key: ants-${{ env.ANTS_VERSION }}-${{ runner.os }}
 
     - name: Install ANTs Package
       if: steps.cache-install.outputs.cache-hit != 'true'
       run: |
-        workingDir=${PWD}
+        pushd ~
         git clone https://github.com/ANTsX/ANTs.git
         pushd ./ANTs
         git checkout ${{ env.ANTS_VERSION }}
         popd
         mkdir build install
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=${workingDir}/install ../ANTs
+        cmake -DCMAKE_INSTALL_PREFIX=${{ env.ANTS_INSTALL_PATH }} ../ANTs
         make -j 4
         cd ANTS-build
         make install
         echo "Installation completed successfully"
-        echo "PATH=${workingDir}/install/bin:$PATH" >> $GITHUB_ENV
-        echo "LD_LIBRARY_PATH=${workingDir}/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        echo "PATH=${{ env.ANTS_INSTALL_PATH }}/bin:$PATH" >> $GITHUB_ENV
+        echo "LD_LIBRARY_PATH=${{ env.ANTS_INSTALL_PATH }}/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+        popd
 
     - name: Checkout repo
       uses: actions/checkout@v4
