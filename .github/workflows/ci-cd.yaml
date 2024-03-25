@@ -18,7 +18,7 @@ on:
 
 env: # Define environment variables
   ANTS_VERSION: v2.5.1
-  ANTS_INSTALL_PATH: $HOME/ants-install
+  ANTS_INSTALL_PATH: ${{ github.workspace }}/ants-install
 
 jobs:
 
