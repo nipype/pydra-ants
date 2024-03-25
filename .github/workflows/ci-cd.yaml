@@ -139,11 +139,6 @@ jobs:
         echo "PATH=${workingDir}/install/bin:$PATH" >> $GITHUB_ENV
         echo "LD_LIBRARY_PATH=${workingDir}/install/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-    - name: Check ANTs installation
-      run: |
-        which antsRegistration
-        antsRegistrationSyN.sh -h
-
     - name: Checkout repo
       uses: actions/checkout@v4
 
