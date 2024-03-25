@@ -18,7 +18,7 @@ on:
 
 env: # Define environment variables
   ANTS_VERSION: v2.5.1
-  ANTS_INSTALL_PATH: ${{ github.workspace }}/ants-install
+  ANTS_INSTALL_PATH: /opt/ants
 
 jobs:
 
@@ -120,6 +120,11 @@ jobs:
       run: |
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+    - name: Create ANTs install directory
+      run: |
+        sudo mkdir -p ${{ env.ANTS_INSTALL_PATH }}
+        sudo chown $USER ${{ env.ANTS_INSTALL_PATH }}
 
     - name: Cache ANTs Install
       id: cache-install
