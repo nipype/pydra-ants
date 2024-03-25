@@ -45,11 +45,14 @@ inputs:
   # passed to the field in the automatically generated unittests.
     input_image: medimage/nifti1
     # type=file|default=<undefined>: input image file
-    output_image: medimage/nifti-gz
-    # type=file: resampled file
-    # type=file|default=<undefined>: output image file
     input_mask: generic/file
     # type=file|default=<undefined>: input mask for Otsu, Kmeans
+    output_image: Path
+    # type=file: resampled file
+    # type=file|default=<undefined>: output image file
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -107,7 +110,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -126,7 +129,7 @@ tests:
   # (if not specified, will try to choose a sensible value)
     input_image:
     # type=file|default=<undefined>: input image file
-    output_image:
+    output_image: '"output.nii.gz"'
     # type=file: resampled file
     # type=file|default=<undefined>: output image file
     th_low: '0.5'
@@ -140,7 +143,7 @@ tests:
     dimension: '3'
     # type=int|default=3: dimension of output image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -159,7 +162,7 @@ tests:
   # (if not specified, will try to choose a sensible value)
     input_image:
     # type=file|default=<undefined>: input image file
-    output_image:
+    output_image: '"output.nii.gz"'
     # type=file: resampled file
     # type=file|default=<undefined>: output image file
     mode: '"Kmeans"'
@@ -169,7 +172,7 @@ tests:
     dimension: '3'
     # type=int|default=3: dimension of output image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -192,7 +195,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     input_image:
     # type=file|default=<undefined>: input image file
-    output_image:
+    output_image: '"output.nii.gz"'
     # type=file: resampled file
     # type=file|default=<undefined>: output image file
     th_low: '0.5'
@@ -206,7 +209,7 @@ doctests:
     dimension: '3'
     # type=int|default=3: dimension of output image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
@@ -218,7 +221,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     input_image:
     # type=file|default=<undefined>: input image file
-    output_image:
+    output_image: '"output.nii.gz"'
     # type=file: resampled file
     # type=file|default=<undefined>: output image file
     mode: '"Kmeans"'
@@ -228,7 +231,7 @@ doctests:
     dimension: '3'
     # type=int|default=3: dimension of output image
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

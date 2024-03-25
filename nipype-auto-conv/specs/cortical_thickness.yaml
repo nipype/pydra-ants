@@ -41,18 +41,21 @@ inputs:
   # passed to the field in the automatically generated unittests.
     anatomical_image: medimage/nifti-gz
     # type=file|default=<undefined>: Structural *intensity* image, typically T1. If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image.
-    brain_template: medimage/nifti-gz
-    # type=file|default=<undefined>: Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is  *not* skull-stripped.
     brain_probability_mask: medimage/nifti-gz
     # type=file|default=<undefined>: brain probability mask in template space
+    brain_template: medimage/nifti-gz
+    # type=file|default=<undefined>: Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is  *not* skull-stripped.
+    cortical_label_image: generic/file
+    # type=file|default=<undefined>: Cortical ROI labels to use as a prior for ATITH.
+    extraction_registration_mask: generic/file
+    # type=file|default=<undefined>: Mask (defined in the template space) used during registration for brain extraction.
     segmentation_priors: medimage/nifti-gz+list-of
     # type=inputmultiobject|default=[]: 
     t1_registration_template: medimage/nifti-gz
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
-    extraction_registration_mask: generic/file
-    # type=file|default=<undefined>: Mask (defined in the template space) used during registration for brain extraction.
-    cortical_label_image: generic/file
-    # type=file|default=<undefined>: Cortical ROI labels to use as a prior for ATITH.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -68,28 +71,30 @@ outputs:
   # passed to the field in the automatically generated unittests.
     BrainExtractionMask: generic/file
     # type=file: brain extraction mask
-    ExtractedBrainN4: generic/file
-    # type=file: extracted brain from N4 image
     BrainSegmentation: generic/file
     # type=file: brain segmentation image
     BrainSegmentationN4: generic/file
     # type=file: N4 corrected image
-    CorticalThickness: generic/file
-    # type=file: cortical thickness file
-    TemplateToSubject1GenericAffine: generic/file
-    # type=file: Template to subject affine
-    TemplateToSubject0Warp: generic/file
-    # type=file: Template to subject warp
-    SubjectToTemplate1Warp: generic/file
-    # type=file: Template to subject inverse warp
-    SubjectToTemplate0GenericAffine: generic/file
-    # type=file: Template to subject inverse affine
-    SubjectToTemplateLogJacobian: generic/file
-    # type=file: Template to subject log jacobian
-    CorticalThicknessNormedToTemplate: generic/file
-    # type=file: Normalized cortical thickness
+    BrainSegmentationPosteriors: generic/file+list-of
+    # type=outputmultiobject: Posterior probability images
     BrainVolumes: generic/file
     # type=file: Brain volumes as text
+    CorticalThickness: generic/file
+    # type=file: cortical thickness file
+    CorticalThicknessNormedToTemplate: generic/file
+    # type=file: Normalized cortical thickness
+    ExtractedBrainN4: generic/file
+    # type=file: extracted brain from N4 image
+    SubjectToTemplate0GenericAffine: generic/file
+    # type=file: Template to subject inverse affine
+    SubjectToTemplate1Warp: generic/file
+    # type=file: Template to subject inverse warp
+    SubjectToTemplateLogJacobian: generic/file
+    # type=file: Template to subject log jacobian
+    TemplateToSubject0Warp: generic/file
+    # type=file: Template to subject warp
+    TemplateToSubject1GenericAffine: generic/file
+    # type=file: Template to subject affine
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -150,7 +155,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -180,7 +185,7 @@ tests:
     t1_registration_template:
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -214,7 +219,7 @@ doctests:
     t1_registration_template:
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

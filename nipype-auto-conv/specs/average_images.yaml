@@ -31,11 +31,14 @@ inputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    output_average_image: medimage/nifti-gz
-    # type=file: average image file
-    # type=file|default='average.nii': the name of the resulting image.
     images: medimage/nifti1+list-of
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregistered functional)
+    output_average_image: Path
+    # type=file: average image file
+    # type=file|default='average.nii': the name of the resulting image.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -79,7 +82,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -98,7 +101,7 @@ tests:
   # (if not specified, will try to choose a sensible value)
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    output_average_image:
+    output_average_image: '"average.nii.gz"'
     # type=file: average image file
     # type=file|default='average.nii': the name of the resulting image.
     normalize: 'True'
@@ -106,7 +109,7 @@ tests:
     images:
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregistered functional)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -129,7 +132,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    output_average_image:
+    output_average_image: '"average.nii.gz"'
     # type=file: average image file
     # type=file|default='average.nii': the name of the resulting image.
     normalize: 'True'
@@ -137,7 +140,7 @@ doctests:
     images:
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregistered functional)
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

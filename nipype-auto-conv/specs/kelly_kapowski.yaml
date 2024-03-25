@@ -43,20 +43,23 @@ inputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    segmentation_image: medimage/nifti-gz
-    # type=file|default=<undefined>: A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
-    gray_matter_prob_image: generic/file
-    # type=file|default=<undefined>: In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-    white_matter_prob_image: generic/file
-    # type=file|default=<undefined>: In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-    thickness_prior_image: generic/file
-    # type=file|default=<undefined>: An image containing spatially varying prior thickness values.
-    cortical_thickness: generic/file
+    cortical_thickness: Path
     # type=file: A thickness map defined in the segmented gray matter.
     # type=file|default=<undefined>: Filename for the cortical thickness.
-    warped_white_matter: generic/file
+    gray_matter_prob_image: generic/file
+    # type=file|default=<undefined>: In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+    segmentation_image: medimage/nifti-gz
+    # type=file|default=<undefined>: A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
+    thickness_prior_image: generic/file
+    # type=file|default=<undefined>: An image containing spatially varying prior thickness values.
+    warped_white_matter: Path
     # type=file: A warped white matter image.
     # type=file|default=<undefined>: Filename for the warped white matter file.
+    white_matter_prob_image: generic/file
+    # type=file|default=<undefined>: In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -130,7 +133,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -156,7 +159,7 @@ tests:
     thickness_prior_estimate: '10'
     # type=float|default=10: Provides a prior constraint on the final thickness measurement in mm.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -186,7 +189,7 @@ doctests:
     thickness_prior_estimate: '10'
     # type=float|default=10: Provides a prior constraint on the final thickness measurement in mm.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

@@ -8,9 +8,9 @@ description = "Extensions to add functionality to tool-specific *fileformats* cl
 readme = "README.rst"
 requires-python = ">=3.8"
 dependencies = [
-    "fileformats >= 0.7",
+    "fileformats",
     "fileformats-medimage-ants",
-    "pydra >= 0.22.0"
+    "pydra >= 0.23.0a"
 ]
 license = {file = "LICENSE"}
 authors = [
@@ -65,14 +65,14 @@ source = "vcs"
 raw-options = { root = "../.." }
 
 [tool.hatch.build.hooks.vcs]
-version-file = "fileformats/extras/medimage_ants/_version.py"
+version-file = "fileformats/extras/medimage_CHANGEME/_version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["fileformats"]
 
 [tool.black]
 target-version = ['py38']
-exclude = "fileformats/extras/medimage_ants/_version.py"
+exclude = "fileformats/extras/medimage_CHANGEME/_version.py"
 
 [tool.codespell]
 ignore-words = ".codespell-ignorewords"

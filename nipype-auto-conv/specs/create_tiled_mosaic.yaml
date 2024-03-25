@@ -42,10 +42,13 @@ inputs:
   # passed to the field in the automatically generated unittests.
     input_image: medimage/nifti-gz
     # type=file|default=<undefined>: Main input is a 3-D grayscale image.
-    rgb_image: medimage/nifti-gz
-    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
     mask_image: medimage/nifti-gz
     # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
+    rgb_image: medimage/nifti-gz
+    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -103,7 +106,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -138,7 +141,7 @@ tests:
     slices: '"[2 ,100 ,160]"'
     # type=str|default='': Number of slices to increment Slice1xSlice2xSlice3[numberOfSlicesToIncrement,<minSlice=0>,<maxSlice=lastSlice>]
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -177,7 +180,7 @@ doctests:
     slices: '"[2 ,100 ,160]"'
     # type=str|default='': Number of slices to increment Slice1xSlice2xSlice3[numberOfSlicesToIncrement,<minSlice=0>,<maxSlice=lastSlice>]
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

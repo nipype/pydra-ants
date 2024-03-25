@@ -33,9 +33,12 @@ inputs:
   # passed to the field in the automatically generated unittests.
     first_input: medimage/nifti1
     # type=file|default=<undefined>: image 1
-    output_product_image: medimage/nifti1
+    output_product_image: Path
     # type=file: average image file
     # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -79,7 +82,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -102,11 +105,11 @@ tests:
     # type=file|default=<undefined>: image 1
     second_input: '0.25'
     # type=traitcompound|default=None: image 2 or multiplication weight
-    output_product_image:
+    output_product_image: '"out.nii"'
     # type=file: average image file
     # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
@@ -133,11 +136,11 @@ doctests:
     # type=file|default=<undefined>: image 1
     second_input: '0.25'
     # type=traitcompound|default=None: image 2 or multiplication weight
-    output_product_image:
+    output_product_image: '"out.nii"'
     # type=file: average image file
     # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   directive:
   # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

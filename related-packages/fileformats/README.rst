@@ -1,22 +1,11 @@
-How to customise this template
-==============================
+FileFormats-medimage-ants
+=========================
 
-#. Rename the `related-packages/fileformats/ants` directory to the name of the fileformats subpackage (e.g. `medimage_fsl`)
-#. Search and replace "ants" with the name of the fileformats subpackage the extras are to be added
-#. Replace name + email placeholders in `pyproject.toml` for developers and maintainers
-#. Add the extension file-format classes
-#. Ensure that all the extension file-format classes are imported into the extras package root, i.e. `fileformats/ants`
-#. Delete these instructions
-
-...
-
-FileFormats Extension - ants
-====================================
 .. image:: https://github.com/nipype/pydra-ants/actions/workflows/ci-cd.yml/badge.svg
     :target: https://github.com/nipype/pydra-ants/actions/workflows/ci-cd.yml
 
-This is the "ants" extension module for the
-`fileformats <https://github.com/ArcanaFramework/fileformats-core>`__ package
+This is an extension module of the `fileformats <https://github.com/ArcanaFramework/fileformats>`__
+package for defining file formats that are specific to the CHANGME software toolkit.
 
 
 Quick Installation
@@ -24,9 +13,9 @@ Quick Installation
 
 This extension can be installed for Python 3 using *pip*::
 
-    $ pip3 install fileformats-ants
+    $ pip3 install fileformats-medimage-ants
 
-This will install the core package and any other dependencies
+This will install the format extensions and dependent base packages.
 
 License
 -------

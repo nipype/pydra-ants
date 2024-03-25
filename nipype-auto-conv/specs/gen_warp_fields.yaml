@@ -20,10 +20,13 @@ inputs:
   # from the nipype interface, but you may want to be more specific, particularly
   # for file types, where specifying the format also specifies the file that will be
   # passed to the field in the automatically generated unittests.
-    reference_image: generic/file
-    # type=file|default=<undefined>: template file to warp to
     input_image: generic/file
     # type=file|default=<undefined>: input image to warp to template
+    reference_image: generic/file
+    # type=file|default=<undefined>: template file to warp to
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
   metadata:
   # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
 outputs:
@@ -39,14 +42,14 @@ outputs:
   # passed to the field in the automatically generated unittests.
     affine_transformation: generic/file
     # type=file: affine (prefix_Affine.txt)
-    warp_field: generic/file
-    # type=file: warp field (prefix_Warp.nii)
-    inverse_warp_field: generic/file
-    # type=file: inverse warp field (prefix_InverseWarp.nii)
     input_file: generic/file
     # type=file: input image (prefix_repaired.nii)
+    inverse_warp_field: generic/file
+    # type=file: inverse warp field (prefix_InverseWarp.nii)
     output_file: generic/file
     # type=file: output image (prefix_deformed.nii)
+    warp_field: generic/file
+    # type=file: warp field (prefix_Warp.nii)
   callables:
   # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
   # to set to the `callable` attribute of output fields
@@ -87,7 +90,7 @@ tests:
     environ:
     # type=dict|default={}: Environment variables
   imports:
-  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
   # consisting of 'module', 'name', and optionally 'alias' keys
   expected_outputs:
   # dict[str, str] - expected values for selected outputs, noting that tests will typically
