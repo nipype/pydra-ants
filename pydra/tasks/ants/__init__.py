@@ -1,4 +1,5 @@
 """
+>>> from pydra import ShellCommandTask
 >>> import pydra.tasks.ants
 """
 try:
