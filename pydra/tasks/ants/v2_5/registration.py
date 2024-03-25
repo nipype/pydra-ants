@@ -109,12 +109,21 @@ class Registration(ShellCommandTask):
     @define(kw_only=True)
     class InputSpec(ShellSpec):
         dimensionality: int = field(
-            default=3, metadata={"help_string": "image dimensionality", "argstr": "-d", "allowed_values": {2, 3, 4}}
+            default=3,
+            metadata={
+                "help_string": "image dimensionality",
+                "argstr": "-d",
+                "allowed_values": {2, 3, 4},
+            },
         )
 
-        fixed_image: PathLike = field(metadata={"help_string": "fixed image", "mandatory": True})
+        fixed_image: PathLike = field(
+            metadata={"help_string": "fixed image", "mandatory": True}
+        )
 
-        moving_image: PathLike = field(metadata={"help_string": "moving image", "mandatory": True})
+        moving_image: PathLike = field(
+            metadata={"help_string": "moving image", "mandatory": True}
+        )
 
         output_: str = field(
             metadata={
@@ -130,7 +139,9 @@ class Registration(ShellCommandTask):
             }
         )
 
-        output_transform_prefix: str = field(default="output", metadata={"help_string": "output transform prefix"})
+        output_transform_prefix: str = field(
+            default="output", metadata={"help_string": "output transform prefix"}
+        )
 
         warped_image: str = field(
             metadata={
@@ -188,25 +199,37 @@ class Registration(ShellCommandTask):
             },
         )
 
-        sigma: float = field(default=1.0, metadata={"help_string": "sigma parameter for interpolation"})
+        sigma: float = field(
+            default=1.0, metadata={"help_string": "sigma parameter for interpolation"}
+        )
 
-        alpha: float = field(default=1.0, metadata={"help_string": "alpha parameter for interpolation"})
+        alpha: float = field(
+            default=1.0, metadata={"help_string": "alpha parameter for interpolation"}
+        )
 
-        order: int = field(default=3, metadata={"help_string": "order parameter for interpolation"})
+        order: int = field(
+            default=3, metadata={"help_string": "order parameter for interpolation"}
+        )
 
         masks_: str = field(
             metadata={
                 "help_string": "masks parameter",
                 "readonly": True,
                 "formatter": lambda fixed_mask, moving_mask: (
-                    f"-x [{fixed_mask or 'NULL'},{moving_mask or 'NULL'}]" if any([fixed_mask, moving_mask]) else ""
+                    f"-x [{fixed_mask or 'NULL'},{moving_mask or 'NULL'}]"
+                    if any([fixed_mask, moving_mask])
+                    else ""
                 ),
             }
         )
 
-        fixed_mask: PathLike = field(metadata={"help_string": "mask applied to the fixed image"})
+        fixed_mask: PathLike = field(
+            metadata={"help_string": "mask applied to the fixed image"}
+        )
 
-        moving_mask: PathLike = field(metadata={"help_string": "mask applied to the moving image"})
+        moving_mask: PathLike = field(
+            metadata={"help_string": "mask applied to the moving image"}
+        )
 
         use_histogram_matching: bool = field(
             default=False,
@@ -221,14 +244,20 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "winsorize image intensities",
                 "formatter": lambda winsorize_image_intensities, lower_quantile, upper_quantile: (
-                    f"-w [{lower_quantile},{upper_quantile}]" if winsorize_image_intensities else ""
+                    f"-w [{lower_quantile},{upper_quantile}]"
+                    if winsorize_image_intensities
+                    else ""
                 ),
             },
         )
 
-        lower_quantile: float = field(default=0.0, metadata={"help_string": "lower quantile"})
+        lower_quantile: float = field(
+            default=0.0, metadata={"help_string": "lower quantile"}
+        )
 
-        upper_quantile: float = field(default=1.0, metadata={"help_string": "upper quantile"})
+        upper_quantile: float = field(
+            default=1.0, metadata={"help_string": "upper quantile"}
+        )
 
         initial_fixed_transforms: Sequence[PathLike] = field(
             metadata={
@@ -238,7 +267,12 @@ class Registration(ShellCommandTask):
                     if not initial_fixed_transforms
                     else " ".join(f"-q {x}" for x in initial_fixed_transforms)
                     if not invert_fixed_transforms
-                    else " ".join(f"-q [{x},{y:d}]" for x, y in zip(initial_fixed_transforms, invert_fixed_transforms))
+                    else " ".join(
+                        f"-q [{x},{y:d}]"
+                        for x, y in zip(
+                            initial_fixed_transforms, invert_fixed_transforms
+                        )
+                    )
                 ),
             }
         )
@@ -259,7 +293,10 @@ class Registration(ShellCommandTask):
                     else " ".join(f"-r {x}" for x in initial_moving_transforms)
                     if not invert_moving_transforms
                     else " ".join(
-                        f"-r [{x},{y:d}]" for x, y in zip(initial_moving_transforms, invert_moving_transforms)
+                        f"-r [{x},{y:d}]"
+                        for x, y in zip(
+                            initial_moving_transforms, invert_moving_transforms
+                        )
                     )
                 ),
             }
@@ -272,7 +309,9 @@ class Registration(ShellCommandTask):
             }
         )
 
-        enable_rigid_stage = field(default=True, metadata={"help_string": "enable rigid registration stage"})
+        enable_rigid_stage = field(
+            default=True, metadata={"help_string": "enable rigid registration stage"}
+        )
 
         rigid_transform_type: str = field(
             default="Rigid",
@@ -280,12 +319,16 @@ class Registration(ShellCommandTask):
                 "help_string": "transform type for rigid stage",
                 "allowed_values": {"Rigid", "Translation"},
                 "formatter": lambda enable_rigid_stage, rigid_transform_type, rigid_gradient_step: (
-                    f"-t {rigid_transform_type}[{rigid_gradient_step}]" if enable_rigid_stage else ""
+                    f"-t {rigid_transform_type}[{rigid_gradient_step}]"
+                    if enable_rigid_stage
+                    else ""
                 ),
             },
         )
 
-        rigid_gradient_step: bool = field(default=0.1, metadata={"help_string": "gradient step for rigid stage"})
+        rigid_gradient_step: bool = field(
+            default=0.1, metadata={"help_string": "gradient step for rigid stage"}
+        )
 
         rigid_metric: str = field(
             metadata={
@@ -295,9 +338,13 @@ class Registration(ShellCommandTask):
             }
         )
 
-        rigid_radius: int = field(default=4, metadata={"help_string": "radius for rigid stage"})
+        rigid_radius: int = field(
+            default=4, metadata={"help_string": "radius for rigid stage"}
+        )
 
-        rigid_num_bins: int = field(default=32, metadata={"help_string": "number of bins for rigid stage"})
+        rigid_num_bins: int = field(
+            default=32, metadata={"help_string": "number of bins for rigid stage"}
+        )
 
         rigid_sampling_strategy: str = field(
             default="None",
@@ -307,7 +354,9 @@ class Registration(ShellCommandTask):
             },
         )
 
-        rigid_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for rigid stage"})
+        rigid_sampling_rate: float = field(
+            default=1.0, metadata={"help_string": "sampling rate for rigid stage"}
+        )
 
         rigid_convergence_: Sequence[int] = field(
             metadata={
@@ -315,7 +364,9 @@ class Registration(ShellCommandTask):
                 "readonly": True,
                 "formatter": lambda enable_rigid_stage, rigid_num_iterations, rigid_threshold, rigid_window_size: (
                     "-c [{},{},{}]".format(
-                        "x".join(str(c) for c in rigid_num_iterations), rigid_threshold, rigid_window_size
+                        "x".join(str(c) for c in rigid_num_iterations),
+                        rigid_threshold,
+                        rigid_window_size,
                     )
                     if enable_rigid_stage
                     else ""
@@ -324,19 +375,28 @@ class Registration(ShellCommandTask):
         )
 
         rigid_num_iterations: Sequence[int] = field(
-            default=(1000, 500, 250, 0), metadata={"help_string": "number of iterations for rigid stage"}
+            default=(1000, 500, 250, 0),
+            metadata={"help_string": "number of iterations for rigid stage"},
         )
 
-        rigid_threshold: float = field(default=1e-6, metadata={"help_string": "convergence threshold for rigid stage"})
+        rigid_threshold: float = field(
+            default=1e-6,
+            metadata={"help_string": "convergence threshold for rigid stage"},
+        )
 
-        rigid_window_size: int = field(default=10, metadata={"help_string": "convergence window size for rigid stage"})
+        rigid_window_size: int = field(
+            default=10,
+            metadata={"help_string": "convergence window size for rigid stage"},
+        )
 
         rigid_shrink_factors: Sequence[int] = field(
             default=(8, 4, 2, 1),
             metadata={
                 "help_string": "shrink factors for rigid stage",
                 "formatter": lambda enable_rigid_stage, rigid_shrink_factors: (
-                    "-f {}".format("x".join(str(f) for f in rigid_shrink_factors)) if enable_rigid_stage else ""
+                    "-f {}".format("x".join(str(f) for f in rigid_shrink_factors))
+                    if enable_rigid_stage
+                    else ""
                 ),
             },
         )
@@ -346,7 +406,10 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "smoothing sigmas for rigid stage",
                 "formatter": lambda enable_rigid_stage, rigid_smoothing_sigmas, rigid_smoothing_units: (
-                    "-s {}{}".format("x".join(str(s) for s in rigid_smoothing_sigmas), rigid_smoothing_units)
+                    "-s {}{}".format(
+                        "x".join(str(s) for s in rigid_smoothing_sigmas),
+                        rigid_smoothing_units,
+                    )
                     if enable_rigid_stage
                     else ""
                 ),
@@ -355,10 +418,15 @@ class Registration(ShellCommandTask):
 
         rigid_smoothing_units: str = field(
             default="vox",
-            metadata={"help_string": "smoothing units for rigid stage", "allowed_values": {"vox", "mm"}},
+            metadata={
+                "help_string": "smoothing units for rigid stage",
+                "allowed_values": {"vox", "mm"},
+            },
         )
 
-        enable_affine_stage: bool = field(default=True, metadata={"help_string": "enable affine registration stage"})
+        enable_affine_stage: bool = field(
+            default=True, metadata={"help_string": "enable affine registration stage"}
+        )
 
         affine_transform_type: str = field(
             default="Affine",
@@ -366,12 +434,16 @@ class Registration(ShellCommandTask):
                 "help_string": "transform type for affine stage",
                 "allowed_values": {"Affine", "CompositeAffine", "Similarity"},
                 "formatter": lambda enable_affine_stage, affine_transform_type, affine_gradient_step: (
-                    f"-t {affine_transform_type}[{affine_gradient_step}]" if enable_affine_stage else ""
+                    f"-t {affine_transform_type}[{affine_gradient_step}]"
+                    if enable_affine_stage
+                    else ""
                 ),
             },
         )
 
-        affine_gradient_step: bool = field(default=0.1, metadata={"help_string": "gradient step for affine stage"})
+        affine_gradient_step: bool = field(
+            default=0.1, metadata={"help_string": "gradient step for affine stage"}
+        )
 
         affine_metric: str = field(
             metadata={
@@ -381,9 +453,13 @@ class Registration(ShellCommandTask):
             }
         )
 
-        affine_radius: int = field(default=4, metadata={"help_string": "radius for affine stage"})
+        affine_radius: int = field(
+            default=4, metadata={"help_string": "radius for affine stage"}
+        )
 
-        affine_num_bins: int = field(default=32, metadata={"help_string": "number of bins for affine stage"})
+        affine_num_bins: int = field(
+            default=32, metadata={"help_string": "number of bins for affine stage"}
+        )
 
         affine_sampling_strategy: str = field(
             default="None",
@@ -393,7 +469,9 @@ class Registration(ShellCommandTask):
             },
         )
 
-        affine_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for affine stage"})
+        affine_sampling_rate: float = field(
+            default=1.0, metadata={"help_string": "sampling rate for affine stage"}
+        )
 
         affine_convergence_: Sequence[int] = field(
             metadata={
@@ -401,7 +479,9 @@ class Registration(ShellCommandTask):
                 "readonly": True,
                 "formatter": lambda enable_affine_stage, affine_num_iterations, affine_threshold, affine_window_size: (
                     "-c [{},{},{}]".format(
-                        "x".join(str(c) for c in affine_num_iterations), affine_threshold, affine_window_size
+                        "x".join(str(c) for c in affine_num_iterations),
+                        affine_threshold,
+                        affine_window_size,
                     )
                     if enable_affine_stage
                     else ""
@@ -410,15 +490,18 @@ class Registration(ShellCommandTask):
         )
 
         affine_num_iterations: Sequence[int] = field(
-            default=(1000, 500, 250, 0), metadata={"help_string": "number of iterations for affine stage"}
+            default=(1000, 500, 250, 0),
+            metadata={"help_string": "number of iterations for affine stage"},
         )
 
         affine_threshold: float = field(
-            default=1e-6, metadata={"help_string": "convergence threshold for affine stage"}
+            default=1e-6,
+            metadata={"help_string": "convergence threshold for affine stage"},
         )
 
         affine_window_size: int = field(
-            default=10, metadata={"help_string": "convergence window size for affine stage"}
+            default=10,
+            metadata={"help_string": "convergence window size for affine stage"},
         )
 
         affine_shrink_factors: Sequence[int] = field(
@@ -426,7 +509,9 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "shrink factors for affine stage",
                 "formatter": lambda enable_affine_stage, affine_shrink_factors: (
-                    "-f {}".format("x".join(str(f) for f in affine_shrink_factors)) if enable_affine_stage else ""
+                    "-f {}".format("x".join(str(f) for f in affine_shrink_factors))
+                    if enable_affine_stage
+                    else ""
                 ),
             },
         )
@@ -436,7 +521,10 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "smoothing sigmas for affine stage",
                 "formatter": lambda enable_affine_stage, affine_smoothing_sigmas, affine_smoothing_units: (
-                    "-s {}{}".format("x".join(str(s) for s in affine_smoothing_sigmas), affine_smoothing_units)
+                    "-s {}{}".format(
+                        "x".join(str(s) for s in affine_smoothing_sigmas),
+                        affine_smoothing_units,
+                    )
                     if enable_affine_stage
                     else ""
                 ),
@@ -445,10 +533,15 @@ class Registration(ShellCommandTask):
 
         affine_smoothing_units: str = field(
             default="vox",
-            metadata={"help_string": "smoothing units for affine stage", "allowed_values": {"vox", "mm"}},
+            metadata={
+                "help_string": "smoothing units for affine stage",
+                "allowed_values": {"vox", "mm"},
+            },
         )
 
-        enable_syn_stage: str = field(default=True, metadata={"help_string": "enable SyN registration stage"})
+        enable_syn_stage: str = field(
+            default=True, metadata={"help_string": "enable SyN registration stage"}
+        )
 
         syn_transform_type: str = field(
             default="Syn",
@@ -459,15 +552,25 @@ class Registration(ShellCommandTask):
             },
         )
 
-        syn_gradient_step: bool = field(default=0.1, metadata={"help_string": "gradient step for SyN stage"})
+        syn_gradient_step: bool = field(
+            default=0.1, metadata={"help_string": "gradient step for SyN stage"}
+        )
 
-        syn_flow_sigma: float = field(default=3, metadata={"help_string": "sigma for flow field in SyN stage"})
+        syn_flow_sigma: float = field(
+            default=3, metadata={"help_string": "sigma for flow field in SyN stage"}
+        )
 
-        syn_total_sigma: float = field(default=0, metadata={"help_string": "sigma for total field in SyN stage"})
+        syn_total_sigma: float = field(
+            default=0, metadata={"help_string": "sigma for total field in SyN stage"}
+        )
 
-        syn_spline_distance: int = field(default=26, metadata={"help_string": "spline distance for SyN stage"})
+        syn_spline_distance: int = field(
+            default=26, metadata={"help_string": "spline distance for SyN stage"}
+        )
 
-        syn_spline_order: int = field(default=3, metadata={"help_string": "spline order for SyN stage"})
+        syn_spline_order: int = field(
+            default=3, metadata={"help_string": "spline order for SyN stage"}
+        )
 
         syn_metric: str = field(
             default="MI",
@@ -478,9 +581,13 @@ class Registration(ShellCommandTask):
             },
         )
 
-        syn_radius: int = field(default=4, metadata={"help_string": "radius for SyN stage"})
+        syn_radius: int = field(
+            default=4, metadata={"help_string": "radius for SyN stage"}
+        )
 
-        syn_num_bins: int = field(default=32, metadata={"help_string": "number of bins for SyN stage"})
+        syn_num_bins: int = field(
+            default=32, metadata={"help_string": "number of bins for SyN stage"}
+        )
 
         syn_sampling_strategy: str = field(
             default="None",
@@ -490,14 +597,20 @@ class Registration(ShellCommandTask):
             },
         )
 
-        syn_sampling_rate: float = field(default=1.0, metadata={"help_string": "sampling rate for SyN stage"})
+        syn_sampling_rate: float = field(
+            default=1.0, metadata={"help_string": "sampling rate for SyN stage"}
+        )
 
         syn_convergence_: str = field(
             metadata={
                 "help_string": "convergence parameter for SyN stage",
                 "readonly": True,
                 "formatter": lambda enable_syn_stage, syn_num_iterations, syn_threshold, syn_window_size: (
-                    "-c [{},{},{}]".format("x".join(str(c) for c in syn_num_iterations), syn_threshold, syn_window_size)
+                    "-c [{},{},{}]".format(
+                        "x".join(str(c) for c in syn_num_iterations),
+                        syn_threshold,
+                        syn_window_size,
+                    )
                     if enable_syn_stage
                     else ""
                 ),
@@ -505,19 +618,28 @@ class Registration(ShellCommandTask):
         )
 
         syn_num_iterations: Sequence[int] = field(
-            default=(100, 70, 50, 20), metadata={"help_string": "number of iterations for SyN stage"}
+            default=(100, 70, 50, 20),
+            metadata={"help_string": "number of iterations for SyN stage"},
         )
 
-        syn_threshold: float = field(default=1e-6, metadata={"help_string": "convergence threshold for SyN stage"})
+        syn_threshold: float = field(
+            default=1e-6,
+            metadata={"help_string": "convergence threshold for SyN stage"},
+        )
 
-        syn_window_size: int = field(default=10, metadata={"help_string": "convergence window size for SyN stage"})
+        syn_window_size: int = field(
+            default=10,
+            metadata={"help_string": "convergence window size for SyN stage"},
+        )
 
         syn_shrink_factors: Sequence[int] = field(
             default=(8, 4, 2, 1),
             metadata={
                 "help_string": "shrink factors for SyN stage",
                 "formatter": lambda enable_syn_stage, syn_shrink_factors: (
-                    "-f {}".format("x".join(str(f) for f in syn_shrink_factors)) if enable_syn_stage else ""
+                    "-f {}".format("x".join(str(f) for f in syn_shrink_factors))
+                    if enable_syn_stage
+                    else ""
                 ),
             },
         )
@@ -527,7 +649,10 @@ class Registration(ShellCommandTask):
             metadata={
                 "help_string": "smoothing sigmas for SyN stage",
                 "formatter": lambda enable_syn_stage, syn_smoothing_sigmas, syn_smoothing_units: (
-                    "-s {}{}".format("x".join(str(s) for s in syn_smoothing_sigmas), syn_smoothing_units)
+                    "-s {}{}".format(
+                        "x".join(str(s) for s in syn_smoothing_sigmas),
+                        syn_smoothing_units,
+                    )
                     if enable_syn_stage
                     else ""
                 ),
@@ -536,7 +661,10 @@ class Registration(ShellCommandTask):
 
         syn_smoothing_units: str = field(
             default="vox",
-            metadata={"help_string": "smoothing units for SyN stage", "allowed_values": {"vox", "mm"}},
+            metadata={
+                "help_string": "smoothing units for SyN stage",
+                "allowed_values": {"vox", "mm"},
+            },
         )
 
         use_float_precision: bool = field(
@@ -555,7 +683,9 @@ class Registration(ShellCommandTask):
             },
         )
 
-        random_seed: int = field(metadata={"help_string": "random seed", "argstr": "--random-seed"})
+        random_seed: int = field(
+            metadata={"help_string": "random seed", "argstr": "--random-seed"}
+        )
 
         verbose: bool = field(
             default=False,
@@ -574,7 +704,9 @@ class Registration(ShellCommandTask):
                 "help_string": "affine transform",
                 "callable": lambda output_transform_prefix, use_minc_format: (
                     Path.cwd()
-                    / "{}0GenericAffine{}".format(output_transform_prefix, ".xfm" if use_minc_format else ".mat")
+                    / "{}0GenericAffine{}".format(
+                        output_transform_prefix, ".xfm" if use_minc_format else ".mat"
+                    )
                 ),
             }
         )
@@ -775,7 +907,11 @@ def registration_syn(
         syn_metric="CC" if reproducible else "MI",
         syn_radius=radius,
         syn_num_bins=num_bins,
-        syn_num_iterations=((100, 100, 70, 50, 0 if quick else 20) if large else (100, 70, 50, 0 if quick else 20)),
+        syn_num_iterations=(
+            (100, 100, 70, 50, 0 if quick else 20)
+            if large
+            else (100, 70, 50, 0 if quick else 20)
+        ),
         syn_shrink_factors=(10, 6, 4, 2, 1) if large else (8, 4, 2, 1),
         syn_smoothing_sigmas=(5, 3, 2, 1, 0) if large else (3, 2, 1, 0),
         use_histogram_matching=use_histogram_matching,
