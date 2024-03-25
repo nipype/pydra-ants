@@ -122,7 +122,7 @@ The tests should be run on the auto-generated tasks to see if they are valid
 
 .. code-block::
 
-   $ pytest --doctest-modules pydra/tasks/ants/auto/tests/test_<the-name-of-the-task-you-edited>.py
+   $ pytest pydra/tasks/ants/auto/tests/test_<the-name-of-the-task-you-edited>.py
 
 If the test passes you should then edit the `pydra/tasks/ants/v<tool-version>/__init__.py` file
 to import the now valid task interface to signify that it has been validated and is ready
