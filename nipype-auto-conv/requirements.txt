@@ -7,6 +7,5 @@ PyYAML>=6.0
 fileformats >=0.8
 fileformats-medimage >=0.4
 fileformats-datascience >= 0.1
-fileformats-medimage-ants
 traits
 nipype2pydra
