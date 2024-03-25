@@ -29,4 +29,4 @@ jobs:
         pip install ".[dev]"
     - name: Test with pytest
       run: |
-        pytest -sv --doctest-modules pydra/tasks/TODO
+        pytest -sv --doctest-modules pydra/tasks/ants
