@@ -3,15 +3,15 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pydra-ants"
-version = "0.0.5"
-description = "Pydra tasks for ANTs"
-readme = "README.md"
-requires-python = ">=3.8"
-license = "Apache-2.0"
-keywords = ["ants", "neuroimaging", "pydra", "registration"]
 authors = [
   { name = "Ghislain Vaillant", email = "ghislain.vaillant@icm-institute.org" },
+]
+dependencies = [
+  "pydra >=0.22",
+  "fileformats >=0.8.3",
+  "fileformats-datascience >=0.1",
+  "fileformats-medimage >=0.4.1",
+  #    "fileformats-medimage-ants"
 ]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -27,13 +27,11 @@ classifiers = [
   "Topic :: Scientific/Engineering",
   "Topic :: Software Development :: Libraries",
 ]
-dependencies = ["attrs >=22.1.0", "pydra >=0.22"]
 
 [project.urls]
-Documentation = "https://github.com/aramis-lab/pydra-ants#readme"
-Issues = "https://github.com/aramis-lab/pydra-ants/issues"
-Source = "https://github.com/aramis-lab/pydra-ants"
 
+
+version-file = "pydra/tasks/ants/_version.py"
 [tool.hatch.build.targets.wheel]
 only-include = ["src/pydra/tasks/ants"]
 sources = ["src"]
