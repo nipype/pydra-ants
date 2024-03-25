@@ -246,7 +246,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    op1:
+    op1: '"structural.nii"'
     # type=file|default=<undefined>: first operator
     operation: '"+"'
     # type=enum|default='m'|allowed['+','-','/','4DTensorTo3DTensor','Byte','Canny','Convolve','CorruptImage','D','Decision','ExtractContours','ExtractSlice','ExtractVectorComponent','FillHoles','Finite','FlattenImage','G','GC','GD','GE','GO','GetLargestComponent','Grad','LabelStats','Laplacian','Lipschitz','MC','MD','ME','MO','MTR','MaurerDistance','Neg','NeighborhoodStats','Normalize','PValueImage','PadImage','Project','ReplaceVoxelValue','ReplicateDisplacement','ReplicateImage','RescaleImage','SetTimeSpacing','SetTimeSpacingWarp','Sharpen','SigmoidImage','TensorAxialDiffusion','TensorColor','TensorEigenvalue','TensorFA','TensorFADenominator','TensorFANumerator','TensorMask','TensorMeanDiffusion','TensorRadialDiffusion','TensorToVector','TensorToVectorComponent','ThresholdAtMean','Translate','TriPlanarView','TruncateImageIntensity','UnsharpMask','WindowImage','^','abs','addtozero','exp','m','max','mean','overadd','stack','total','v+','v-','vm','vtotal']: mathematical operations
@@ -263,7 +263,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    op1:
+    op1: '"structural.nii"'
     # type=file|default=<undefined>: first operator
     operation: '"Project"'
     # type=enum|default='m'|allowed['+','-','/','4DTensorTo3DTensor','Byte','Canny','Convolve','CorruptImage','D','Decision','ExtractContours','ExtractSlice','ExtractVectorComponent','FillHoles','Finite','FlattenImage','G','GC','GD','GE','GO','GetLargestComponent','Grad','LabelStats','Laplacian','Lipschitz','MC','MD','ME','MO','MTR','MaurerDistance','Neg','NeighborhoodStats','Normalize','PValueImage','PadImage','Project','ReplaceVoxelValue','ReplicateDisplacement','ReplicateImage','RescaleImage','SetTimeSpacing','SetTimeSpacingWarp','Sharpen','SigmoidImage','TensorAxialDiffusion','TensorColor','TensorEigenvalue','TensorFA','TensorFADenominator','TensorFANumerator','TensorMask','TensorMeanDiffusion','TensorRadialDiffusion','TensorToVector','TensorToVectorComponent','ThresholdAtMean','Translate','TriPlanarView','TruncateImageIntensity','UnsharpMask','WindowImage','^','abs','addtozero','exp','m','max','mean','overadd','stack','total','v+','v-','vm','vtotal']: mathematical operations
@@ -280,7 +280,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    op1:
+    op1: '"structural.nii"'
     # type=file|default=<undefined>: first operator
     operation: '"G"'
     # type=enum|default='m'|allowed['+','-','/','4DTensorTo3DTensor','Byte','Canny','Convolve','CorruptImage','D','Decision','ExtractContours','ExtractSlice','ExtractVectorComponent','FillHoles','Finite','FlattenImage','G','GC','GD','GE','GO','GetLargestComponent','Grad','LabelStats','Laplacian','Lipschitz','MC','MD','ME','MO','MTR','MaurerDistance','Neg','NeighborhoodStats','Normalize','PValueImage','PadImage','Project','ReplaceVoxelValue','ReplicateDisplacement','ReplicateImage','RescaleImage','SetTimeSpacing','SetTimeSpacingWarp','Sharpen','SigmoidImage','TensorAxialDiffusion','TensorColor','TensorEigenvalue','TensorFA','TensorFADenominator','TensorFANumerator','TensorMask','TensorMeanDiffusion','TensorRadialDiffusion','TensorToVector','TensorToVectorComponent','ThresholdAtMean','Translate','TriPlanarView','TruncateImageIntensity','UnsharpMask','WindowImage','^','abs','addtozero','exp','m','max','mean','overadd','stack','total','v+','v-','vm','vtotal']: mathematical operations
@@ -297,7 +297,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    op1:
+    op1: '"structural.nii"'
     # type=file|default=<undefined>: first operator
     operation: '"TruncateImageIntensity"'
     # type=enum|default='m'|allowed['+','-','/','4DTensorTo3DTensor','Byte','Canny','Convolve','CorruptImage','D','Decision','ExtractContours','ExtractSlice','ExtractVectorComponent','FillHoles','Finite','FlattenImage','G','GC','GD','GE','GO','GetLargestComponent','Grad','LabelStats','Laplacian','Lipschitz','MC','MD','ME','MO','MTR','MaurerDistance','Neg','NeighborhoodStats','Normalize','PValueImage','PadImage','Project','ReplaceVoxelValue','ReplicateDisplacement','ReplicateImage','RescaleImage','SetTimeSpacing','SetTimeSpacingWarp','Sharpen','SigmoidImage','TensorAxialDiffusion','TensorColor','TensorEigenvalue','TensorFA','TensorFADenominator','TensorFANumerator','TensorMask','TensorMeanDiffusion','TensorRadialDiffusion','TensorToVector','TensorToVectorComponent','ThresholdAtMean','Translate','TriPlanarView','TruncateImageIntensity','UnsharpMask','WindowImage','^','abs','addtozero','exp','m','max','mean','overadd','stack','total','v+','v-','vm','vtotal']: mathematical operations

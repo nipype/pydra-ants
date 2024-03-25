@@ -147,7 +147,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    in_files:
+    in_files: '["T1.nii", "structural.nii"]'
     # type=list|default=[]: list of images to generate template from
     max_iterations: '[30, 90, 20]'
     # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations

@@ -151,7 +151,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    label_image:
+    label_image: '"atlas.nii.gz"'
     # type=file|default=<undefined>: label image to use for extracting geometry measures
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
@@ -164,7 +164,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    intensity_image:
+    intensity_image: '"ants_Warp.nii.gz"'
     # type=file|default='[]': Intensity image to extract values from. This is an optional input
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

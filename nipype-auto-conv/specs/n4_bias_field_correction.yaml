@@ -306,7 +306,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3 or 4)
-    input_image:
+    input_image: '"structural.nii"'
     # type=file|default=<undefined>: input for bias correction. Negative values or values close to zero should be processed prior to correction
     bspline_fitting_distance: '300'
     # type=float|default=0.0:
@@ -351,7 +351,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_image:
+    input_image: '"structural.nii"'
     # type=file|default=<undefined>: input for bias correction. Negative values or values close to zero should be processed prior to correction
     save_bias: 'True'
     # type=bool|default=False: True if the estimated bias should be saved to file.
@@ -368,7 +368,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_image:
+    input_image: '"structural.nii"'
     # type=file|default=<undefined>: input for bias correction. Negative values or values close to zero should be processed prior to correction
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3 or 4)

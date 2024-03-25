@@ -362,7 +362,7 @@ doctests:
     # type=file|default=<undefined>: The output label fusion image.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"] ]'
     # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
-    atlas_segmentation_image:
+    atlas_segmentation_image: '["segmentation0.nii.gz"]'
     # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
     target_image: '["im1.nii"]'
     # type=list|default=[]: The target image (or multimodal target images) assumed to be aligned to a common image domain.
@@ -392,7 +392,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     atlas_image: '[ ["rc1s1.nii","rc1s2.nii"],["rc2s1.nii","rc2s2.nii"] ]'
     # type=list|default=[]: The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
-    atlas_segmentation_image:
+    atlas_segmentation_image: '["segmentation0.nii.gz","segmentation1.nii.gz"]'
     # type=inputmultiobject|default=[]: The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
@@ -430,7 +430,7 @@ doctests:
     # type=list|default=[3, 3, 3]: Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
     verbose: 'True'
     # type=bool|default=False: Verbose output.
-    exclusion_image:
+    exclusion_image: '["roi01.nii", "roi02.nii"]'
     # type=list|default=[]: Specify an exclusion region for the given label.
     exclusion_image_label: '["1","2"]'
     # type=list|default=[]: Specify a label for the exclusion region.

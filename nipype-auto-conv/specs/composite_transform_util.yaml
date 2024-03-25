@@ -170,7 +170,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     process: '"disassemble"'
     # type=enum|default='assemble'|allowed['assemble','disassemble']: What to do with the transform inputs (assemble or disassemble)
-    in_file:
+    in_file: '"output_Composite.h5"'
     # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
@@ -188,7 +188,7 @@ doctests:
     out_file: '"my.h5"'
     # type=file: Compound transformation file
     # type=file|default=<undefined>: Output file path (only used for disassembly).
-    in_file:
+    in_file: '["AffineTransform.mat", "DisplacementFieldTransform.nii.gz"]'
     # type=inputmultiobject|default=[]: Input transform file(s)
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

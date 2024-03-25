@@ -215,9 +215,9 @@ doctests:
     # type=str|default='out':
     metric: '["CC"]'
     # type=list|default=[]:
-    fixed_image:
+    fixed_image: '["T1.nii"]'
     # type=inputmultiobject|default=[]: image to which the moving image is warped
-    moving_image:
+    moving_image: '["resting.nii"]'
     # type=inputmultiobject|default=[]: image to apply transformation to (generally a coregisteredfunctional)
     metric_weight: '[1.0]'
     # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.

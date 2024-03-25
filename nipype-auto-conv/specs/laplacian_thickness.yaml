@@ -158,9 +158,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    input_wm:
+    input_wm: '"white_matter.nii.gz"'
     # type=file|default=<undefined>: white matter segmentation image
-    input_gm:
+    input_gm: '"gray_matter.nii.gz"'
     # type=file|default=<undefined>: gray matter segmentation image
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

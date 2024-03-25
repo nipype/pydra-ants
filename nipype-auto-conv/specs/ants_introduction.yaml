@@ -148,9 +148,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    reference_image:
+    reference_image: '"Template_6.nii"'
     # type=file|default=<undefined>: template file to warp to
-    input_image:
+    input_image: '"structural.nii"'
     # type=file|default=<undefined>: input image to warp to template
     max_iterations: '[30,90,20]'
     # type=list|default=[]: maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations

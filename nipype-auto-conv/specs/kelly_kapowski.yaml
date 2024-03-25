@@ -182,7 +182,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    segmentation_image:
+    segmentation_image: '"segmentation0.nii.gz"'
     # type=file|default=<undefined>: A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
     convergence: '"[45,0.0,10]"'
     # type=str|default='[50,0.001,10]': Convergence is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold.

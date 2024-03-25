@@ -415,9 +415,9 @@ doctests:
     # type=enum|default='Random'|allowed['KMeans','Otsu','PriorLabelImage','PriorProbabilityImages','Random']:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
-    intensity_images:
+    intensity_images: '"structural.nii"'
     # type=inputmultiobject|default=[]:
-    mask_image:
+    mask_image: '"mask.nii"'
     # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
     # type=int|default=0:
@@ -458,9 +458,9 @@ doctests:
     # type=list|default=[]:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
-    intensity_images:
+    intensity_images: '"structural.nii"'
     # type=inputmultiobject|default=[]:
-    mask_image:
+    mask_image: '"mask.nii"'
     # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
     # type=int|default=0:
@@ -505,9 +505,9 @@ doctests:
     # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
-    intensity_images:
+    intensity_images: '"structural.nii"'
     # type=inputmultiobject|default=[]:
-    mask_image:
+    mask_image: '"mask.nii"'
     # type=file|default=<undefined>:
     number_of_tissue_classes: '2'
     # type=int|default=0:
@@ -552,9 +552,9 @@ doctests:
     # type=float|default=0.0:
     dimension: '3'
     # type=enum|default=3|allowed[2,3,4]: image dimension (2, 3, or 4)
-    intensity_images:
+    intensity_images: '"structural.nii"'
     # type=inputmultiobject|default=[]:
-    mask_image:
+    mask_image: '"mask.nii"'
     # type=file|default=<undefined>:
     likelihood_model: '"Gaussian"'
     # type=str|default='':

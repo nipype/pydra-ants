@@ -134,9 +134,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '"fixed1.nii"'
     # type=file|default=<undefined>: reference image
-    moving_image:
+    moving_image: '"moving1.nii"'
     # type=file|default=<undefined>: moving image
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

@@ -184,11 +184,11 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    anatomical_image:
+    anatomical_image: '"T1.nii.gz"'
     # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_template:
+    brain_template: '"study_template.nii.gz"'
     # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_probability_mask:
+    brain_probability_mask: '"ProbabilityMaskOfStudyTemplate.nii.gz"'
     # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

@@ -848,13 +848,13 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '"fixed1.nii"'
     # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
+    moving_image: '"moving1.nii"'
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     output_transform_prefix: '"output_"'
     # type=str|default='transform':
-    initial_moving_transform:
+    initial_moving_transform: '"trans.mat"'
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
     transforms: '["Affine", "SyN"]'
     # type=list|default=[]:
@@ -979,7 +979,7 @@ doctests:
     save_state: '"trans.mat"'
     # type=file: The saved registration state to be restored
     # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
-    restore_state:
+    restore_state: '"trans.mat"'
     # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
     initialize_transforms_per_stage: 'True'
     # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
@@ -1009,9 +1009,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '"fixed1.nii"'
     # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
+    moving_image: '"moving1.nii"'
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     metric: '["Mattes", ["Mattes", "CC"]]'
     # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
@@ -1034,9 +1034,9 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    fixed_image:
+    fixed_image: '["fixed1.nii", "fixed2.nii"]'
     # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
+    moving_image: '["moving1.nii", "moving2.nii"]'
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
@@ -1107,7 +1107,7 @@ doctests:
   # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
   # If the field is of file-format type and the value is None, then the
   # '.mock()' method of the corresponding class is used instead.
-    initial_moving_transform:
+    initial_moving_transform: '["func_to_struct.mat", "ants_Warp.nii.gz"]'
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
     invert_initial_moving_transform: '[False, False]'
     # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.

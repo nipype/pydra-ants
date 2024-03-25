@@ -132,7 +132,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    first_input:
+    first_input: '"moving2.nii"'
     # type=file|default=<undefined>: image 1
     second_input: '0.25'
     # type=traitcompound|default=None: image 2 or multiplication weight

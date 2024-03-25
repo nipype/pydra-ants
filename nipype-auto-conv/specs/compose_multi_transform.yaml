@@ -131,7 +131,7 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    transforms:
+    transforms: '["struct_to_template.mat", "func_to_struct.mat"]'
     # type=inputmultiobject|default=[]: transforms to average
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item

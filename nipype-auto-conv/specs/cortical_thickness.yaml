@@ -208,15 +208,15 @@ doctests:
   # '.mock()' method of the corresponding class is used instead.
     dimension: '3'
     # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    anatomical_image:
+    anatomical_image: '"T1.nii.gz"'
     # type=file|default=<undefined>: Structural *intensity* image, typically T1. If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image.
-    brain_template:
+    brain_template: '"study_template.nii.gz"'
     # type=file|default=<undefined>: Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is  *not* skull-stripped.
-    brain_probability_mask:
+    brain_probability_mask: '"ProbabilityMaskOfStudyTemplate.nii.gz"'
     # type=file|default=<undefined>: brain probability mask in template space
-    segmentation_priors:
+    segmentation_priors: '["BrainSegmentationPrior01.nii.gz","BrainSegmentationPrior02.nii.gz","BrainSegmentationPrior03.nii.gz","BrainSegmentationPrior04.nii.gz"]'
     # type=inputmultiobject|default=[]:
-    t1_registration_template:
+    t1_registration_template: '"brain_study_template.nii.gz"'
     # type=file|default=<undefined>: Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.
   imports:
   # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
