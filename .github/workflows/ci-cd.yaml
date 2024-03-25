@@ -9,30 +9,38 @@ name: CI/CD
 on:
   push:
     branches: [ main, develop ]
-    tags: [ '*' ]
   pull_request:
     branches: [ main, develop ]
+  release:
+    types: [published]
   repository_dispatch:
-    types: [create-release]
+    types: [create-post-release]
 
 jobs:
 
   nipype-conv:
     runs-on: ubuntu-latest
     steps:
+
     - name: Checkout
-      uses: actions/checkout@v3
-    - name: Revert version to most recent tag on upstream update
+      uses: actions/checkout@v4
+
+    - name: Revert version to most recent version tag on upstream update
       if: github.event_name == 'repository_dispatch'
-      run: git checkout $(git tag -l | tail -n 1 | awk -F post '{print $1}')
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      run: git checkout $(git tag -l | grep 'v.*' | tail -n 1 | awk -F post '{print $1}')
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+
     - name: Install build dependencies
       run: python -m pip install --upgrade pip
+
     - name: Install requirements
       run: python -m pip install ./related-packages/fileformats -r ./nipype-auto-conv/requirements.txt
+
     - name: Run automatic Nipype > Pydra conversion
       run: ./nipype-auto-conv/generate
+
     - uses: actions/upload-artifact@v3
       with:
         name: converted-nipype
@@ -50,163 +58,152 @@ jobs:
         - '--editable git+https://github.com/nipype/pydra.git#egg=pydra'
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
-    - name: Revert version to most recent tag on upstream update
+      uses: actions/checkout@v4
+
+    - name: Revert version to most recent version tag on upstream update
       if: github.event_name == 'repository_dispatch'
-      run: git checkout $(git tag -l | tail -n 1 | awk -F post '{print $1}')
+      run: git checkout $(git tag -l | grep 'v.*' | tail -n 1 | awk -F post '{print $1}')
+
     - name: Download tasks converted from Nipype
       uses: actions/download-artifact@v3
       with:
         name: converted-nipype
         path: pydra/tasks/ants/auto
+
     - name: Strip auto package from gitignore so it is included in package
       run: |
         sed -i '/\/pydra\/tasks\/ants\/auto/d' .gitignore
+        sed -i '/^_version.py/d' .gitignore
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
+
     - name: Install Pydra
       run: |
         pushd $HOME
         pip install ${{ matrix.pydra }}
         popd
         python -c "import pydra as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
+
     - name: Install task package
       run: |
-        pip install "./related-packages/fileformats[dev]" "related-packages/fileformats-extras[dev]"
+        pip install ${{ matrix.pip-flags }} "./related-packages/fileformats[dev]"
+        pip install ${{ matrix.pip-flags }} "related-packages/fileformats-extras[dev]"
         pip install ${{ matrix.pip-flags }} ".[dev]"
         python -c "import pydra.tasks.ants as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
         python -c "import pydra as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
         python -c "import fileformats.medimage_ants as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
         python -c "import fileformats.extras.medimage_ants as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
 
-  fileformats-test:
-    runs-on: ubuntu-latest
+  test:
+    needs: [nipype-conv]
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: ['3.8', '3.11']
     steps:
-    - uses: actions/checkout@v3
-    - name: Revert version to most recent tag on upstream update
-      if: github.event_name == 'repository_dispatch'
-      run: git checkout $(git tag -l | tail -n 1 | awk -F post '{print $1}')
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install build dependencies
-      run: |
-        python -m pip install --upgrade pip
-    - name: Install task package
-      run: |
-        pip install "./related-packages/fileformats[test]" "./related-packages/fileformats-extras[test]"
-        python -c "import fileformats.medimage_ants as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
-    - name: Test fileformats with pytest
-      run: |
-        cd ./fileformats
-        pytest -sv --cov fileformats.medimage_ants --cov fileformats.extras.medimage_ants --cov-report xml .
 
-  test:
-    needs: [nipype-conv, fileformats-test]
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        python-version: ['3.8']  # '3.11'
-    steps:
     - name: Removed unnecessary tools to free space
       run: |
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-    - name: Get Download cache Key
-      id: cache-key
-      run: echo "::set-output name=key::ants-linux-ubuntu22_amd64-7.4.1"
-    - name: Cache FreeSurfer
-      uses: actions/cache@v2
-      with:
-        path: $HOME/downloads/ants
-        key: ${{ steps.cache-key.outputs.key }}
-        restore-keys: |
-          ants-linux-ubuntu22_amd64-7.4.1
-    - name: Download FreeSurfer
-      if: steps.cache-key.outputs.key != steps.cache-hit.outputs.key
-      run: |
-        mkdir -p $HOME/downloads/ants
-        curl -s -o $HOME/downloads/ants/ants-linux-ubuntu22_amd64-7.4.1.tar.gz https://surfer.nmr.mgh.harvard.edu/pub/dist/ants/7.4.1/ants-linux-ubuntu22_amd64-7.4.1.tar.gz
-      shell: bash
-    - name: Install Freesurfer
-      env:
-        FREESURFER_LICENCE: ${{ secrets.FREESURFER_LICENCE }}
-      run: |
-        pushd $HOME/downloads/ants
-        tar -zxpf ants-linux-ubuntu22_amd64-7.4.1.tar.gz
-        mv ants $HOME/
-        popd
-        export FREESURFER_HOME=$HOME/ants
-        source $FREESURFER_HOME/SetUpFreeSurfer.sh
-        echo $FREESURFER_LICENCE > $FREESURFER_HOME/license.txt
-        export PATH=$FREESURFER_HOME/bin:$PATH
-    - uses: actions/checkout@v3
-    - name: Revert version to most recent tag on upstream update
+
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Revert version to most recent version tag on upstream update
       if: github.event_name == 'repository_dispatch'
-      run: git checkout $(git tag -l | tail -n 1 | awk -F post '{print $1}')
+      run: git checkout $(git tag -l | grep 'v.*' | tail -n 1 | awk -F post '{print $1}')
+
+    - name: Install ants Package
+      run: |
+        echo "NOT IMPLEMENTED YET"
+        exit 1  # This is a placeholder for the actual install command
+
     - name: Download tasks converted from Nipype
       uses: actions/download-artifact@v3
       with:
         name: converted-nipype
         path: pydra/tasks/ants/auto
+
+    - name: Show the contents of the auto-generated tasks
+      run: tree pydra
+
     - name: Strip auto package from gitignore so it is included in package
       run: |
-        sed -i '/\/src\/pydra\/tasks\/ants\/auto/d' .gitignore
+        sed -i '/\/pydra\/tasks\/ants\/auto/d' .gitignore
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install build dependencies
       run: |
         python -m pip install --upgrade pip
+
     - name: Install task package
       run: |
         pip install "./related-packages/fileformats" "./related-packages/fileformats-extras" ".[test]"
         python -c "import pydra.tasks.ants as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
         python -c "import pydra as m; print(f'{m.__name__} {m.__version__} @ {m.__file__}')"
+
     - name: Test with pytest
-      run: |
-        pytest -sv --doctest-modules ./pydra/tasks/ants \
-            --cov pydra.tasks.ants --cov-report xml
-    - uses: codecov/codecov-action@v3
+      run: >-
+        pytest -sv
+        ./pydra/tasks/ants
+        ./related-packages/fileformats
+        ./related-packages/fileformats-extras
+        --cov pydra.tasks.ants
+        --cov fileformats.medimage_ants
+        --cov fileformats.extras.medimage_ants
+        --cov-report xml
+
+    - name: Upload to CodeCov
+      uses: codecov/codecov-action@v3
       if: ${{ always() }}
       with:
-        files: coverage.xml,./fileformats/coverage.xml
+        files: coverage.xml
         name: pydra-ants
+
 
   deploy-fileformats:
     needs: [devcheck, test]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+
     - name: Install build tools
       run: python -m pip install build twine
+
     - name: Build source and wheel distributions
       run: python -m build ./related-packages/fileformats
+
     - name: Check distributions
       run: twine check ./related-packages/fileformats/dist/*
+
     - name: Check for PyPI token on tag
       id: deployable
-      if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'repository_dispatch'
+      if: github.event_name == 'release' || github.event_name == 'repository_dispatch'
       env:
         PYPI_API_TOKEN: "${{ secrets.PYPI_FILEFORMATS_API_TOKEN }}"
       run: if [ -n "$PYPI_API_TOKEN" ]; then echo "DEPLOY=true" >> $GITHUB_OUTPUT; fi
+
     - name: Upload to PyPI
       if: steps.deployable.outputs.DEPLOY
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -219,26 +216,33 @@ jobs:
     needs: [deploy-fileformats]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+
     - name: Install build tools
       run: python -m pip install build twine
+
     - name: Build source and wheel distributions
       run: python -m build ./related-packages/fileformats-extras
+
     - name: Check distributions
       run: twine check ./related-packages/fileformats-extras/dist/*
+
     - name: Check for PyPI token on tag
       id: deployable
-      if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'repository_dispatch'
+      if: github.event_name == 'release' || github.event_name == 'repository_dispatch'
       env:
         PYPI_API_TOKEN: "${{ secrets.PYPI_FILEFORMATS_EXTRAS_API_TOKEN }}"
       run: if [ -n "$PYPI_API_TOKEN" ]; then echo "DEPLOY=true" >> $GITHUB_OUTPUT; fi
+
     - name: Upload to PyPI
       if: steps.deployable.outputs.DEPLOY
       uses: pypa/gh-action-pypi-publish@release/v1
@@ -248,56 +252,115 @@ jobs:
         packages-dir: ./related-packages/fileformats-extras/dist
 
   deploy:
-    needs: [deploy-fileformats-extras]
+    needs: [nipype-conv, test, deploy-fileformats, deploy-fileformats-extras]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
       with:
         submodules: recursive
         fetch-depth: 0
+
+    - name: Set up Git user
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Get latest version tag
+      id: latest_tag
+      run: |
+        git fetch --tags
+        echo "TAG=$(git tag -l | grep 'v.*' | tail -n 1 | awk -F post '{print $1}')" >> $GITHUB_OUTPUT
+
+    - name: Revert to latest tag
+      if: github.event_name == 'repository_dispatch'
+      run: git checkout ${{ steps.latest_tag.outputs.TAG }}
+
     - name: Download tasks converted from Nipype
       uses: actions/download-artifact@v3
       with:
         name: converted-nipype
         path: pydra/tasks/ants/auto
-    - name: Tag release with a post-release based on Nipype and Nipype2Pydra versions
-      if: github.event_name == 'repository_dispatch'
-      run: |
-        TAG=$(git tag -l | tail -n 1 | awk -F post '{print $1}')
-        POST=$(python -c "from pydra.tasks.ants.auto._version import *; print(post_release)")
-        git checkout $TAG
-        git add -f pydra/tasks/ants/auto/_version.py
-        git commit -am"added auto-generated version to make new tag for package version"
-        git tag ${TAG}post${POST}
+
+    - name: Show the contents of the auto-generated tasks
+      run: tree pydra
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
+
     - name: Install build tools
       run: python -m pip install build twine
+
     - name: Strip auto package from gitignore so it is included in package
       run: |
         sed -i '/\/pydra\/tasks\/ants\/auto/d' .gitignore
+        cat .gitignore
+
+    - name: Install task package to calculate post-release tag
+      run: |
+        pip install "./related-packages/fileformats" "./related-packages/fileformats-extras" ".[test]"
+
+    - name: Generate post-release tag based on Nipype and Nipype2Pydra versions
+      id: post_release_tag
+      run: |
+        POST=$(python -c "from pydra.tasks.ants.auto._version import *; print(post_release)")
+        echo "TAG=${{ steps.latest_tag.outputs.TAG }}post${POST}" >> $GITHUB_OUTPUT
+
+    - name: Add auto directory to git repo
+      if: github.event_name == 'release' || github.event_name == 'repository_dispatch'
+      run: |
+        git add pydra/tasks/ants/auto
+        git commit -am"added auto-generated version to make new tag for package version"
+        git status
+
+    - name: Overwrite the tag of release event with latest commit (i.e. including the auto directory)
+      if: github.event_name == 'release'
+      run: |
+        git tag -d ${{ steps.latest_tag.outputs.TAG }};
+        git tag ${{ steps.latest_tag.outputs.TAG }};
+
+    - name: Tag repo with the post-release
+      if: github.event_name == 'repository_dispatch'
+      run: git tag ${{ steps.post_release_tag.outputs.TAG }}
+
     - name: Build source and wheel distributions
       run: python -m build .
+
     - name: Check distributions
       run: twine check dist/*
+
     - uses: actions/upload-artifact@v3
       with:
         name: distributions
         path: dist/
+
     - name: Check for PyPI token on tag
       id: deployable
-      if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || github.event_name == 'repository_dispatch'
+      if: github.event_name == 'release' || github.event_name == 'repository_dispatch'
       env:
         PYPI_API_TOKEN: "${{ secrets.PYPI_API_TOKEN }}"
       run: if [ -n "$PYPI_API_TOKEN" ]; then echo "DEPLOY=true" >> $GITHUB_OUTPUT; fi
+
     - name: Upload to PyPI
       if: steps.deployable.outputs.DEPLOY
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
+
+    - name: Create post-release release for releases triggered by nipype2pydra dispatches
+      if: steps.deployable.outputs.DEPLOY && github.event_name == 'repository_dispatch'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ steps.post_release_tag.outputs.TAG }}
+        release_name: Release ${{ steps.post_release_tag.outputs.TAG }}
+        draft: false
+        prerelease: false
 
 # Deploy on tags if PYPI_API_TOKEN is defined in the repository secrets.
 # Secrets are not accessible in the if: condition [0], so set an output variable [1]
