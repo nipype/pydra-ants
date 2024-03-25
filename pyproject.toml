@@ -63,7 +63,6 @@ test = [
   "codecov",
   "fileformats-extras",
   "fileformats-datascience-extras",
-  "fileformats-medimage-extras",
 ]
 
 [tool.hatch.version]
