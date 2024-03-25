@@ -1,0 +1,183 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.visualization.CreateTiledMosaic' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Docs
+# ----
+# The program CreateTiledMosaic in conjunction with ConvertScalarImageToRGB
+#     provides useful functionality for common image analysis tasks. The basic
+#     usage of CreateTiledMosaic is to tile a 3-D image volume slice-wise into
+#     a 2-D image.
+# 
+#     Examples
+#     --------
+# 
+#     >>> from nipype.interfaces.ants.visualization import CreateTiledMosaic
+#     >>> mosaic_slicer = CreateTiledMosaic()
+#     >>> mosaic_slicer.inputs.input_image = 'T1.nii.gz'
+#     >>> mosaic_slicer.inputs.rgb_image = 'rgb.nii.gz'
+#     >>> mosaic_slicer.inputs.mask_image = 'mask.nii.gz'
+#     >>> mosaic_slicer.inputs.output_image = 'output.png'
+#     >>> mosaic_slicer.inputs.alpha_value = 0.5
+#     >>> mosaic_slicer.inputs.direction = 2
+#     >>> mosaic_slicer.inputs.pad_or_crop = '[ -15x -50 , -15x -30 ,0]'
+#     >>> mosaic_slicer.inputs.slices = '[2 ,100 ,160]'
+#     >>> mosaic_slicer.cmdline
+#     'CreateTiledMosaic -a 0.50 -d 2 -i T1.nii.gz -x mask.nii.gz -o output.png -p [ -15x -50 , -15x -30 ,0] -r rgb.nii.gz -s [2 ,100 ,160]'
+#     
+task_name: CreateTiledMosaic
+nipype_name: CreateTiledMosaic
+nipype_module: nipype.interfaces.ants.visualization
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    input_image: medimage/nifti-gz
+    # type=file|default=<undefined>: Main input is a 3-D grayscale image.
+    rgb_image: medimage/nifti-gz
+    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
+    mask_image: medimage/nifti-gz
+    # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+  # from the nipype interface, but you may want to be more specific, particularly
+  # for file types, where specifying the format also specifies the file that will be
+  # passed to the field in the automatically generated unittests.
+    output_image: image/png
+    # type=file: image file
+    # type=str|default='output.png': The output consists of the tiled mosaic image.
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests:
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    input_image:
+    # type=file|default=<undefined>: Main input is a 3-D grayscale image.
+    rgb_image:
+    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
+    mask_image:
+    # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
+    alpha_value:
+    # type=float|default=0.0: If an Rgb image is provided, render the overlay using the specified alpha parameter.
+    output_image:
+    # type=file: image file
+    # type=str|default='output.png': The output consists of the tiled mosaic image.
+    tile_geometry:
+    # type=str|default='': The tile geometry specifies the number of rows and columnsin the output image. For example, if the user specifies "5x10", then 5 rows by 10 columns of slices are rendered. If R < 0 and C > 0 (or vice versa), the negative value is selectedbased on direction.
+    direction:
+    # type=int|default=0: Specifies the direction of the slices. If no direction is specified, the direction with the coarsest spacing is chosen.
+    pad_or_crop:
+    # type=str|default='': argument passed to -p flag:[padVoxelWidth,<constantValue=0>][lowerPadding[0]xlowerPadding[1],upperPadding[0]xupperPadding[1],constantValue]The user can specify whether to pad or crop a specified voxel-width boundary of each individual slice. For this program, cropping is simply padding with negative voxel-widths.If one pads (+), the user can also specify a constant pad value (default = 0). If a mask is specified, the user can use the mask to define the region, by using the keyword "mask" plus an offset, e.g. "-p mask+3".
+    slices:
+    # type=str|default='': Number of slices to increment Slice1xSlice2xSlice3[numberOfSlicesToIncrement,<minSlice=0>,<maxSlice=lastSlice>]
+    flip_slice:
+    # type=str|default='': flipXxflipY
+    permute_axes:
+    # type=bool|default=False: doPermute
+    num_threads:
+    # type=int|default=1: Number of ITK threads to use
+    args:
+    # type=str|default='': Additional parameters to the command
+    environ:
+    # type=dict|default={}: Environment variables
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+- inputs:
+  # dict[str, str] - values to provide to inputs fields in the task initialisation
+  # (if not specified, will try to choose a sensible value)
+    input_image:
+    # type=file|default=<undefined>: Main input is a 3-D grayscale image.
+    rgb_image:
+    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
+    mask_image:
+    # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
+    output_image: '"output.png"'
+    # type=file: image file
+    # type=str|default='output.png': The output consists of the tiled mosaic image.
+    alpha_value: '0.5'
+    # type=float|default=0.0: If an Rgb image is provided, render the overlay using the specified alpha parameter.
+    direction: '2'
+    # type=int|default=0: Specifies the direction of the slices. If no direction is specified, the direction with the coarsest spacing is chosen.
+    pad_or_crop: '"[ -15x -50 , -15x -30 ,0]"'
+    # type=str|default='': argument passed to -p flag:[padVoxelWidth,<constantValue=0>][lowerPadding[0]xlowerPadding[1],upperPadding[0]xupperPadding[1],constantValue]The user can specify whether to pad or crop a specified voxel-width boundary of each individual slice. For this program, cropping is simply padding with negative voxel-widths.If one pads (+), the user can also specify a constant pad value (default = 0). If a mask is specified, the user can use the mask to define the region, by using the keyword "mask" plus an offset, e.g. "-p mask+3".
+    slices: '"[2 ,100 ,160]"'
+    # type=str|default='': Number of slices to increment Slice1xSlice2xSlice3[numberOfSlicesToIncrement,<minSlice=0>,<maxSlice=lastSlice>]
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  expected_outputs:
+  # dict[str, str] - expected values for selected outputs, noting that tests will typically
+  # be terminated before they complete for time-saving reasons, and therefore
+  # these values will be ignored, when running in CI
+  timeout: 10
+  # int - the value to set for the timeout in the generated test, 
+  # after which the test will be considered to have been initialised 
+  # successfully. Set to 0 to disable the timeout (warning, this could
+  # lead to the unittests taking a very long time to complete)
+  xfail: true
+  # bool - whether the unittest is expected to fail or not. Set to false
+  # when you are satisfied with the edits you have made to this file
+doctests:
+- cmdline: CreateTiledMosaic -a 0.50 -d 2 -i T1.nii.gz -x mask.nii.gz -o output.png -p [ -15x -50 , -15x -30 ,0] -r rgb.nii.gz -s [2 ,100 ,160]
+  # str - the expected cmdline output
+  inputs:
+  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+  # If the field is of file-format type and the value is None, then the
+  # '.mock()' method of the corresponding class is used instead.
+    input_image:
+    # type=file|default=<undefined>: Main input is a 3-D grayscale image.
+    rgb_image:
+    # type=file|default=<undefined>: An optional Rgb image can be added as an overlay.It must have the same imagegeometry as the input grayscale image.
+    mask_image:
+    # type=file|default=<undefined>: Specifies the ROI of the RGB voxels used.
+    output_image: '"output.png"'
+    # type=file: image file
+    # type=str|default='output.png': The output consists of the tiled mosaic image.
+    alpha_value: '0.5'
+    # type=float|default=0.0: If an Rgb image is provided, render the overlay using the specified alpha parameter.
+    direction: '2'
+    # type=int|default=0: Specifies the direction of the slices. If no direction is specified, the direction with the coarsest spacing is chosen.
+    pad_or_crop: '"[ -15x -50 , -15x -30 ,0]"'
+    # type=str|default='': argument passed to -p flag:[padVoxelWidth,<constantValue=0>][lowerPadding[0]xlowerPadding[1],upperPadding[0]xupperPadding[1],constantValue]The user can specify whether to pad or crop a specified voxel-width boundary of each individual slice. For this program, cropping is simply padding with negative voxel-widths.If one pads (+), the user can also specify a constant pad value (default = 0). If a mask is specified, the user can use the mask to define the region, by using the keyword "mask" plus an offset, e.g. "-p mask+3".
+    slices: '"[2 ,100 ,160]"'
+    # type=str|default='': Number of slices to increment Slice1xSlice2xSlice3[numberOfSlicesToIncrement,<minSlice=0>,<maxSlice=lastSlice>]
+  imports:
+  # list[nipype2pydra.task.importstatement] - list import statements required by the test, with each list item
+  # consisting of 'module', 'name', and optionally 'alias' keys
+  directive:
+  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
