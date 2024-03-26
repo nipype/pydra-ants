@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "pydra-ants"
 description = "Pydra tasks package for ANTs"
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.8"
 keywords = ["ants", "neuroimaging", "pydra", "registration"]
 dependencies = [
@@ -52,6 +52,7 @@ doc = [
   "sphinxcontrib-apidoc ~=0.3.0",
   "sphinxcontrib-napoleon",
   "sphinxcontrib-versioning",
+  "pydata-sphinx-theme >=0.13",
 ]
 test = [
   "nipype2pydra",
