@@ -268,18 +268,18 @@ inputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
-    fixed_image: medimage/nifti1+list-of
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
+    fixed_image: medimage/itk-image+list-of
     # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
     fixed_image_mask: generic/file
     # type=file|default=<undefined>: Mask used to limit metric sampling region of the fixed imagein all stages
     initial_moving_transform: datascience/text-matrix+list-of
     # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    moving_image: medimage/nifti1+list-of
+    moving_image: medimage/itk-image+list-of
     # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
     moving_image_mask: generic/file
     # type=file|default=<undefined>: mask used to limit metric sampling region of the moving imagein all stages
@@ -299,18 +299,18 @@ outputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
     composite_transform: generic/file
     # type=file: Composite transform file
     forward_transforms: generic/file+list-of
     # type=list: List of output transforms for forward registration
     inverse_composite_transform: generic/file
     # type=file: Inverse composite transform file
-    inverse_warped_image: generic/file
+    inverse_warped_image: medimage/itk-image
     # type=file: Outputs the inverse of the warped image
     reverse_forward_transforms: generic/file+list-of
     # type=list: List of output transforms for forward registration reversed for antsApplyTransform
@@ -319,11 +319,11 @@ outputs:
     save_state: datascience/text-matrix
     # type=file: The saved registration state to be restored
     # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
-    warped_image: generic/file
+    warped_image: medimage/itk-image
     # type=file: Outputs warped image
   callables:
-  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
-  # to set to the `callable` attribute of output fields
+    # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+    # to set to the `callable` attribute of output fields
     elapsed_time: elapsed_time_callable
     # type=float: the total elapsed time as reported by ANTs
     metric_value: metric_value_callable
@@ -333,786 +333,786 @@ outputs:
   requirements:
   # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
 tests:
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    dimension:
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    fixed_image:
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    fixed_image_mask:
-    # type=file|default=<undefined>: Mask used to limit metric sampling region of the fixed imagein all stages
-    fixed_image_masks:
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
-    moving_image:
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-    moving_image_mask:
-    # type=file|default=<undefined>: mask used to limit metric sampling region of the moving imagein all stages
-    moving_image_masks:
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the moving image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
-    save_state:
-    # type=file: The saved registration state to be restored
-    # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
-    restore_state:
-    # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
-    initial_moving_transform:
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform:
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
-    initial_moving_transform_com:
-    # type=enum|default=0|allowed[0,1,2]: Align the moving_image and fixed_image before registration using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
-    metric_item_trait:
-    # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
-    metric_stage_trait:
-    # type=traitcompound|default=None:
-    metric:
-    # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
-    metric_weight_item_trait:
-    # type=float|default=1.0:
-    metric_weight_stage_trait:
-    # type=traitcompound|default=None:
-    metric_weight:
-    # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
-    radius_bins_item_trait:
-    # type=int|default=5:
-    radius_bins_stage_trait:
-    # type=traitcompound|default=None:
-    radius_or_number_of_bins:
-    # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
-    sampling_strategy_item_trait:
-    # type=enum|default='None'|allowed['None','Random','Regular',None]:
-    sampling_strategy_stage_trait:
-    # type=traitcompound|default=None:
-    sampling_strategy:
-    # type=list|default=[]: the metric sampling strategy (strategies) for each stage
-    sampling_percentage_item_trait:
-    # type=traitcompound|default=None:
-    sampling_percentage_stage_trait:
-    # type=traitcompound|default=None:
-    sampling_percentage:
-    # type=list|default=[]: the metric sampling percentage(s) to use for each stage
-    use_estimate_learning_rate_once:
-    # type=list|default=[]:
-    use_histogram_matching:
-    # type=traitcompound|default=True: Histogram match the images before registration.
-    interpolation:
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
-    interpolation_parameters:
-    # type=traitcompound|default=None:
-    write_composite_transform:
-    # type=bool|default=False:
-    collapse_output_transforms:
-    # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
-    initialize_transforms_per_stage:
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-    float:
-    # type=bool|default=False: Use float instead of double for computations.
-    transforms:
-    # type=list|default=[]:
-    transform_parameters:
-    # type=list|default=[]:
-    restrict_deformation:
-    # type=list|default=[]: This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the  first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation.  Low-dimensional restriction only works if there are no preceding transformations.
-    number_of_iterations:
-    # type=list|default=[]:
-    smoothing_sigmas:
-    # type=list|default=[]:
-    sigma_units:
-    # type=list|default=[]: units for smoothing sigmas
-    shrink_factors:
-    # type=list|default=[]:
-    convergence_threshold:
-    # type=list|default=[1e-06]:
-    convergence_window_size:
-    # type=list|default=[10]:
-    output_transform_prefix:
-    # type=str|default='transform':
-    output_warped_image:
-    # type=traitcompound|default=None:
-    output_inverse_warped_image:
-    # type=traitcompound|default=None:
-    winsorize_upper_quantile:
-    # type=range|default=1.0: The Upper quantile to clip image ranges
-    winsorize_lower_quantile:
-    # type=range|default=0.0: The Lower quantile to clip image ranges
-    random_seed:
-    # type=int|default=0: Fixed seed for random number generation
-    verbose:
-    # type=bool|default=False:
-    num_threads:
-    # type=int|default=1: Number of ITK threads to use
-    args:
-    # type=str|default='': Additional parameters to the command
-    environ:
-    # type=dict|default={}: Environment variables
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    fixed_image:
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-    output_transform_prefix: '"output_"'
-    # type=str|default='transform':
-    initial_moving_transform:
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    transforms: '["Affine", "SyN"]'
-    # type=list|default=[]:
-    transform_parameters: '[(2.0,), (0.25, 3.0, 0.0)]'
-    # type=list|default=[]:
-    number_of_iterations: '[[1500, 200], [100, 50, 30]]'
-    # type=list|default=[]:
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    write_composite_transform: 'True'
-    # type=bool|default=False:
-    collapse_output_transforms: 'False'
-    # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
-    initialize_transforms_per_stage: 'False'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-    metric: '["Mattes"]*2'
-    # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
-    metric_weight: '[1]*2 # Default (value ignored currently by ANTs)'
-    # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
-    radius_or_number_of_bins: '[32]*2'
-    # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
-    sampling_strategy: '["Random", None]'
-    # type=list|default=[]: the metric sampling strategy (strategies) for each stage
-    sampling_percentage: '[0.05, None]'
-    # type=list|default=[]: the metric sampling percentage(s) to use for each stage
-    convergence_threshold: '[1.e-8, 1.e-9]'
-    # type=list|default=[1e-06]:
-    convergence_window_size: '[20]*2'
-    # type=list|default=[10]:
-    smoothing_sigmas: '[[1,0], [2,1,0]]'
-    # type=list|default=[]:
-    sigma_units: '["vox"] * 2'
-    # type=list|default=[]: units for smoothing sigmas
-    shrink_factors: '[[2,1], [3,2,1]]'
-    # type=list|default=[]:
-    use_estimate_learning_rate_once: '[True, True]'
-    # type=list|default=[]:
-    use_histogram_matching: '[True, True] # This is the default'
-    # type=traitcompound|default=True: Histogram match the images before registration.
-    output_warped_image: '"output_warped_image.nii.gz"'
-    # type=traitcompound|default=None:
-  imports: &id001
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  - module: copy
-  - module: pprint
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    invert_initial_moving_transform: 'True'
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
-    winsorize_lower_quantile: '0.025'
-    # type=range|default=0.0: The Lower quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    winsorize_upper_quantile: '0.975'
-    # type=range|default=1.0: The Upper quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    winsorize_lower_quantile: '0.025'
-    # type=range|default=0.0: The Lower quantile to clip image ranges
-    winsorize_upper_quantile: '0.975'
-    # type=range|default=1.0: The Upper quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    float: 'True'
-    # type=bool|default=False: Use float instead of double for computations.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    float: 'False'
-    # type=bool|default=False: Use float instead of double for computations.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    save_state: '"trans.mat"'
-    # type=file: The saved registration state to be restored
-    # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
-    restore_state:
-    # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
-    initialize_transforms_per_stage: 'True'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-    collapse_output_transforms: 'True'
-    # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    write_composite_transform: 'False'
-    # type=bool|default=False:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    fixed_image:
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-    metric: '["Mattes", ["Mattes", "CC"]]'
-    # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
-    metric_weight: '[1, [.5,.5]]'
-    # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
-    radius_or_number_of_bins: '[32, [32, 4] ]'
-    # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
-    sampling_strategy: '["Random", None] # use default strategy in second stage'
-    # type=list|default=[]: the metric sampling strategy (strategies) for each stage
-    sampling_percentage: '[0.05, [0.05, 0.10]]'
-    # type=list|default=[]: the metric sampling percentage(s) to use for each stage
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    fixed_image:
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image:
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
-    interpolation_parameters: (3,)
-    # type=traitcompound|default=None:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    interpolation: '"Gaussian"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
-    interpolation_parameters: (1.0, 1.0)
-    # type=traitcompound|default=None:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    transforms: '["Affine", "BSplineSyN"]'
-    # type=list|default=[]:
-    transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
-    # type=list|default=[]:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    fixed_image_masks: '["NULL", "fixed1.nii"]'
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    initial_moving_transform:
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform: '[False, False]'
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension:
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      fixed_image:
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      fixed_image_mask:
+      # type=file|default=<undefined>: Mask used to limit metric sampling region of the fixed imagein all stages
+      fixed_image_masks:
+      # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
+      moving_image:
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+      moving_image_mask:
+      # type=file|default=<undefined>: mask used to limit metric sampling region of the moving imagein all stages
+      moving_image_masks:
+      # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the moving image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
+      save_state:
+      # type=file: The saved registration state to be restored
+      # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
+      restore_state:
+      # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
+      initial_moving_transform:
+      # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
+      invert_initial_moving_transform:
+      # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+      initial_moving_transform_com:
+      # type=enum|default=0|allowed[0,1,2]: Align the moving_image and fixed_image before registration using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
+      metric_item_trait:
+      # type=enum|default='CC'|allowed['CC','Demons','GC','MI','Mattes','MeanSquares']:
+      metric_stage_trait:
+      # type=traitcompound|default=None:
+      metric:
+      # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
+      metric_weight_item_trait:
+      # type=float|default=1.0:
+      metric_weight_stage_trait:
+      # type=traitcompound|default=None:
+      metric_weight:
+      # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
+      radius_bins_item_trait:
+      # type=int|default=5:
+      radius_bins_stage_trait:
+      # type=traitcompound|default=None:
+      radius_or_number_of_bins:
+      # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
+      sampling_strategy_item_trait:
+      # type=enum|default='None'|allowed['None','Random','Regular',None]:
+      sampling_strategy_stage_trait:
+      # type=traitcompound|default=None:
+      sampling_strategy:
+      # type=list|default=[]: the metric sampling strategy (strategies) for each stage
+      sampling_percentage_item_trait:
+      # type=traitcompound|default=None:
+      sampling_percentage_stage_trait:
+      # type=traitcompound|default=None:
+      sampling_percentage:
+      # type=list|default=[]: the metric sampling percentage(s) to use for each stage
+      use_estimate_learning_rate_once:
+      # type=list|default=[]:
+      use_histogram_matching:
+      # type=traitcompound|default=True: Histogram match the images before registration.
+      interpolation:
+      # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
+      interpolation_parameters:
+      # type=traitcompound|default=None:
+      write_composite_transform:
+      # type=bool|default=False:
+      collapse_output_transforms:
+      # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
+      initialize_transforms_per_stage:
+      # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+      float:
+      # type=bool|default=False: Use float instead of double for computations.
+      transforms:
+      # type=list|default=[]:
+      transform_parameters:
+      # type=list|default=[]:
+      restrict_deformation:
+      # type=list|default=[]: This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the  first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation.  Low-dimensional restriction only works if there are no preceding transformations.
+      number_of_iterations:
+      # type=list|default=[]:
+      smoothing_sigmas:
+      # type=list|default=[]:
+      sigma_units:
+      # type=list|default=[]: units for smoothing sigmas
+      shrink_factors:
+      # type=list|default=[]:
+      convergence_threshold:
+      # type=list|default=[1e-06]:
+      convergence_window_size:
+      # type=list|default=[10]:
+      output_transform_prefix:
+      # type=str|default='transform':
+      output_warped_image:
+      # type=traitcompound|default=None:
+      output_inverse_warped_image:
+      # type=traitcompound|default=None:
+      winsorize_upper_quantile:
+      # type=range|default=1.0: The Upper quantile to clip image ranges
+      winsorize_lower_quantile:
+      # type=range|default=0.0: The Lower quantile to clip image ranges
+      random_seed:
+      # type=int|default=0: Fixed seed for random number generation
+      verbose:
+      # type=bool|default=False:
+      num_threads:
+      # type=int|default=1: Number of ITK threads to use
+      args:
+      # type=str|default='': Additional parameters to the command
+      environ:
+      # type=dict|default={}: Environment variables
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      fixed_image:
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image:
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+      output_transform_prefix: '"output_"'
+      # type=str|default='transform':
+      initial_moving_transform:
+      # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
+      transforms: '["Affine", "SyN"]'
+      # type=list|default=[]:
+      transform_parameters: "[(2.0,), (0.25, 3.0, 0.0)]"
+      # type=list|default=[]:
+      number_of_iterations: "[[1500, 200], [100, 50, 30]]"
+      # type=list|default=[]:
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      write_composite_transform: "True"
+      # type=bool|default=False:
+      collapse_output_transforms: "False"
+      # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
+      initialize_transforms_per_stage: "False"
+      # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+      metric: '["Mattes"]*2'
+      # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
+      metric_weight: "[1]*2 # Default (value ignored currently by ANTs)"
+      # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
+      radius_or_number_of_bins: "[32]*2"
+      # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
+      sampling_strategy: '["Random", None]'
+      # type=list|default=[]: the metric sampling strategy (strategies) for each stage
+      sampling_percentage: "[0.05, None]"
+      # type=list|default=[]: the metric sampling percentage(s) to use for each stage
+      convergence_threshold: "[1.e-8, 1.e-9]"
+      # type=list|default=[1e-06]:
+      convergence_window_size: "[20]*2"
+      # type=list|default=[10]:
+      smoothing_sigmas: "[[1,0], [2,1,0]]"
+      # type=list|default=[]:
+      sigma_units: '["vox"] * 2'
+      # type=list|default=[]: units for smoothing sigmas
+      shrink_factors: "[[2,1], [3,2,1]]"
+      # type=list|default=[]:
+      use_estimate_learning_rate_once: "[True, True]"
+      # type=list|default=[]:
+      use_histogram_matching: "[True, True] # This is the default"
+      # type=traitcompound|default=True: Histogram match the images before registration.
+      output_warped_image: '"output_warped_image.nii.gz"'
+      # type=traitcompound|default=None:
+    imports: &id001
+      # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+      # consisting of 'module', 'name', and optionally 'alias' keys
+      - module: copy
+      - module: pprint
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      invert_initial_moving_transform: "True"
+      # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+      winsorize_lower_quantile: "0.025"
+      # type=range|default=0.0: The Lower quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      winsorize_upper_quantile: "0.975"
+      # type=range|default=1.0: The Upper quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      winsorize_lower_quantile: "0.025"
+      # type=range|default=0.0: The Lower quantile to clip image ranges
+      winsorize_upper_quantile: "0.975"
+      # type=range|default=1.0: The Upper quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      float: "True"
+      # type=bool|default=False: Use float instead of double for computations.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      float: "False"
+      # type=bool|default=False: Use float instead of double for computations.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      save_state: '"trans.mat"'
+      # type=file: The saved registration state to be restored
+      # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
+      restore_state:
+      # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
+      initialize_transforms_per_stage: "True"
+      # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+      collapse_output_transforms: "True"
+      # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      write_composite_transform: "False"
+      # type=bool|default=False:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      fixed_image:
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image:
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+      metric: '["Mattes", ["Mattes", "CC"]]'
+      # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
+      metric_weight: "[1, [.5,.5]]"
+      # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
+      radius_or_number_of_bins: "[32, [32, 4] ]"
+      # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
+      sampling_strategy: '["Random", None] # use default strategy in second stage'
+      # type=list|default=[]: the metric sampling strategy (strategies) for each stage
+      sampling_percentage: "[0.05, [0.05, 0.10]]"
+      # type=list|default=[]: the metric sampling percentage(s) to use for each stage
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      fixed_image:
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image:
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      interpolation: '"BSpline"'
+      # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
+      interpolation_parameters: (3,)
+      # type=traitcompound|default=None:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      interpolation: '"Gaussian"'
+      # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
+      interpolation_parameters: (1.0, 1.0)
+      # type=traitcompound|default=None:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      transforms: '["Affine", "BSplineSyN"]'
+      # type=list|default=[]:
+      transform_parameters: "[(2.0,), (0.25, 26, 0, 3)]"
+      # type=list|default=[]:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      fixed_image_masks: '["NULL", "fixed1.nii"]'
+      # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      initial_moving_transform:
+      # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
+      invert_initial_moving_transform: "[False, False]"
+      # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
 doctests:
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    fixed_image: '"fixed1.nii"'
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image: '"moving1.nii"'
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-    output_transform_prefix: '"output_"'
-    # type=str|default='transform':
-    initial_moving_transform: '"trans.mat"'
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    transforms: '["Affine", "SyN"]'
-    # type=list|default=[]:
-    transform_parameters: '[(2.0,), (0.25, 3.0, 0.0)]'
-    # type=list|default=[]:
-    number_of_iterations: '[[1500, 200], [100, 50, 30]]'
-    # type=list|default=[]:
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    write_composite_transform: 'True'
-    # type=bool|default=False:
-    collapse_output_transforms: 'False'
-    # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
-    initialize_transforms_per_stage: 'False'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-    metric: '["Mattes"]*2'
-    # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
-    metric_weight: '[1]*2 # Default (value ignored currently by ANTs)'
-    # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
-    radius_or_number_of_bins: '[32]*2'
-    # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
-    sampling_strategy: '["Random", None]'
-    # type=list|default=[]: the metric sampling strategy (strategies) for each stage
-    sampling_percentage: '[0.05, None]'
-    # type=list|default=[]: the metric sampling percentage(s) to use for each stage
-    convergence_threshold: '[1.e-8, 1.e-9]'
-    # type=list|default=[1e-06]:
-    convergence_window_size: '[20]*2'
-    # type=list|default=[10]:
-    smoothing_sigmas: '[[1,0], [2,1,0]]'
-    # type=list|default=[]:
-    sigma_units: '["vox"] * 2'
-    # type=list|default=[]: units for smoothing sigmas
-    shrink_factors: '[[2,1], [3,2,1]]'
-    # type=list|default=[]:
-    use_estimate_learning_rate_once: '[True, True]'
-    # type=list|default=[]:
-    use_histogram_matching: '[True, True] # This is the default'
-    # type=traitcompound|default=True: Histogram match the images before registration.
-    output_warped_image: '"output_warped_image.nii.gz"'
-    # type=traitcompound|default=None:
-  imports: *id001
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    invert_initial_moving_transform: 'True'
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
-    winsorize_lower_quantile: '0.025'
-    # type=range|default=0.0: The Lower quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 0.975 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    winsorize_upper_quantile: '0.975'
-    # type=range|default=1.0: The Upper quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 0.975 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    winsorize_lower_quantile: '0.025'
-    # type=range|default=0.0: The Lower quantile to clip image ranges
-    winsorize_upper_quantile: '0.975'
-    # type=range|default=1.0: The Upper quantile to clip image ranges
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 1 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    float: 'True'
-    # type=bool|default=False: Use float instead of double for computations.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 0 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    float: 'False'
-    # type=bool|default=False: Use float instead of double for computations.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    save_state: '"trans.mat"'
-    # type=file: The saved registration state to be restored
-    # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
-    restore_state: '"trans.mat"'
-    # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
-    initialize_transforms_per_stage: 'True'
-    # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-    collapse_output_transforms: 'True'
-    # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 0
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    write_composite_transform: 'False'
-    # type=bool|default=False:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed1.nii, moving1.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    fixed_image: '"fixed1.nii"'
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image: '"moving1.nii"'
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-    metric: '["Mattes", ["Mattes", "CC"]]'
-    # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
-    metric_weight: '[1, [.5,.5]]'
-    # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
-    radius_or_number_of_bins: '[32, [32, 4] ]'
-    # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
-    sampling_strategy: '["Random", None] # use default strategy in second stage'
-    # type=list|default=[]: the metric sampling strategy (strategies) for each stage
-    sampling_percentage: '[0.05, [0.05, 0.10]]'
-    # type=list|default=[]: the metric sampling percentage(s) to use for each stage
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed2.nii, moving2.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    fixed_image: '["fixed1.nii", "fixed2.nii"]'
-    # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
-    moving_image: '["moving1.nii", "moving2.nii"]'
-    # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation BSpline[ 3 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    interpolation: '"BSpline"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
-    interpolation_parameters: (3,)
-    # type=traitcompound|default=None:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Gaussian[ 1.0, 1.0 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    interpolation: '"Gaussian"'
-    # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
-    interpolation_parameters: (1.0, 1.0)
-    # type=traitcompound|default=None:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform BSplineSyN[ 0.25, 26, 0, 3 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    transforms: '["Affine", "BSplineSyN"]'
-    # type=list|default=[]:
-    transform_parameters: '[(2.0,), (0.25, 26, 0, 3)]'
-    # type=list|default=[]:
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ NULL, NULL ] --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ fixed1.nii, NULL ] --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    fixed_image_masks: '["NULL", "fixed1.nii"]'
-    # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
-- cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ func_to_struct.mat, 0 ] [ ants_Warp.nii.gz, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    initial_moving_transform: '["func_to_struct.mat", "ants_Warp.nii.gz"]'
-    # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
-    invert_initial_moving_transform: '[False, False]'
-    # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      fixed_image: '"fixed1.nii"'
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image: '"moving1.nii"'
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+      output_transform_prefix: '"output_"'
+      # type=str|default='transform':
+      initial_moving_transform: '"trans.mat"'
+      # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
+      transforms: '["Affine", "SyN"]'
+      # type=list|default=[]:
+      transform_parameters: "[(2.0,), (0.25, 3.0, 0.0)]"
+      # type=list|default=[]:
+      number_of_iterations: "[[1500, 200], [100, 50, 30]]"
+      # type=list|default=[]:
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      write_composite_transform: "True"
+      # type=bool|default=False:
+      collapse_output_transforms: "False"
+      # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
+      initialize_transforms_per_stage: "False"
+      # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+      metric: '["Mattes"]*2'
+      # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
+      metric_weight: "[1]*2 # Default (value ignored currently by ANTs)"
+      # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
+      radius_or_number_of_bins: "[32]*2"
+      # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
+      sampling_strategy: '["Random", None]'
+      # type=list|default=[]: the metric sampling strategy (strategies) for each stage
+      sampling_percentage: "[0.05, None]"
+      # type=list|default=[]: the metric sampling percentage(s) to use for each stage
+      convergence_threshold: "[1.e-8, 1.e-9]"
+      # type=list|default=[1e-06]:
+      convergence_window_size: "[20]*2"
+      # type=list|default=[10]:
+      smoothing_sigmas: "[[1,0], [2,1,0]]"
+      # type=list|default=[]:
+      sigma_units: '["vox"] * 2'
+      # type=list|default=[]: units for smoothing sigmas
+      shrink_factors: "[[2,1], [3,2,1]]"
+      # type=list|default=[]:
+      use_estimate_learning_rate_once: "[True, True]"
+      # type=list|default=[]:
+      use_histogram_matching: "[True, True] # This is the default"
+      # type=traitcompound|default=True: Histogram match the images before registration.
+      output_warped_image: '"output_warped_image.nii.gz"'
+      # type=traitcompound|default=None:
+    imports: *id001
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      invert_initial_moving_transform: "True"
+      # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+      winsorize_lower_quantile: "0.025"
+      # type=range|default=0.0: The Lower quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 0.975 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      winsorize_upper_quantile: "0.975"
+      # type=range|default=1.0: The Upper quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.025, 0.975 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      winsorize_lower_quantile: "0.025"
+      # type=range|default=0.0: The Lower quantile to clip image ranges
+      winsorize_upper_quantile: "0.975"
+      # type=range|default=1.0: The Upper quantile to clip image ranges
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 1 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      float: "True"
+      # type=bool|default=False: Use float instead of double for computations.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --float 0 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      float: "False"
+      # type=bool|default=False: Use float instead of double for computations.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      save_state: '"trans.mat"'
+      # type=file: The saved registration state to be restored
+      # type=file|default=<undefined>: Filename for saving the internal restorable state of the registration
+      restore_state: '"trans.mat"'
+      # type=file|default=<undefined>: Filename for restoring the internal restorable state of the registration
+      initialize_transforms_per_stage: "True"
+      # type=bool|default=False: Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly initialized from the previous stages linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+      collapse_output_transforms: "True"
+      # type=bool|default=True: Collapse output transforms. Specifically, enabling this option combines all adjacent linear transforms and composes all adjacent displacement field transforms before writing the results to disk.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 1 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 1 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --restore-state trans.mat --save-state trans.mat --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 0
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      write_composite_transform: "False"
+      # type=bool|default=False:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed1.nii, moving1.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      fixed_image: '"fixed1.nii"'
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image: '"moving1.nii"'
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+      metric: '["Mattes", ["Mattes", "CC"]]'
+      # type=list|default=[]: the metric(s) to use for each stage. Note that multiple metrics per stage are not supported in ANTS 1.9.1 and earlier.
+      metric_weight: "[1, [.5,.5]]"
+      # type=list|default=[1.0]: the metric weight(s) for each stage. The weights must sum to 1 per stage.
+      radius_or_number_of_bins: "[32, [32, 4] ]"
+      # type=list|default=[5]: the number of bins in each stage for the MI and Mattes metric, the radius for other metrics
+      sampling_strategy: '["Random", None] # use default strategy in second stage'
+      # type=list|default=[]: the metric sampling strategy (strategies) for each stage
+      sampling_percentage: "[0.05, [0.05, 0.10]]"
+      # type=list|default=[]: the metric sampling percentage(s) to use for each stage
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 0.5, 32, None, 0.05 ] --metric CC[ fixed2.nii, moving2.nii, 0.5, 4, None, 0.1 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      fixed_image: '["fixed1.nii", "fixed2.nii"]'
+      # type=inputmultiobject|default=[]: Image to which the moving_image should be transformed(usually a structural image)
+      moving_image: '["moving1.nii", "moving2.nii"]'
+      # type=inputmultiobject|default=[]: Image that will be registered to the space of fixed_image. This is theimage on which the transformations will be applied to
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation BSpline[ 3 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      interpolation: '"BSpline"'
+      # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
+      interpolation_parameters: (3,)
+      # type=traitcompound|default=None:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Gaussian[ 1.0, 1.0 ] --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      interpolation: '"Gaussian"'
+      # type=enum|default='Linear'|allowed['BSpline','CosineWindowedSinc','Gaussian','GenericLabel','HammingWindowedSinc','LanczosWindowedSinc','Linear','MultiLabel','NearestNeighbor','WelchWindowedSinc']:
+      interpolation_parameters: (1.0, 1.0)
+      # type=traitcompound|default=None:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform BSplineSyN[ 0.25, 26, 0, 3 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      transforms: '["Affine", "BSplineSyN"]'
+      # type=list|default=[]:
+      transform_parameters: "[(2.0,), (0.25, 26, 0, 3)]"
+      # type=list|default=[]:
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ trans.mat, 1 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ NULL, NULL ] --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --masks [ fixed1.nii, NULL ] --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      fixed_image_masks: '["NULL", "fixed1.nii"]'
+      # type=inputmultiobject|default=[]: Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsRegistration --collapse-output-transforms 0 --dimensionality 3 --initial-moving-transform [ func_to_struct.mat, 0 ] [ ants_Warp.nii.gz, 0 ] --initialize-transforms-per-stage 0 --interpolation Linear --output [ output_, output_warped_image.nii.gz ] --transform Affine[ 2.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32, Random, 0.05 ] --convergence [ 1500x200, 1e-08, 20 ] --smoothing-sigmas 1.0x0.0vox --shrink-factors 2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --transform SyN[ 0.25, 3.0, 0.0 ] --metric Mattes[ fixed1.nii, moving1.nii, 1, 32 ] --convergence [ 100x50x30, 1e-09, 20 ] --smoothing-sigmas 2.0x1.0x0.0vox --shrink-factors 3x2x1 --use-estimate-learning-rate-once 1 --use-histogram-matching 1 --winsorize-image-intensities [ 0.0, 1.0 ] --write-composite-transform 1
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      initial_moving_transform: '["func_to_struct.mat", "ants_Warp.nii.gz"]'
+      # type=inputmultiobject|default=[]: A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.
+      invert_initial_moving_transform: "[False, False]"
+      # type=inputmultiobject|default=[]: One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

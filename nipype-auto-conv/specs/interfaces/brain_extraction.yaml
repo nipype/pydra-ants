@@ -30,12 +30,12 @@ inputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
-    anatomical_image: medimage/nifti-gz
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
+    anatomical_image: medimage/itk-image
     # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
     brain_probability_mask: medimage/nifti-gz
     # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
@@ -54,11 +54,11 @@ outputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
     BrainExtractionBrain: generic/file
     # type=file: brain extraction image
     BrainExtractionCSF: generic/file
@@ -103,95 +103,95 @@ outputs:
   requirements:
   # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
 tests:
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    dimension:
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    anatomical_image:
-    # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_template:
-    # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_probability_mask:
-    # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
-    out_prefix:
-    # type=str|default='highres001_': Prefix that is prepended to all output files
-    extraction_registration_mask:
-    # type=file|default=<undefined>: Mask (defined in the template space) used during registration for brain extraction. To limit the metric computation to a specific region.
-    image_suffix:
-    # type=str|default='nii.gz': any of standard ITK formats, nii.gz is default
-    use_random_seeding:
-    # type=enum|default=0|allowed[0,1]: Use random number generated from system clock in Atropos (default = 1)
-    keep_temporary_files:
-    # type=int|default=0: Keep brain extraction/segmentation warps, etc (default = 0).
-    use_floatingpoint_precision:
-    # type=enum|default=0|allowed[0,1]: Use floating point precision in registrations (default = 0)
-    debug:
-    # type=bool|default=False: If > 0, runs a faster version of the script. Only for testing. Implies -u 0. Requires single thread computation for complete reproducibility.
-    num_threads:
-    # type=int|default=1: Number of ITK threads to use
-    args:
-    # type=str|default='': Additional parameters to the command
-    environ:
-    # type=dict|default={}: Environment variables
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    anatomical_image:
-    # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_template:
-    # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_probability_mask:
-    # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension:
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      anatomical_image:
+      # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_template:
+      # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_probability_mask:
+      # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
+      out_prefix:
+      # type=str|default='highres001_': Prefix that is prepended to all output files
+      extraction_registration_mask:
+      # type=file|default=<undefined>: Mask (defined in the template space) used during registration for brain extraction. To limit the metric computation to a specific region.
+      image_suffix:
+      # type=str|default='nii.gz': any of standard ITK formats, nii.gz is default
+      use_random_seeding:
+      # type=enum|default=0|allowed[0,1]: Use random number generated from system clock in Atropos (default = 1)
+      keep_temporary_files:
+      # type=int|default=0: Keep brain extraction/segmentation warps, etc (default = 0).
+      use_floatingpoint_precision:
+      # type=enum|default=0|allowed[0,1]: Use floating point precision in registrations (default = 0)
+      debug:
+      # type=bool|default=False: If > 0, runs a faster version of the script. Only for testing. Implies -u 0. Requires single thread computation for complete reproducibility.
+      num_threads:
+      # type=int|default=1: Number of ITK threads to use
+      args:
+      # type=str|default='': Additional parameters to the command
+      environ:
+      # type=dict|default={}: Environment variables
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      anatomical_image:
+      # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_template:
+      # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_probability_mask:
+      # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
 doctests:
-- cmdline: antsBrainExtraction.sh -a T1.nii.gz -m ProbabilityMaskOfStudyTemplate.nii.gz -e study_template.nii.gz -d 3 -s nii.gz -o highres001_
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    anatomical_image: '"T1.nii.gz"'
-    # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_template: '"study_template.nii.gz"'
-    # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
-    brain_probability_mask: '"ProbabilityMaskOfStudyTemplate.nii.gz"'
-    # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: antsBrainExtraction.sh -a T1.nii.gz -m ProbabilityMaskOfStudyTemplate.nii.gz -e study_template.nii.gz -d 3 -s nii.gz -o highres001_
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      anatomical_image: '"T1.nii.gz"'
+      # type=file|default=<undefined>: Structural image, typically T1.  If more than one anatomical image is specified, subsequently specified images are used during the segmentation process.  However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image. Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_template: '"study_template.nii.gz"'
+      # type=file|default=<undefined>: Anatomical template created using e.g. LPBA40 data set with buildtemplateparallel.sh in ANTs.
+      brain_probability_mask: '"ProbabilityMaskOfStudyTemplate.nii.gz"'
+      # type=file|default=<undefined>: Brain probability mask created using e.g. LPBA40 data set which have brain masks defined, and warped to anatomical template and averaged resulting in a probability image.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS

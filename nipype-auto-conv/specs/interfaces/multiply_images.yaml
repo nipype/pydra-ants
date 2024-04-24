@@ -26,11 +26,11 @@ inputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
     first_input: medimage/nifti1
     # type=file|default=<undefined>: image 1
     output_product_image: Path
@@ -47,12 +47,12 @@ outputs:
   rename:
   # dict[str, str] - fields to rename in the Pydra interface
   types:
-  # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
-  # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
-  # from the nipype interface, but you may want to be more specific, particularly
-  # for file types, where specifying the format also specifies the file that will be
-  # passed to the field in the automatically generated unittests.
-    output_product_image: medimage/nifti1
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
+    output_product_image: medimage/itk-image
     # type=file: average image file
     # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
   callables:
@@ -63,84 +63,84 @@ outputs:
   requirements:
   # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
 tests:
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    dimension:
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    first_input:
-    # type=file|default=<undefined>: image 1
-    second_input:
-    # type=traitcompound|default=None: image 2 or multiplication weight
-    output_product_image:
-    # type=file: average image file
-    # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
-    num_threads:
-    # type=int|default=1: Number of ITK threads to use
-    args:
-    # type=str|default='': Additional parameters to the command
-    environ:
-    # type=dict|default={}: Environment variables
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
-- inputs:
-  # dict[str, str] - values to provide to inputs fields in the task initialisation
-  # (if not specified, will try to choose a sensible value)
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    first_input:
-    # type=file|default=<undefined>: image 1
-    second_input: '0.25'
-    # type=traitcompound|default=None: image 2 or multiplication weight
-    output_product_image: '"out.nii"'
-    # type=file: average image file
-    # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  expected_outputs:
-  # dict[str, str] - expected values for selected outputs, noting that tests will typically
-  # be terminated before they complete for time-saving reasons, and therefore
-  # these values will be ignored, when running in CI
-  timeout: 10
-  # int - the value to set for the timeout in the generated test,
-  # after which the test will be considered to have been initialised
-  # successfully. Set to 0 to disable the timeout (warning, this could
-  # lead to the unittests taking a very long time to complete)
-  xfail: true
-  # bool - whether the unittest is expected to fail or not. Set to false
-  # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension:
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      first_input:
+      # type=file|default=<undefined>: image 1
+      second_input:
+      # type=traitcompound|default=None: image 2 or multiplication weight
+      output_product_image:
+      # type=file: average image file
+      # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
+      num_threads:
+      # type=int|default=1: Number of ITK threads to use
+      args:
+      # type=str|default='': Additional parameters to the command
+      environ:
+      # type=dict|default={}: Environment variables
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      first_input:
+      # type=file|default=<undefined>: image 1
+      second_input: "0.25"
+      # type=traitcompound|default=None: image 2 or multiplication weight
+      output_product_image: '"out.nii"'
+      # type=file: average image file
+      # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
 doctests:
-- cmdline: MultiplyImages 3 moving2.nii 0.25 out.nii
-  # str - the expected cmdline output
-  inputs:
-  # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
-  # If the field is of file-format type and the value is None, then the
-  # '.mock()' method of the corresponding class is used instead.
-    dimension: '3'
-    # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
-    first_input: '"moving2.nii"'
-    # type=file|default=<undefined>: image 1
-    second_input: '0.25'
-    # type=traitcompound|default=None: image 2 or multiplication weight
-    output_product_image: '"out.nii"'
-    # type=file: average image file
-    # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
-  imports:
-  # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
-  # consisting of 'module', 'name', and optionally 'alias' keys
-  directive:
-  # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+  - cmdline: MultiplyImages 3 moving2.nii 0.25 out.nii
+    # str - the expected cmdline output
+    inputs:
+      # dict[str, str] - name-value pairs for inputs to be provided to the doctest.
+      # If the field is of file-format type and the value is None, then the
+      # '.mock()' method of the corresponding class is used instead.
+      dimension: "3"
+      # type=enum|default=3|allowed[2,3]: image dimension (2 or 3)
+      first_input: '"moving2.nii"'
+      # type=file|default=<undefined>: image 1
+      second_input: "0.25"
+      # type=traitcompound|default=None: image 2 or multiplication weight
+      output_product_image: '"out.nii"'
+      # type=file: average image file
+      # type=file|default=<undefined>: Outputfname.nii.gz: the name of the resulting image.
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    directive:
+    # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
