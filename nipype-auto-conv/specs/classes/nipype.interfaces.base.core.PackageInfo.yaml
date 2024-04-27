@@ -1,0 +1,20 @@
+# name of the converted workflow constructor function
+name: PackageInfo
+# name of the nipype workflow constructor
+nipype_name: PackageInfo
+# name of the nipype module the function is found within, e.g. mriqc.workflows.anatomical.base
+nipype_module: nipype.interfaces.base.core
+# the names of the nested interfaces that are defined in other modules and need to be imported
+external_nested_interfaces: null
+# a list of tuples where the first element is a regular expression to find in the code and the second
+# element is the replacement string
+find_replace:
+  - ["import logging", "import logging\\nimport subprocess as sp"]
+  - [
+      "\\n(\\s+)clout = CommandLine\\(\\s*command=([^,]+).+?\\).run\\(\\)",
+      "\\n\\1raw_info = sp.check_output(\\2, shell=True).decode('utf-8')",
+    ]
+  - ["raw_info = clout\\.runtime\\.stdout", ""]
+imports:
+  - module: subprocess
+    alias: sp
