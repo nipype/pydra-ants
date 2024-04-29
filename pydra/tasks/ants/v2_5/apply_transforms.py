@@ -19,9 +19,11 @@ def _format_output(
     return "-o {}".format(
         f"Linear[{output_transform},{invert_transform:%d}]"
         if save_transform
-        else f"[{output_warp_field},{save_warp_field:%d}]"
-        if save_warp_field
-        else f"{output_image}"
+        else (
+            f"[{output_warp_field},{save_warp_field:%d}]"
+            if save_warp_field
+            else f"{output_image}"
+        )
     )
 
 
@@ -30,11 +32,15 @@ def _format_interpolation(
 ) -> str:
     return "-n {}{}".format(
         interpolator,
-        f"[{order}]"
-        if interpolator == "BSpline"
-        else f"[{sigma},{alpha}]"
-        if interpolator in ("MultiLabel", "Gaussian")
-        else "",
+        (
+            f"[{order}]"
+            if interpolator == "BSpline"
+            else (
+                f"[{sigma},{alpha}]"
+                if interpolator in ("MultiLabel", "Gaussian")
+                else ""
+            )
+        ),
     )
 
 
@@ -202,11 +208,13 @@ class ApplyTransforms(ShellCommandTask):
                 "formatter": lambda input_transforms, invert_transforms: (
                     ""
                     if not input_transforms
-                    else " ".join(f"-t {f}" for f in input_transforms)
-                    if not invert_transforms
-                    else " ".join(
-                        f"-t [{f},{int(i)}]"
-                        for f, i in zip(input_transforms, invert_transforms)
+                    else (
+                        " ".join(f"-t {f}" for f in input_transforms)
+                        if not invert_transforms
+                        else " ".join(
+                            f"-t [{f},{int(i)}]"
+                            for f, i in zip(input_transforms, invert_transforms)
+                        )
                     )
                 ),
             }
