@@ -94,9 +94,11 @@ def _format_syn_transform_type(
     return (
         "-t {}[{}]".format(
             syn_transform_type,
-            f"{syn_gradient_step},{syn_spline_distance},0,{syn_spline_order}"
-            if syn_transform_type == "BSplineSyn"
-            else f"{syn_gradient_step},{syn_flow_sigma},{syn_total_sigma}",
+            (
+                f"{syn_gradient_step},{syn_spline_distance},0,{syn_spline_order}"
+                if syn_transform_type == "BSplineSyn"
+                else f"{syn_gradient_step},{syn_flow_sigma},{syn_total_sigma}"
+            ),
         )
         if enable_syn_stage
         else ""
@@ -172,11 +174,11 @@ class Registration(ShellCommandTask):
                 "formatter": lambda interpolator, sigma, alpha, order: (
                     "-n {}{}".format(
                         interpolator,
-                        f"[{sigma},{alpha}]"
-                        if interpolator == "Gaussian"
-                        else f"[{order}]"
-                        if interpolator == "BSpline"
-                        else "",
+                        (
+                            f"[{sigma},{alpha}]"
+                            if interpolator == "Gaussian"
+                            else f"[{order}]" if interpolator == "BSpline" else ""
+                        ),
                     )
                 ),
             }
@@ -265,12 +267,14 @@ class Registration(ShellCommandTask):
                 "formatter": lambda initial_fixed_transforms, invert_fixed_transforms: (
                     ""
                     if not initial_fixed_transforms
-                    else " ".join(f"-q {x}" for x in initial_fixed_transforms)
-                    if not invert_fixed_transforms
-                    else " ".join(
-                        f"-q [{x},{y:d}]"
-                        for x, y in zip(
-                            initial_fixed_transforms, invert_fixed_transforms
+                    else (
+                        " ".join(f"-q {x}" for x in initial_fixed_transforms)
+                        if not invert_fixed_transforms
+                        else " ".join(
+                            f"-q [{x},{y:d}]"
+                            for x, y in zip(
+                                initial_fixed_transforms, invert_fixed_transforms
+                            )
                         )
                     )
                 ),
@@ -290,12 +294,14 @@ class Registration(ShellCommandTask):
                 "formatter": lambda initial_moving_transforms, invert_moving_transforms, fixed_image, moving_image: (
                     f"-r [{fixed_image},{moving_image},1]"
                     if not initial_moving_transforms
-                    else " ".join(f"-r {x}" for x in initial_moving_transforms)
-                    if not invert_moving_transforms
-                    else " ".join(
-                        f"-r [{x},{y:d}]"
-                        for x, y in zip(
-                            initial_moving_transforms, invert_moving_transforms
+                    else (
+                        " ".join(f"-r {x}" for x in initial_moving_transforms)
+                        if not invert_moving_transforms
+                        else " ".join(
+                            f"-r [{x},{y:d}]"
+                            for x, y in zip(
+                                initial_moving_transforms, invert_moving_transforms
+                            )
                         )
                     )
                 ),
