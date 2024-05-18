@@ -1,0 +1,11 @@
+# name of the converted workflow constructor function
+name: Info
+# name of the nipype workflow constructor
+nipype_name: Info
+# name of the nipype module the function is found within, e.g. mriqc.workflows.anatomical.base
+nipype_module: nipype.interfaces.ants.base
+# the names of the nested interfaces that are defined in other modules and need to be imported
+external_nested_interfaces: null
+# a list of tuples where the first element is a regular expression to find in the code and the second
+# element is the replacement string
+find_replace: null

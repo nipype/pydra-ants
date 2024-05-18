@@ -1,0 +1,133 @@
+# This file is used to manually specify the semi-automatic conversion of
+# 'nipype.interfaces.ants.utils.AI' from Nipype to Pydra.
+#
+# Please fill-in/edit the fields below where appropriate
+#
+# Docs
+# ----
+#
+#     Calculate the optimal linear transform parameters for aligning two images.
+#
+#     Examples
+#     --------
+#     >>> AI(
+#     ...     fixed_image='structural.nii',
+#     ...     moving_image='epi.nii',
+#     ...     metric=('Mattes', 32, 'Regular', 1),
+#     ... ).cmdline
+#     'antsAI -c [10,1e-06,10] -d 3 -m Mattes[structural.nii,epi.nii,32,Regular,1]
+#     -o initialization.mat -p 0 -s [20,0.12] -t Affine[0.1] -v 0'
+#
+#     >>> AI(fixed_image='structural.nii',
+#     ...    moving_image='epi.nii',
+#     ...    metric=('Mattes', 32, 'Regular', 1),
+#     ...    search_grid=(12, (1, 1, 1)),
+#     ... ).cmdline
+#     'antsAI -c [10,1e-06,10] -d 3 -m Mattes[structural.nii,epi.nii,32,Regular,1]
+#     -o initialization.mat -p 0 -s [20,0.12] -g [12.0,1x1x1] -t Affine[0.1] -v 0'
+#
+#
+task_name: AI
+nipype_name: AI
+nipype_module: nipype.interfaces.ants.utils
+inputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
+    fixed_image: medimage/itk-image
+    # type=file|default=<undefined>: Image to which the moving_image should be transformed
+    fixed_image_mask: generic/file
+    # type=file|default=<undefined>: fixed mage mask
+    moving_image: medimage/itk-image
+    # type=file|default=<undefined>: Image that will be transformed to fixed_image
+    moving_image_mask: generic/file
+    # type=file|default=<undefined>: moving mage mask
+    output_transform: Path
+    # type=file: output file name
+    # type=file|default='initialization.mat': output file name
+  callable_defaults:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set as the `default` method of input fields
+  metadata:
+  # dict[str, dict[str, any]] - additional metadata to set on any of the input fields (e.g. out_file: position: 1)
+outputs:
+  omit:
+  # list[str] - fields to omit from the Pydra interface
+  rename:
+  # dict[str, str] - fields to rename in the Pydra interface
+  types:
+    # dict[str, type] - override inferred types (use "mime-like" string for file-format types,
+    # e.g. 'medimage/nifti-gz'). For most fields the type will be correctly inferred
+    # from the nipype interface, but you may want to be more specific, particularly
+    # for file types, where specifying the format also specifies the file that will be
+    # passed to the field in the automatically generated unittests.
+    output_transform: generic/file
+    # type=file: output file name
+    # type=file|default='initialization.mat': output file name
+  callables:
+  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+  # to set to the `callable` attribute of output fields
+  templates:
+  # dict[str, str] - `output_file_template` values to be provided to output fields
+  requirements:
+  # dict[str, list[str]] - input fields that are required to be provided for the output field to be present
+tests:
+  - inputs:
+      # dict[str, str] - values to provide to inputs fields in the task initialisation
+      # (if not specified, will try to choose a sensible value)
+      dimension:
+      # type=enum|default=3|allowed[2,3]: dimension of output image
+      verbose:
+      # type=bool|default=False: enable verbosity
+      fixed_image:
+      # type=file|default=<undefined>: Image to which the moving_image should be transformed
+      moving_image:
+      # type=file|default=<undefined>: Image that will be transformed to fixed_image
+      fixed_image_mask:
+      # type=file|default=<undefined>: fixed mage mask
+      moving_image_mask:
+      # type=file|default=<undefined>: moving mage mask
+      metric:
+      # type=tuple|default=('Mattes', 32, 'Regular', 0.2): the metric(s) to use.
+      transform:
+      # type=tuple|default=('Affine', 0.1): Several transform options are available
+      principal_axes:
+      # type=bool|default=False: align using principal axes
+      search_factor:
+      # type=tuple|default=(20, 0.12): search factor
+      search_grid:
+      # type=traitcompound|default=None: Translation search grid in mm
+      convergence:
+      # type=tuple|default=(10, 1e-06, 10): convergence
+      output_transform:
+      # type=file: output file name
+      # type=file|default='initialization.mat': output file name
+      num_threads:
+      # type=int|default=1: Number of ITK threads to use
+      args:
+      # type=str|default='': Additional parameters to the command
+      environ:
+      # type=dict|default={}: Environment variables
+    imports:
+    # list[nipype2pydra.task.base.importstatement] - list import statements required by the test, with each list item
+    # consisting of 'module', 'name', and optionally 'alias' keys
+    expected_outputs:
+    # dict[str, str] - expected values for selected outputs, noting that tests will typically
+    # be terminated before they complete for time-saving reasons, and therefore
+    # these values will be ignored, when running in CI
+    timeout: 10
+    # int - the value to set for the timeout in the generated test,
+    # after which the test will be considered to have been initialised
+    # successfully. Set to 0 to disable the timeout (warning, this could
+    # lead to the unittests taking a very long time to complete)
+    xfail: true
+    # bool - whether the unittest is expected to fail or not. Set to false
+    # when you are satisfied with the edits you have made to this file
+doctests: []
