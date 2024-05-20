@@ -292,7 +292,7 @@ jobs:
 
     - name: Check for PyPI token on tag
       id: deployable
-      if: github.event_name == 'release' || github.event_name == 'repository_dispatch'
+      if: github.event_name == 'release'
       env:
         PYPI_API_TOKEN: "${{ secrets.PYPI_API_TOKEN }}"
       run: if [ -n "$PYPI_API_TOKEN" ]; then echo "DEPLOY=true" >> $GITHUB_OUTPUT; fi
