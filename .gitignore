@@ -165,4 +165,3 @@ cython_debug/
 # Generated files
 /pydra/tasks/ants/_version.py
 /pydra/tasks/ants/auto
-/pydra/tasks/ants/nipype_ports
