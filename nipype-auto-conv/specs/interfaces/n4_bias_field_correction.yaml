@@ -379,3 +379,13 @@ doctests:
     # consisting of 'module', 'name', and optionally 'alias' keys
     directive:
     # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+find_replace:
+  - [
+      "\\(\n\\s*\"save_bias\".*,\\n\\s*\\(\"bias_image\", Path",
+      '("bias_image", ty.Union[Path, bool]',
+    ]
+  - [
+      "if inputs\\[\"save_bias\"\\] or \\(inputs\\[\"bias_image\"\\] is not attrs.NOTHING\\)",
+      "if inputs['bias_image']",
+    ]
+  - ["if bias_image is attrs\\.NOTHING:", "if bias_image is True:"]
