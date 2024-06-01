@@ -128,8 +128,12 @@ outputs:
     out_label_post_prob: generic/file+list-of
     # type=outputmultiobject:
   callables:
-  # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
-  # to set to the `callable` attribute of output fields
+    # dict[str, str] - names of methods/callable classes defined in the adjacent `*_callables.py`
+    # to set to the `callable` attribute of output fields
+    out_label_fusion: out_label_fusion_callable
+    out_intensity_fusion: out_intensity_fusion_callable
+    out_label_post_prob: out_label_post_prob_callable
+    out_atlas_voting_weight: out_atlas_voting_weight_callable
   templates:
   # dict[str, str] - `output_file_template` values to be provided to output fields
   requirements:
@@ -459,3 +463,5 @@ doctests:
     # consisting of 'module', 'name', and optionally 'alias' keys
     directive:
     # str - any doctest directive to place on the cmdline call, e.g. # doctest: +ELLIPSIS
+find_replace:
+  - ["AntsJointFusion = JointFusion\n", ""]
