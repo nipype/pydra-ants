@@ -91,7 +91,7 @@ class MeasureImageSimilarity(shell.Task["MeasureImageSimilarity.Outputs"]):
     moving_image: File = shell.arg(
         help="Image to apply transformation to (generally a coregistered functional)"
     )
-    metric: ty.Any = shell.arg(help="", formatter="metric_formatter")
+    metric: ty.Any = shell.arg(help="", formatter=metric_formatter)
     metric_weight: float = shell.arg(
         help='The "metricWeight" variable is not used.',
         requires=["metric"],
@@ -112,7 +112,7 @@ class MeasureImageSimilarity(shell.Task["MeasureImageSimilarity.Outputs"]):
     )
     fixed_image_mask: Nifti1 = shell.arg(
         help="mask used to limit metric sampling region of the fixed image",
-        formatter="fixed_image_mask_formatter",
+        formatter=fixed_image_mask_formatter,
     )
     moving_image_mask: File | None = shell.arg(
         help="mask used to limit metric sampling region of the moving image",

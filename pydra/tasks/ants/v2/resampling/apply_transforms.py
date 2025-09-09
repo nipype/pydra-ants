@@ -142,12 +142,12 @@ class ApplyTransforms(shell.Task["ApplyTransforms.Outputs"]):
         argstr="--reference-image {reference_image}",
     )
     interpolation: ty.Any = shell.arg(
-        help="", formatter="interpolation_formatter", default="Linear"
+        help="", formatter=interpolation_formatter, default="Linear"
     )
     interpolation_parameters: ty.Any = shell.arg(help="")
     transforms: MultiInputObj = shell.arg(
         help="transform files: will be applied in reverse order. For example, the last specified transform will be applied first.",
-        formatter="transforms_formatter",
+        formatter=transforms_formatter,
     )
     invert_transform_flags: MultiInputObj = shell.arg(help="")
     default_value: float = shell.arg(
@@ -168,7 +168,7 @@ class ApplyTransforms(shell.Task["ApplyTransforms.Outputs"]):
         output_image: str = shell.outarg(
             help="output file name",
             path_template="output_image",
-            formatter="output_image_formatter",
+            formatter=output_image_formatter,
         )
 
 

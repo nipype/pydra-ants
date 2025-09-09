@@ -93,7 +93,7 @@ class DenoiseImage(shell.Task["DenoiseImage.Outputs"]):
         output_image: Path = shell.outarg(
             help="The output consists of the noise corrected version of the input image.",
             path_template="{input_image}_noise_corrected",
-            formatter="output_image_formatter",
+            formatter=output_image_formatter,
         )
         noise_image: Path | None = shell.outarg(
             help="Filename for the estimated noise.",

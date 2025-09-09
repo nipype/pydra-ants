@@ -623,7 +623,7 @@ class Registration(shell.Task["Registration.Outputs"]):
     )
     fixed_image_mask: File | None = shell.arg(
         help="Mask used to limit metric sampling region of the fixed imagein all stages",
-        formatter="fixed_image_mask_formatter",
+        formatter=fixed_image_mask_formatter,
     )
     fixed_image_masks: MultiInputObj = shell.arg(
         help='Masks used to limit metric sampling region of the fixed image, defined per registration stage(Use "NULL" to omit a mask at a given stage)'
@@ -648,7 +648,7 @@ class Registration(shell.Task["Registration.Outputs"]):
     )
     initial_moving_transform: list[TextMatrix] = shell.arg(
         help="A transform or a list of transforms that should be applied before the registration begins. Note that, when a list is given, the transformations are applied in reverse order.",
-        formatter="initial_moving_transform_formatter",
+        formatter=initial_moving_transform_formatter,
     )
     invert_initial_moving_transform: MultiInputObj = shell.arg(
         help="One boolean or a list of booleans that indicatewhether the inverse(s) of the transform(s) definedin initial_moving_transform should be used.",
@@ -656,7 +656,7 @@ class Registration(shell.Task["Registration.Outputs"]):
     )
     initial_moving_transform_com: ty.Any | None = shell.arg(
         help="Align the moving_image and fixed_image before registration using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).",
-        formatter="initial_moving_transform_com_formatter",
+        formatter=initial_moving_transform_com_formatter,
     )
     metric_item_trait: ty.Any = shell.arg(help="")
     metric_stage_trait: ty.Any = shell.arg(help="")
@@ -694,7 +694,7 @@ class Registration(shell.Task["Registration.Outputs"]):
         help="Histogram match the images before registration.", default=True
     )
     interpolation: ty.Any = shell.arg(
-        help="", formatter="interpolation_formatter", default="Linear"
+        help="", formatter=interpolation_formatter, default="Linear"
     )
     interpolation_parameters: ty.Any = shell.arg(help="")
     write_composite_transform: bool = shell.arg(
@@ -715,7 +715,7 @@ class Registration(shell.Task["Registration.Outputs"]):
     float: bool = shell.arg(
         help="Use float instead of double for computations.", argstr="--float {float:d}"
     )
-    transforms: list[ty.Any] = shell.arg(help="", formatter="transforms_formatter")
+    transforms: list[ty.Any] = shell.arg(help="", formatter=transforms_formatter)
     transform_parameters: list[ty.Any] = shell.arg(help="")
     restrict_deformation: list[list[ty.Any]] = shell.arg(
         help="This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the  first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation.  Low-dimensional restriction only works if there are no preceding transformations."
@@ -733,7 +733,7 @@ class Registration(shell.Task["Registration.Outputs"]):
         help="", requires=["convergence_threshold"], default=[10]
     )
     output_transform_prefix: str = shell.arg(
-        help="", formatter="output_transform_prefix_formatter", default="transform"
+        help="", formatter=output_transform_prefix_formatter, default="transform"
     )
     output_warped_image: ty.Any = shell.arg(help="")
     output_inverse_warped_image: ty.Any = shell.arg(
@@ -741,12 +741,12 @@ class Registration(shell.Task["Registration.Outputs"]):
     )
     winsorize_upper_quantile: ty.Any = shell.arg(
         help="The Upper quantile to clip image ranges",
-        formatter="winsorize_upper_quantile_formatter",
+        formatter=winsorize_upper_quantile_formatter,
         default=1.0,
     )
     winsorize_lower_quantile: ty.Any = shell.arg(
         help="The Lower quantile to clip image ranges",
-        formatter="winsorize_lower_quantile_formatter",
+        formatter=winsorize_lower_quantile_formatter,
         default=0.0,
     )
     random_seed: int = shell.arg(

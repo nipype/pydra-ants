@@ -128,7 +128,7 @@ class WarpImageMultiTransform(shell.Task["WarpImageMultiTransform.Outputs"]):
     transformation_series: list[TextFile | NiftiGz] = shell.arg(
         help="transformation file(s) to be applied",
         position=-1,
-        formatter="transformation_series_formatter",
+        formatter=transformation_series_formatter,
     )
     invert_affine: list[int] = shell.arg(
         help='List of Affine transformations to invert.E.g.: [1,4,5] inverts the 1st, 4th, and 5th Affines found in transformation_series. Note that indexing starts with 1 and does not include warp fields. Affine transformations are distinguished from warp fields by the word "affine" included in their filenames.'

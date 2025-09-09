@@ -284,7 +284,7 @@ class Atropos(shell.Task["Atropos.Outputs"]):
     initialization: ty.Any = shell.arg(
         help="",
         requires=["number_of_tissue_classes"],
-        formatter="initialization_formatter",
+        formatter=initialization_formatter,
     )
     kmeans_init_centers: list[ty.Any] = shell.arg(help="")
     prior_image: ty.Any = shell.arg(
@@ -299,19 +299,19 @@ class Atropos(shell.Task["Atropos.Outputs"]):
         help="", argstr="--likelihood-model {likelihood_model}"
     )
     mrf_smoothing_factor: float = shell.arg(
-        help="", formatter="mrf_smoothing_factor_formatter"
+        help="", formatter=mrf_smoothing_factor_formatter
     )
     mrf_radius: list[int] = shell.arg(help="", requires=["mrf_smoothing_factor"])
     icm_use_synchronous_update: bool = shell.arg(
-        help="", formatter="icm_use_synchronous_update_formatter"
+        help="", formatter=icm_use_synchronous_update_formatter
     )
     maximum_number_of_icm_terations: int = shell.arg(
         help="", requires=["icm_use_synchronous_update"]
     )
-    n_iterations: int = shell.arg(help="", formatter="n_iterations_formatter")
+    n_iterations: int = shell.arg(help="", formatter=n_iterations_formatter)
     convergence_threshold: float = shell.arg(help="", requires=["n_iterations"])
     posterior_formulation: str = shell.arg(
-        help="", formatter="posterior_formulation_formatter"
+        help="", formatter=posterior_formulation_formatter
     )
     use_random_seed: bool = shell.arg(
         help="use random seed value over constant",
@@ -322,7 +322,7 @@ class Atropos(shell.Task["Atropos.Outputs"]):
         help="", requires=["posterior_formulation"]
     )
     out_classified_image_name: Path = shell.arg(
-        help="", formatter="out_classified_image_name_formatter"
+        help="", formatter=out_classified_image_name_formatter
     )
     save_posteriors: bool = shell.arg(help="")
     output_posteriors_name_template: str = shell.arg(

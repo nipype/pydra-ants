@@ -236,15 +236,15 @@ class JointFusion(shell.Task["JointFusion.Outputs"]):
     )
     target_image: list[list[File]] = shell.arg(
         help="The target image (or multimodal target images) assumed to be aligned to a common image domain.",
-        formatter="target_image_formatter",
+        formatter=target_image_formatter,
     )
     atlas_image: list[list[File]] = shell.arg(
         help="The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.",
-        formatter="atlas_image_formatter",
+        formatter=atlas_image_formatter,
     )
     atlas_segmentation_image: list[NiftiGz] = shell.arg(
         help="The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.",
-        formatter="atlas_segmentation_image_formatter",
+        formatter=atlas_segmentation_image_formatter,
     )
     alpha: float = shell.arg(
         help="Regularization term added to matrix Mx for calculating the inverse. Default = 0.1",
@@ -270,7 +270,7 @@ class JointFusion(shell.Task["JointFusion.Outputs"]):
     )
     patch_radius: list[int] = shell.arg(
         help="Patch radius for similarity measures. Default: 2x2x2",
-        formatter="patch_radius_formatter",
+        formatter=patch_radius_formatter,
     )
     patch_metric: ty.Any = shell.arg(
         help="Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).",
@@ -278,13 +278,13 @@ class JointFusion(shell.Task["JointFusion.Outputs"]):
     )
     search_radius: list[ty.Any] = shell.arg(
         help="Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.",
-        formatter="search_radius_formatter",
+        formatter=search_radius_formatter,
         default=[3, 3, 3],
     )
     exclusion_image_label: list[str] = shell.arg(
         help="Specify a label for the exclusion region.",
         requires=["exclusion_image"],
-        formatter="exclusion_image_label_formatter",
+        formatter=exclusion_image_label_formatter,
     )
     exclusion_image: list[Nifti1] = shell.arg(
         help="Specify an exclusion region for the given label."
@@ -294,11 +294,11 @@ class JointFusion(shell.Task["JointFusion.Outputs"]):
         argstr="-x {mask_image}",
     )
     out_label_fusion: Path = shell.arg(
-        help="The output label fusion image.", formatter="out_label_fusion_formatter"
+        help="The output label fusion image.", formatter=out_label_fusion_formatter
     )
     out_intensity_fusion_name_format: str = shell.arg(
         help='Optional intensity fusion image file name format. (e.g. "antsJointFusionIntensity_%d.nii.gz")',
-        formatter="out_intensity_fusion_name_format_formatter",
+        formatter=out_intensity_fusion_name_format_formatter,
     )
     out_label_post_prob_name_format: str = shell.arg(
         help="Optional label posterior probability image file name format.",
