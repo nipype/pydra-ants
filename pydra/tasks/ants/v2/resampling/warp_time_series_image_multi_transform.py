@@ -114,7 +114,7 @@ class WarpTimeSeriesImageMultiTransform(
     )
     out_postfix: str = shell.arg(
         help="Postfix that is prepended to all output files (default = _wtsimt)",
-        formatter="out_postfix_formatter",
+        formatter=out_postfix_formatter,
         default="_wtsimt",
     )
     reference_image: File | None = shell.arg(
@@ -137,7 +137,7 @@ class WarpTimeSeriesImageMultiTransform(
     )
     transformation_series: list[NiftiGz] = shell.arg(
         help="transformation file(s) to be applied",
-        formatter="transformation_series_formatter",
+        formatter=transformation_series_formatter,
     )
     invert_affine: list[int] = shell.arg(
         help='List of Affine transformations to invert.E.g.: [1,4,5] inverts the 1st, 4th, and 5th Affines found in transformation_series. Note that indexing starts with 1 and does not include warp fields. Affine transformations are distinguished from warp fields by the word "affine" included in their filenames.'

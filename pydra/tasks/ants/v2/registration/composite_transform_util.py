@@ -105,7 +105,7 @@ class CompositeTransformUtil(shell.Task["CompositeTransformUtil.Outputs"]):
     out_file: Path = shell.arg(
         help="Output file path (only used for disassembly).",
         position=2,
-        formatter="out_file_formatter",
+        formatter=out_file_formatter,
     )
     in_file: list[TextMatrix] = shell.arg(
         help="Input transform file(s)", argstr="{in_file}...", position=3
@@ -113,7 +113,7 @@ class CompositeTransformUtil(shell.Task["CompositeTransformUtil.Outputs"]):
     output_prefix: str = shell.arg(
         help="A prefix that is prepended to all output files (only used for assembly).",
         position=4,
-        formatter="output_prefix_formatter",
+        formatter=output_prefix_formatter,
         default="transform",
     )
     num_threads: int = shell.arg(help="Number of ITK threads to use", default=1)

@@ -139,7 +139,7 @@ class RegistrationSynQuick(shell.Task["RegistrationSynQuick.Outputs"]):
     )
     precision_type: ty.Any = shell.arg(
         help="precision type (default = double)",
-        formatter="precision_type_formatter",
+        formatter=precision_type_formatter,
         default="double",
     )
     random_seed: int = shell.arg(help="fixed random seed", argstr="-e {random_seed}")

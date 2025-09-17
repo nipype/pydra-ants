@@ -57,7 +57,7 @@ class ApplyTransformsToPoints(shell.Task["ApplyTransformsToPoints.Outputs"]):
     )
     transforms: list[TextMatrix] = shell.arg(
         help="transforms that will be applied to the points",
-        formatter="transforms_formatter",
+        formatter=transforms_formatter,
     )
     invert_transform_flags: list[bool] = shell.arg(
         help="list indicating if a transform should be reversed"

@@ -257,22 +257,22 @@ class CorticalThickness(shell.Task["CorticalThickness.Outputs"]):
     )
     anatomical_image: File = shell.arg(
         help="Structural *intensity* image, typically T1. If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors. Our suggestion would be to specify the T1 as the first image.",
-        formatter="anatomical_image_formatter",
+        formatter=anatomical_image_formatter,
     )
     brain_template: NiftiGz = shell.arg(
         help="Anatomical *intensity* template (possibly created using a population data set with buildtemplateparallel.sh in ANTs). This template is  *not* skull-stripped.",
-        formatter="brain_template_formatter",
+        formatter=brain_template_formatter,
     )
     brain_probability_mask: File = shell.arg(
         help="brain probability mask in template space",
-        formatter="brain_probability_mask_formatter",
+        formatter=brain_probability_mask_formatter,
     )
     segmentation_priors: list[NiftiGz] = shell.arg(
-        help="", formatter="segmentation_priors_formatter"
+        help="", formatter=segmentation_priors_formatter
     )
     out_prefix: str = shell.arg(
         help="Prefix that is prepended to all output files",
-        formatter="out_prefix_formatter",
+        formatter=out_prefix_formatter,
         default="antsCT_",
     )
     image_suffix: str = shell.arg(
@@ -282,7 +282,7 @@ class CorticalThickness(shell.Task["CorticalThickness.Outputs"]):
     )
     t1_registration_template: File = shell.arg(
         help="Anatomical *intensity* template (assumed to be skull-stripped). A common case would be where this would be the same template as specified in the -e option which is not skull stripped.",
-        formatter="t1_registration_template_formatter",
+        formatter=t1_registration_template_formatter,
     )
     extraction_registration_mask: File = shell.arg(
         help="Mask (defined in the template space) used during registration for brain extraction.",

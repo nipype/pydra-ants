@@ -120,7 +120,7 @@ class KellyKapowski(shell.Task["KellyKapowski.Outputs"]):
     )
     segmentation_image: File = shell.arg(
         help="A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.",
-        formatter="segmentation_image_formatter",
+        formatter=segmentation_image_formatter,
     )
     gray_matter_label: int = shell.arg(
         help="The label value for the gray matter label in the segmentation_image.",
@@ -187,7 +187,7 @@ class KellyKapowski(shell.Task["KellyKapowski.Outputs"]):
         cortical_thickness: Path = shell.outarg(
             help="Filename for the cortical thickness.",
             path_template="{segmentation_image}_cortical_thickness",
-            formatter="cortical_thickness_formatter",
+            formatter=cortical_thickness_formatter,
         )
         warped_white_matter: Path = shell.outarg(
             help="Filename for the warped white matter file.",

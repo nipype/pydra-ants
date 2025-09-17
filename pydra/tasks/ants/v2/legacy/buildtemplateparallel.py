@@ -130,7 +130,7 @@ class buildtemplateparallel(shell.Task["buildtemplateparallel.Outputs"]):
     in_files: list[Nifti1] = shell.arg(
         help="list of images to generate template from",
         position=-1,
-        formatter="in_files_formatter",
+        formatter=in_files_formatter,
     )
     parallelization: ty.Any = shell.arg(
         help="control for parallel processing (0 = serial, 1 = use PBS, 2 = use PEXEC, 3 = use Apple XGrid",
@@ -149,7 +149,7 @@ class buildtemplateparallel(shell.Task["buildtemplateparallel.Outputs"]):
     num_cores: int = shell.arg(
         help="Requires parallelization = 2 (PEXEC). Sets number of cpu cores to use",
         requires=["parallelization"],
-        formatter="num_cores_formatter",
+        formatter=num_cores_formatter,
     )
     max_iterations: list[int] = shell.arg(
         help="maximum number of iterations (must be list of integers in the form [J,K,L...]: J = coarsest resolution iterations, K = middle resolution iterations, L = fine resolution iterations",

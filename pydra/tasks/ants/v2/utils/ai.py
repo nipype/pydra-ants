@@ -84,14 +84,12 @@ class AI(shell.Task["AI.Outputs"]):
     )
     moving_image: File = shell.arg(help="Image that will be transformed to fixed_image")
     fixed_image_mask: File = shell.arg(
-        help="fixed mage mask", formatter="fixed_image_mask_formatter"
+        help="fixed mage mask", formatter=fixed_image_mask_formatter
     )
     moving_image_mask: File | None = shell.arg(
         help="moving mage mask", requires=["fixed_image_mask"]
     )
-    metric: ty.Any = shell.arg(
-        help="the metric(s) to use.", formatter="metric_formatter"
-    )
+    metric: ty.Any = shell.arg(help="the metric(s) to use.", formatter=metric_formatter)
     transform: ty.Any = shell.arg(
         help="Several transform options are available",
         argstr="-t {transform[0]}[{transform[1]}]",
@@ -106,7 +104,7 @@ class AI(shell.Task["AI.Outputs"]):
         default=(20, 0.12),
     )
     search_grid: ty.Any = shell.arg(
-        help="Translation search grid in mm", formatter="search_grid_formatter"
+        help="Translation search grid in mm", formatter=search_grid_formatter
     )
     convergence: ty.Any = shell.arg(
         help="convergence",

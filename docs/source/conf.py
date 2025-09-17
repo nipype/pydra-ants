@@ -8,7 +8,7 @@ from pydra.tasks.freesurfer import __version__  # noqa
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "pydra-ants"
+project = "pydra-tasks-ants"
 author = "Pydra Developers"
 copyright = f"2022-2023, {author}"
 release = __version__

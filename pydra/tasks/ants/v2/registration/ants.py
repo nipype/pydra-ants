@@ -168,7 +168,7 @@ class ANTS(shell.Task["ANTS.Outputs"]):
     )
     moving_image: list[Nifti1] = shell.arg(
         help="image to apply transformation to (generally a coregisteredfunctional)",
-        formatter="moving_image_formatter",
+        formatter=moving_image_formatter,
     )
     metric: list[ty.Any] = shell.arg(help="")
     metric_weight: list[float] | None = shell.arg(
@@ -184,14 +184,14 @@ class ANTS(shell.Task["ANTS.Outputs"]):
         help="", argstr="--output-naming {output_transform_prefix}", default="out"
     )
     transformation_model: ty.Any = shell.arg(
-        help="", formatter="transformation_model_formatter"
+        help="", formatter=transformation_model_formatter
     )
     gradient_step_length: float = shell.arg(help="", requires=["transformation_model"])
     number_of_time_steps: int = shell.arg(help="", requires=["gradient_step_length"])
     delta_time: float = shell.arg(help="", requires=["number_of_time_steps"])
     symmetry_type: float = shell.arg(help="", requires=["delta_time"])
     use_histogram_matching: bool = shell.arg(
-        help="", formatter="use_histogram_matching_formatter", default=True
+        help="", formatter=use_histogram_matching_formatter, default=True
     )
     number_of_iterations: list[int] = shell.arg(
         help="", argstr="--number-of-iterations {number_of_iterations}", sep="x"
@@ -203,10 +203,10 @@ class ANTS(shell.Task["ANTS.Outputs"]):
         help="", argstr="--subsampling-factors {subsampling_factors}", sep="x"
     )
     affine_gradient_descent_option: list[float] = shell.arg(
-        help="", formatter="affine_gradient_descent_option_formatter"
+        help="", formatter=affine_gradient_descent_option_formatter
     )
     mi_option: list[int] = shell.arg(help="", argstr="--MI-option {mi_option}", sep="x")
-    regularization: ty.Any = shell.arg(help="", formatter="regularization_formatter")
+    regularization: ty.Any = shell.arg(help="", formatter=regularization_formatter)
     regularization_gradient_field_sigma: float = shell.arg(
         help="", requires=["regularization"]
     )

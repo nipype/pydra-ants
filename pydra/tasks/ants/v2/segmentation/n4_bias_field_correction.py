@@ -175,11 +175,11 @@ class N4BiasFieldCorrection(shell.Task["N4BiasFieldCorrection.Outputs"]):
         argstr="--weight-image {weight_image}",
     )
     bspline_fitting_distance: float = shell.arg(
-        help="", formatter="bspline_fitting_distance_formatter"
+        help="", formatter=bspline_fitting_distance_formatter
     )
     bspline_order: int = shell.arg(help="", requires=["bspline_fitting_distance"])
     shrink_factor: int = shell.arg(help="", argstr="--shrink-factor {shrink_factor}")
-    n_iterations: list[int] = shell.arg(help="", formatter="n_iterations_formatter")
+    n_iterations: list[int] = shell.arg(help="", formatter=n_iterations_formatter)
     convergence_threshold: float = shell.arg(help="", requires=["n_iterations"])
     save_bias: bool | None = shell.arg(
         help="True if the estimated bias should be saved to file.", default=False
@@ -204,7 +204,7 @@ class N4BiasFieldCorrection(shell.Task["N4BiasFieldCorrection.Outputs"]):
         output_image: str = shell.outarg(
             help="output file name",
             path_template="{input_image}_corrected",
-            formatter="output_image_formatter",
+            formatter=output_image_formatter,
         )
         bias_image: File | None = shell.out(
             help="Estimated bias", callable=bias_image_callable

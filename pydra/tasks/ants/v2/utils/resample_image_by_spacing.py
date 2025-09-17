@@ -71,7 +71,7 @@ class ResampleImageBySpacing(shell.Task["ResampleImageBySpacing.Outputs"]):
         help="input image file", argstr="{input_image}", position=2
     )
     out_spacing: ty.Any = shell.arg(
-        help="output spacing", position=4, formatter="out_spacing_formatter"
+        help="output spacing", position=4, formatter=out_spacing_formatter
     )
     apply_smoothing: bool = shell.arg(
         help="smooth before resampling", argstr="{apply_smoothing:d}", position=5
