@@ -4,7 +4,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.utils.compose_multi_transform import ComposeMultiTransform
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

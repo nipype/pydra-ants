@@ -5,7 +5,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.visualization.create_tiled_mosaic import CreateTiledMosaic
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

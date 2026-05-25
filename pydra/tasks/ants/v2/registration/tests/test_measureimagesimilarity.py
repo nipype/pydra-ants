@@ -7,7 +7,6 @@ from pydra.tasks.ants.v2.registration.measure_image_similarity import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

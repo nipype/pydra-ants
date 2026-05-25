@@ -5,7 +5,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.utils.affine_initializer import AffineInitializer
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

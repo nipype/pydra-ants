@@ -5,7 +5,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.segmentation.joint_fusion import JointFusion
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

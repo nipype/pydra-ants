@@ -7,7 +7,6 @@ from pydra.tasks.ants.v2.resampling.warp_image_multi_transform import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 
