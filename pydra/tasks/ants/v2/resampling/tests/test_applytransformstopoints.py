@@ -7,7 +7,6 @@ from pydra.tasks.ants.v2.resampling.apply_transforms_to_points import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

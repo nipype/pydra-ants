@@ -7,7 +7,6 @@ from pydra.tasks.ants.v2.segmentation.n4_bias_field_correction import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 
