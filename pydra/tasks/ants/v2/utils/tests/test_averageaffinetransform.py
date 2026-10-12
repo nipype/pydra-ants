@@ -4,7 +4,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.utils.average_affine_transform import AverageAffineTransform
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

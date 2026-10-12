@@ -11,7 +11,6 @@ from pydra.compose import shell
 from pydra.utils.typing import MultiInputObj
 import typing as ty
 
-
 logger = logging.getLogger(__name__)
 
 

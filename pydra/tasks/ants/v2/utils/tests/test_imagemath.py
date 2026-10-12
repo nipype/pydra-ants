@@ -4,7 +4,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.utils.image_math import ImageMath
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

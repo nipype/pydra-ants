@@ -6,7 +6,6 @@ from pydra.tasks.ants.v2.registration.composite_transform_util import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

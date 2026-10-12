@@ -6,7 +6,6 @@ from pydra.tasks.ants.v2.visualization.convert_scalar_image_to_rgb import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 
