@@ -4,7 +4,6 @@ from nipype2pydra.testing import PassAfterTimeoutWorker
 from pydra.tasks.ants.v2.legacy.gen_warp_fields import GenWarpFields
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 

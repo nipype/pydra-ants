@@ -2,7 +2,6 @@ import logging
 from pydra.tasks.ants.v2.nipype_ports.utils.misc import is_container
 import os.path as op
 
-
 logger = logging.getLogger(__name__)
 
 

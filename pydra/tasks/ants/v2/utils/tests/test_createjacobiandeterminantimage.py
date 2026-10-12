@@ -7,7 +7,6 @@ from pydra.tasks.ants.v2.utils.create_jacobian_determinant_image import (
 )
 import pytest
 
-
 logger = logging.getLogger(__name__)
 
 
